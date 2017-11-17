@@ -3,3 +3,6 @@
 ################################################################################
 
 /BSN.Commons/.vs/BSN.Commons/v15/Server/sqlite3
+/BSN.Commons/packages
+/BSN.Commons/BSN.Commons/bin
+/BSN.Commons/BSN.Commons/obj
