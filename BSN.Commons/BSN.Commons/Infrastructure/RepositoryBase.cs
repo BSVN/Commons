@@ -3,88 +3,106 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
+using BSN.Commons.Infrastructure;
 
 namespace Commons.Infrastructure
 {
-	public abstract class RepositoryBase<T> where T : class
+	public abstract partial class RepositoryBase<T> where T : class
 	{
 		private DbContext _dataContext;
-		protected readonly DbSet<T> dbSet;
+		protected readonly DbSet<T> DbSet;
 
-
-		protected DbContext DataContext { get { return _dataContext ?? (_dataContext = DatabaseFactory.Get()); } }
+		protected DbContext DataContext => _dataContext ?? (_dataContext = DatabaseFactory.Get());
 		protected IDatabaseFactory DatabaseFactory { get; private set; }
 
 
 		protected RepositoryBase(IDatabaseFactory databaseFactory)
 		{
 			DatabaseFactory = databaseFactory;
-			dbSet = DataContext.Set<T>();
+			DbSet = DataContext.Set<T>();
 		}
-
 
 		public virtual void Add(T entity)
 		{
-			dbSet.Add(entity);
+			DbSet.Add(entity);
 		}
 
 		public virtual void AddRange(IEnumerable<T> entities)
 		{
-			dbSet.AddRange(entities);
+			DbSet.AddRange(entities);
 		}
 
 		public virtual void Update(T entity)
 		{
-			dbSet.Attach(entity);
-			_dataContext.Entry(entity).State = EntityState.Modified;
+			DbSet.Attach(entity);
 		}
 
 		public virtual void UpdateRange(IEnumerable<T> entities)
 		{
+			_dataContext.Configuration.AutoDetectChangesEnabled = false;
+
 			foreach (T entity in entities)
-				Update(entity);
+				UpdateWholeEntity(entity);
+
+			_dataContext.Configuration.AutoDetectChangesEnabled = true;
+		}
+
+		public virtual IRepositoryUpdateFluentInterface<T> BeginUpdate(T entity)
+		{
+			return new RepositoryBaseSingleUpdateFluentInterface<T>(this, entity);
+		}
+
+		public virtual IRepositoryUpdateFluentInterface<T> BeginUpdateRange(IEnumerable<T> entities)
+		{
+			return new RepositoryBaseUpdateRangeFluentInterface<T>(this, entities);
+		}
+
+		protected virtual void UpdateWholeEntity(T entity)
+		{
+			DbSet.Attach(entity);
+			_dataContext.Entry(entity).State = EntityState.Modified;
 		}
 
 		public virtual void Delete(T entity)
 		{
-			dbSet.Remove(entity);
+			DbSet.Remove(entity);
 		}
 
 		public virtual void Delete(Expression<Func<T, bool>> where)
 		{
-			var objects = dbSet.Where(where).AsEnumerable();
+			var objects = DbSet.Where(where).AsEnumerable();
 			foreach (var obj in objects)
-				dbSet.Remove(obj);
+				DbSet.Remove(obj);
 		}
 
 		public virtual void DeleteRange(IEnumerable<T> entities)
 		{
-			dbSet.RemoveRange(entities);
+			DbSet.RemoveRange(entities);
 		}
 
 		public virtual T GetById(long id)
 		{
-			return dbSet.Find(id);
+			return DbSet.Find(id);
 		}
 
 		public virtual T GetById(string id)
 		{
-			return dbSet.Find(id);
+			return DbSet.Find(id);
 		}
 
 		public virtual IEnumerable<T> GetAll()
 		{
-			return dbSet.ToList();
+			return DbSet.ToList();
 		}
 
 		public virtual IEnumerable<T> GetMany(Expression<Func<T, bool>> where)
 		{
-			return dbSet.Where(where);
+			return DbSet.Where(where);
 		}
 
 		public T Get(Expression<Func<T, bool>> where)
 		{
-			return dbSet.Where(where).FirstOrDefault();
+			return DbSet.Where(where).FirstOrDefault();
 		}
 	}
 }

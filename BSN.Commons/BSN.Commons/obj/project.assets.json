@@ -427,7 +427,7 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\sooro\\.nuget\\packages\\": {},
+    "C:\\Users\\Alireza\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
@@ -436,24 +436,23 @@
       "hideWarningsAndErrors": true
     },
     "restore": {
-      "projectUniqueName": "D:\\Users\\sooro\\Source\\Repos\\Commons\\BSN.Commons\\BSN.Commons\\BSN.Commons.csproj",
+      "projectUniqueName": "C:\\Users\\Alireza\\Source\\Repos\\Commons\\BSN.Commons\\BSN.Commons\\BSN.Commons.csproj",
       "projectName": "BSN.Commons",
-      "projectPath": "D:\\Users\\sooro\\Source\\Repos\\Commons\\BSN.Commons\\BSN.Commons\\BSN.Commons.csproj",
-      "packagesPath": "C:\\Users\\sooro\\.nuget\\packages\\",
-      "outputPath": "D:\\Users\\sooro\\Source\\Repos\\Commons\\BSN.Commons\\BSN.Commons\\obj\\",
+      "projectPath": "C:\\Users\\Alireza\\Source\\Repos\\Commons\\BSN.Commons\\BSN.Commons\\BSN.Commons.csproj",
+      "packagesPath": "C:\\Users\\Alireza\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Alireza\\Source\\Repos\\Commons\\BSN.Commons\\BSN.Commons\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\sooro\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Alireza\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netstandard2.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {

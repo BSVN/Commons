@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using BSN.Commons.Infrastructure;
 
 namespace Commons.Infrastructure
 {
@@ -10,6 +11,8 @@ namespace Commons.Infrastructure
 		void AddRange(IEnumerable<T> entities);
 		void Update(T entity);
 		void UpdateRange(IEnumerable<T> entities);
+		IRepositoryUpdateFluentInterface<T> BeginUpdate(T entity);
+		IRepositoryUpdateFluentInterface<T> BeginUpdateRange(IEnumerable<T> entities);
 		void Delete(T entity);
 		void Delete(Expression<Func<T, bool>> where);
 		void DeleteRange(IEnumerable<T> entities);
