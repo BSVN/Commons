@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
 
-namespace Commons.Users
+namespace BSN.Commons.Users
 {
 	public class UserLogin:IdentityUserLogin<string>
 	{

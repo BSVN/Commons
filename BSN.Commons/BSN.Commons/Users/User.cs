@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 
-namespace Commons.Users
+namespace BSN.Commons.Users
 {
 	public class User : IdentityUser<string, UserLogin, UserRole, UserClaim>
 	{

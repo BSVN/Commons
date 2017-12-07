@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Commons.Utilities
+﻿namespace BSN.Commons.Utilities
 {
 	public class Point
 	{

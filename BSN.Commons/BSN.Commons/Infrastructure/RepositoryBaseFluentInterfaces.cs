@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq.Expressions;
-using BSN.Commons.Infrastructure;
 
-namespace Commons.Infrastructure
+namespace BSN.Commons.Infrastructure
 {
     public abstract partial class RepositoryBase<T> where T : class
 	{
@@ -14,16 +13,16 @@ namespace Commons.Infrastructure
 			protected readonly DbContext DbContext;
 			protected readonly DbSet<TEntity> DbSet;
 			protected readonly List<string> PropertyNames;
-			protected bool _updateWholeEntity;
-			protected bool _autoDetectChangedProperties;
+			protected bool UpdateWholeEntityEnabled;
+			protected bool AutoDetectChangedPropertiesEnabled;
 
 
 			internal RepositoryBaseUpdateFluentInterface(RepositoryBase<TEntity> repository)
 			{
 				DbContext = repository.DataContext;
 				DbSet = DbContext.Set<TEntity>();
-				_updateWholeEntity = false;
-				_autoDetectChangedProperties = true;
+				UpdateWholeEntityEnabled = false;
+				AutoDetectChangedPropertiesEnabled = true;
 				PropertyNames = new List<string>();
 			}
 
@@ -35,22 +34,22 @@ namespace Commons.Infrastructure
 						throw new ArgumentException(nameof(propertyAccessExpression))
 				);
 
-				_autoDetectChangedProperties = false;
-				_updateWholeEntity = false;
+				AutoDetectChangedPropertiesEnabled = false;
+				UpdateWholeEntityEnabled = false;
 				return this;
 			}
 
 			public IRepositoryUpdateFluentInterface<TEntity> IncludeAllProperties()
 			{
-				_autoDetectChangedProperties = false;
-				_updateWholeEntity = true;
+				AutoDetectChangedPropertiesEnabled = false;
+				UpdateWholeEntityEnabled = true;
 				return this;
 			}
 
 			public IRepositoryUpdateFluentInterface<TEntity> AutoDetectChangedProperties()
 			{
-				_autoDetectChangedProperties = true;
-				_updateWholeEntity = false;
+				AutoDetectChangedPropertiesEnabled = true;
+				UpdateWholeEntityEnabled = false;
 				return this;
 			}
 
@@ -67,14 +66,16 @@ namespace Commons.Infrastructure
 				: base(repository)
 			{
 				_entities = entities;
+				AutoDetectChangedPropertiesEnabled = false;
+				UpdateWholeEntityEnabled = true;
 			}
 
 			public override void Commit()
 			{
-				if (!_autoDetectChangedProperties)
+				if (!AutoDetectChangedPropertiesEnabled)
 					DbContext.Configuration.AutoDetectChangesEnabled = false;
 
-				if (_updateWholeEntity)
+				if (UpdateWholeEntityEnabled)
 				{
 					foreach (TEntity entity in _entities)
 					{
@@ -82,7 +83,7 @@ namespace Commons.Infrastructure
 						DbContext.Entry(entity).State = EntityState.Modified;
 					}
 				}
-				else if (!_autoDetectChangedProperties)
+				else if (!AutoDetectChangedPropertiesEnabled)
 				{
 					foreach (TEntity entity in _entities)
 					{
@@ -97,7 +98,7 @@ namespace Commons.Infrastructure
 						DbSet.Attach(entity);
 				}
 
-				if (!_autoDetectChangedProperties)
+				if (!AutoDetectChangedPropertiesEnabled)
 					DbContext.Configuration.AutoDetectChangesEnabled = true;
 			}
 		}
@@ -115,22 +116,22 @@ namespace Commons.Infrastructure
 
 			public override void Commit()
 			{
-				if (!_autoDetectChangedProperties)
+				if (!AutoDetectChangedPropertiesEnabled)
 					DbContext.Configuration.AutoDetectChangesEnabled = false;
 
 				DbSet.Attach(_entity);
 
-				if (_updateWholeEntity)
+				if (UpdateWholeEntityEnabled)
 				{
 					DbContext.Entry(_entity).State = EntityState.Modified;
 				}
-				else if (!_autoDetectChangedProperties)
+				else if (!AutoDetectChangedPropertiesEnabled)
 				{
 					foreach (string propertyName in PropertyNames)
 						DbContext.Entry(_entity).Property(propertyName).IsModified = true;
 				}
 
-				if (!_autoDetectChangedProperties)
+				if (!AutoDetectChangedPropertiesEnabled)
 					DbContext.Configuration.AutoDetectChangesEnabled = true;
 			}
 		}

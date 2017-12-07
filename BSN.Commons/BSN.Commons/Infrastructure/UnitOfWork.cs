@@ -1,6 +1,6 @@
 ﻿using System.Data.Entity;
 
-namespace Commons.Infrastructure
+namespace BSN.Commons.Infrastructure
 {
 	public class UnitOfWork : IUnitOfWork
 	{

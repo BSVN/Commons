@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNet.Identity.EntityFramework;
 
-namespace Commons.Users
+namespace BSN.Commons.Users
 {
 	public class Role : IdentityRole<String, UserRole>
 	{

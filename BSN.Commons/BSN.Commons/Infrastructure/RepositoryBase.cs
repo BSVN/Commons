@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
-using BSN.Commons.Infrastructure;
 
-namespace Commons.Infrastructure
+namespace BSN.Commons.Infrastructure
 {
 	public abstract partial class RepositoryBase<T> where T : class
 	{

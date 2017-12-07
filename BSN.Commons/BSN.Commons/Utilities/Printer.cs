@@ -1,6 +1,6 @@
 ﻿using System.Drawing.Printing;
 
-namespace Commons.Utilities
+namespace BSN.Commons.Utilities
 {
 	public class Printer : PrintDocument
 	{

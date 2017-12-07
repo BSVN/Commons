@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using BSN.Commons.Infrastructure;
 
-namespace Commons.Infrastructure
+namespace BSN.Commons.Infrastructure
 {
 	public interface IRepository<T> where T : class
 	{

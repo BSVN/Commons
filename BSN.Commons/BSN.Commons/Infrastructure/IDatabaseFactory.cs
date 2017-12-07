@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data.Entity;
 
-namespace Commons.Infrastructure
+namespace BSN.Commons.Infrastructure
 {
     public interface IDatabaseFactory : IDisposable
     {
