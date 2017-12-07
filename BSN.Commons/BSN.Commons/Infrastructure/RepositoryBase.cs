@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace BSN.Commons.Infrastructure
 {
-	public abstract partial class RepositoryBase<T> where T : class
+	public abstract partial class RepositoryBase<T> : IRepository<T> where T : class
 	{
 		private DbContext _dataContext;
 		protected readonly DbSet<T> DbSet;
@@ -33,33 +33,71 @@ namespace BSN.Commons.Infrastructure
 
 		public virtual void Update(T entity)
 		{
+			Update(entity, cfg => cfg.AutoDetectChangedProperties());
+		}
+
+		public virtual void Update(T entity, Action<IUpdateConfig<T>> configurer)
+		{
+			var updateConfig = new UpdateConfig();
+			configurer.Invoke(updateConfig);
+
+			if (!updateConfig.AutoDetectChangedPropertiesEnabled)
+				_dataContext.Configuration.AutoDetectChangesEnabled = false;
+
 			DbSet.Attach(entity);
+
+			if (updateConfig.IncludeAllPropertiesEnabled)
+			{
+				_dataContext.Entry(entity).State = EntityState.Modified;
+			}
+			else if (!updateConfig.AutoDetectChangedPropertiesEnabled)
+			{
+				foreach (string propertyName in updateConfig.PropertyNames)
+					_dataContext.Entry(entity).Property(propertyName).IsModified = true;
+			}
+
+			if (!updateConfig.AutoDetectChangedPropertiesEnabled)
+				_dataContext.Configuration.AutoDetectChangesEnabled = true;
 		}
 
 		public virtual void UpdateRange(IEnumerable<T> entities)
 		{
-			_dataContext.Configuration.AutoDetectChangesEnabled = false;
-
-			foreach (T entity in entities)
-				UpdateWholeEntity(entity);
-
-			_dataContext.Configuration.AutoDetectChangesEnabled = true;
+			UpdateRange(entities, cfg => cfg.IncludeAllProperties());
 		}
 
-		public virtual IRepositoryUpdateFluentInterface<T> BeginUpdate(T entity)
+		public virtual void UpdateRange(IEnumerable<T> entities, Action<IUpdateConfig<T>> configurer)
 		{
-			return new RepositoryBaseSingleUpdateFluentInterface<T>(this, entity);
-		}
+			var updateConfig = new UpdateConfig();
+			configurer.Invoke(updateConfig);
 
-		public virtual IRepositoryUpdateFluentInterface<T> BeginUpdateRange(IEnumerable<T> entities)
-		{
-			return new RepositoryBaseUpdateRangeFluentInterface<T>(this, entities);
-		}
+			if (!updateConfig.AutoDetectChangedPropertiesEnabled)
+				_dataContext.Configuration.AutoDetectChangesEnabled = false;
 
-		protected virtual void UpdateWholeEntity(T entity)
-		{
-			DbSet.Attach(entity);
-			_dataContext.Entry(entity).State = EntityState.Modified;
+			if (updateConfig.IncludeAllPropertiesEnabled)
+			{
+				foreach (T entity in entities)
+				{
+					DbSet.Attach(entity);
+					_dataContext.Entry(entity).State = EntityState.Modified;
+				}
+			}
+			else if (!updateConfig.AutoDetectChangedPropertiesEnabled)
+			{
+				foreach (T entity in entities)
+				{
+					DbSet.Attach(entity);
+					foreach (string propertyName in updateConfig.PropertyNames)
+						_dataContext.Entry(entity).Property(propertyName).IsModified = true;
+				}
+			}
+			else
+			{
+				foreach (T entity in entities)
+					DbSet.Attach(entity);
+			}
+
+			if (!updateConfig.AutoDetectChangedPropertiesEnabled)
+				_dataContext.Configuration.AutoDetectChangesEnabled = true;
 		}
 
 		public virtual void Delete(T entity)

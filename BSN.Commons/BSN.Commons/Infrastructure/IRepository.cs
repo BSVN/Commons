@@ -9,9 +9,9 @@ namespace BSN.Commons.Infrastructure
 		void Add(T entity);
 		void AddRange(IEnumerable<T> entities);
 		void Update(T entity);
+		void Update(T entity, Action<IUpdateConfig<T>> configurer);
 		void UpdateRange(IEnumerable<T> entities);
-		IRepositoryUpdateFluentInterface<T> BeginUpdate(T entity);
-		IRepositoryUpdateFluentInterface<T> BeginUpdateRange(IEnumerable<T> entities);
+		void UpdateRange(IEnumerable<T> entities, Action<IUpdateConfig<T>> configurer);
 		void Delete(T entity);
 		void Delete(Expression<Func<T, bool>> where);
 		void DeleteRange(IEnumerable<T> entities);
