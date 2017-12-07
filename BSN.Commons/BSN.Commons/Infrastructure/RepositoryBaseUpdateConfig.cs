@@ -6,7 +6,7 @@ namespace Commons.Infrastructure
 {
 	public abstract partial class RepositoryBase<T> where T : class
 	{
-		public class UpdateConfig : IUpdateConfig<T> 
+		private class UpdateConfig : IUpdateConfig<T> 
 		{
 			public bool IncludeAllPropertiesEnabled
 			{
@@ -43,16 +43,14 @@ namespace Commons.Infrastructure
 				PropertyNames = new List<string>();
 			}
 
-			public IUpdateConfig<T> IncludeAllProperties()
+			public void IncludeAllProperties()
 			{
 				IncludeAllPropertiesEnabled = true;
-				return this;
 			}
 
-			public IUpdateConfig<T> AutoDetectChangedProperties()
+			public void AutoDetectChangedProperties()
 			{
 				AutoDetectChangedPropertiesEnabled = true;
-				return this;
 			}
 
 			public IUpdateConfig<T> IncludeProperty<TProperty>(Expression<Func<T, TProperty>> propertyAccessExpression)

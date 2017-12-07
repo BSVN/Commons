@@ -33,7 +33,7 @@ namespace Commons.Infrastructure
 
 		public virtual void Update(T entity)
 		{
-			Update(entity, cfg => cfg.AutoDetectChangedProperties());
+			Update(entity, cfg => cfg.IncludeAllProperties());
 		}
 
 		public virtual void Update(T entity, Action<IUpdateConfig<T>> configurer)
@@ -41,23 +41,34 @@ namespace Commons.Infrastructure
 			var updateConfig = new UpdateConfig();
 			configurer.Invoke(updateConfig);
 
-			if (!updateConfig.AutoDetectChangedPropertiesEnabled)
+			if (updateConfig.AutoDetectChangedPropertiesEnabled)
+			{
+				_dataContext.Configuration.AutoDetectChangesEnabled = true;
+				return;
+			}
+
+			bool autoDetectChangesPreviousValue = _dataContext.Configuration.AutoDetectChangesEnabled;
+
+			try
+			{
 				_dataContext.Configuration.AutoDetectChangesEnabled = false;
 
-			dbSet.Attach(entity);
+				dbSet.Attach(entity);
 
-			if (updateConfig.IncludeAllPropertiesEnabled)
-			{
-				_dataContext.Entry(entity).State = EntityState.Modified;
+				if (updateConfig.IncludeAllPropertiesEnabled)
+				{
+					_dataContext.Entry(entity).State = EntityState.Modified;
+				}
+				else
+				{
+					foreach (string propertyName in updateConfig.PropertyNames)
+						_dataContext.Entry(entity).Property(propertyName).IsModified = true;
+				}
 			}
-			else if (!updateConfig.AutoDetectChangedPropertiesEnabled)
+			finally 
 			{
-				foreach (string propertyName in updateConfig.PropertyNames)
-					_dataContext.Entry(entity).Property(propertyName).IsModified = true;
+				_dataContext.Configuration.AutoDetectChangesEnabled = autoDetectChangesPreviousValue;
 			}
-
-			if (!updateConfig.AutoDetectChangedPropertiesEnabled)
-				_dataContext.Configuration.AutoDetectChangesEnabled = true;
 		}
 
 		public virtual void UpdateRange(IEnumerable<T> entities)
@@ -70,34 +81,40 @@ namespace Commons.Infrastructure
 			var updateConfig = new UpdateConfig();
 			configurer.Invoke(updateConfig);
 
-			if (!updateConfig.AutoDetectChangedPropertiesEnabled)
+			if (updateConfig.AutoDetectChangedPropertiesEnabled)
+			{
+				_dataContext.Configuration.AutoDetectChangesEnabled = true;
+				return;
+			}
+
+			bool autoDetectChangesPreviousValue = _dataContext.Configuration.AutoDetectChangesEnabled;
+
+			try
+			{
 				_dataContext.Configuration.AutoDetectChangesEnabled = false;
 
-			if (updateConfig.IncludeAllPropertiesEnabled)
-			{
-				foreach (T entity in entities)
+				if (updateConfig.IncludeAllPropertiesEnabled)
 				{
-					dbSet.Attach(entity);
-					_dataContext.Entry(entity).State = EntityState.Modified;
+					foreach (T entity in entities)
+					{
+						dbSet.Attach(entity);
+						_dataContext.Entry(entity).State = EntityState.Modified;
+					}
+				}
+				else
+				{
+					foreach (T entity in entities)
+					{
+						dbSet.Attach(entity);
+						foreach (string propertyName in updateConfig.PropertyNames)
+							_dataContext.Entry(entity).Property(propertyName).IsModified = true;
+					}
 				}
 			}
-			else if (!updateConfig.AutoDetectChangedPropertiesEnabled)
+			finally
 			{
-				foreach (T entity in entities)
-				{
-					dbSet.Attach(entity);
-					foreach (string propertyName in updateConfig.PropertyNames)
-						_dataContext.Entry(entity).Property(propertyName).IsModified = true;
-				}
+				_dataContext.Configuration.AutoDetectChangesEnabled = autoDetectChangesPreviousValue;
 			}
-			else
-			{
-				foreach (T entity in entities)
-					dbSet.Attach(entity);
-			}
-
-			if (!updateConfig.AutoDetectChangedPropertiesEnabled)
-				_dataContext.Configuration.AutoDetectChangesEnabled = true;
 		}
 
 		public virtual void Delete(T entity)
