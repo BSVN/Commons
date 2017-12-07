@@ -1,6 +1,6 @@
 ﻿using System.Data.Entity;
 
-namespace BSN.Commons.Infrastructure
+namespace Commons.Infrastructure
 {
 	public class UnitOfWork : IUnitOfWork
 	{
@@ -8,7 +8,7 @@ namespace BSN.Commons.Infrastructure
 		private DbContext _dataContext;
 
 
-		protected DbContext DataContext { get { return _dataContext ?? (_dataContext = _databaseFactory.Get()); } }
+		protected DbContext DataContext => _dataContext ?? (_dataContext = _databaseFactory.Get());
 
 
 		public UnitOfWork(IDatabaseFactory databaseFactory)

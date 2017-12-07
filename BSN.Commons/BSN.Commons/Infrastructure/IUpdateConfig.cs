@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
-namespace BSN.Commons.Infrastructure
+namespace Commons.Infrastructure
 {
     public interface IUpdateConfig<TEntity> where TEntity : class 
     {

@@ -4,14 +4,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 
-namespace BSN.Commons.Users
+namespace Commons.Users
 {
 	public class User : IdentityUser<string, UserLogin, UserRole, UserClaim>
 	{
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
 		public Gender Gender { get; set; }
-		public string FullName { get { return FirstName + " " + LastName; } }
+		public string FullName => FirstName + " " + LastName;
 
 
 		public User()

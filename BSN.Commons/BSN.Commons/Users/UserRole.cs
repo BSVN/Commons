@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
 
-namespace BSN.Commons.Users
+namespace Commons.Users
 {
-	public class UserRole: IdentityUserRole<string>
+	public class UserRole : IdentityUserRole<string>
 	{
 	}
 }

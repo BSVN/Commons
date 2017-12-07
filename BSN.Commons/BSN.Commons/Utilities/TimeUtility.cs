@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace BSN.Commons.Utilities
+namespace Commons.Utilities
 {
 	public static class TimeUtility
 	{

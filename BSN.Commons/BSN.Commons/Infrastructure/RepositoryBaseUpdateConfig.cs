@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace BSN.Commons.Infrastructure
+namespace Commons.Infrastructure
 {
 	public abstract partial class RepositoryBase<T> where T : class
 	{

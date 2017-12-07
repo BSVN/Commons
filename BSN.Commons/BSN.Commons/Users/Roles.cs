@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BSN.Commons.Users
+namespace Commons.Users
 {
 	public enum Roles
 	{

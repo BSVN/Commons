@@ -1,4 +1,4 @@
-﻿namespace BSN.Commons.Utilities
+﻿namespace Commons.Utilities
 {
 	public class Point
 	{

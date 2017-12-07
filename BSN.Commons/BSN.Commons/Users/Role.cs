@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNet.Identity.EntityFramework;
 
-namespace BSN.Commons.Users
+namespace Commons.Users
 {
-	public class Role : IdentityRole<String, UserRole>
+	public class Role : IdentityRole<string, UserRole>
 	{
 		private static readonly List<Role> Roles = new List<Role>();
 

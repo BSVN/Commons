@@ -1,4 +1,4 @@
-﻿namespace BSN.Commons.Users
+﻿namespace Commons.Users
 {
 	public enum Gender
 	{
