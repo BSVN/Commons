@@ -358,8 +358,8 @@
         "netstandard2.0"
       ],
       "sources": {
-        "E:\\Resa\\Resa\\CustomDependency\\Commons": {},
-        "https://api.nuget.org/v3/index.json": {}
+        "https://api.nuget.org/v3/index.json": {},
+        "https://soroshsabz.pkgs.visualstudio.com/_packaging/BSNRepo/nuget/v3/index.json": {}
       },
       "frameworks": {
         "netstandard2.0": {
