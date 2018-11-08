@@ -2,6 +2,16 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyVersion>1.4.1.0</AssemblyVersion>
+    <FileVersion>1.4.1.0</FileVersion>
+    <Company>BSN Company</Company>
+    <Authors>BSN Developers</Authors>
+    <Copyright>BSN Co 2018</Copyright>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.4.1</Version>
+    <PackageProjectUrl>https://github.com/BSVN/Commons</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/BSVN/Commons/blob/master/LICENSE</PackageLicenseUrl>
+    <Description>Commons library for enterprise application</Description>
   </PropertyGroup>
 
   <ItemGroup>
