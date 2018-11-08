@@ -1,10 +1,17 @@
 ﻿################################################################################
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
+<<<<<<< HEAD
+=======
+
+>>>>>>> legacy-commons/develop
 /BSN.Commons/.vs/BSN.Commons/v15/Server/sqlite3
 /BSN.Commons/packages
 /BSN.Commons/BSN.Commons/bin
 /BSN.Commons/BSN.Commons/obj
+<<<<<<< HEAD
 Source/BSN.Commons/bin
 Source/BSN.Commons/obj
 *.lock
+=======
+>>>>>>> legacy-commons/develop
