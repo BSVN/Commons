@@ -11,3 +11,4 @@ Source/BSN.Commons/obj
 *.lock
 /.vs/BSN.Commons/v15
 /.vs/Commons/v15/.suo
+/Build/tools
