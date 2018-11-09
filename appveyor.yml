@@ -12,7 +12,7 @@ environment:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
 
 build_script:
-- ps: .\build.ps1 --currentBranch=$env:APPVEYOR_REPO_BRANCH 
+- ps: Build/build.ps1 --currentBranch=$env:APPVEYOR_REPO_BRANCH 
 
 test: off #tests handled by cake script
 deploy: off #deploy handled by cake script
