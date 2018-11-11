@@ -7,12 +7,12 @@ using NuGet;
 
 var target = Argument("target", "Default");
 var artifactsDir = "./artifacts/";
-var solutionPath = "./BSN.Commons.sln";
-var project = "./src/BSN.Commons/BSN.Commons.csproj";
-var testFolder = "./tests/BSN.Commons.Tests/";
+var solutionPath = "../BSN.Commons.sln";
+var project = "../Source/BSN.Commons/BSN.Commons.csproj";
+var testFolder = "../Test/BSN.Commons.Tests/";
 var testProject = testFolder + "BSN.Commons.Tests.csproj";
 var coverageResultsFileName = "coverage.xml";
-var currentBranch = Argument<string>("currentBranch", GitBranchCurrent("./").FriendlyName);
+var currentBranch = Argument<string>("currentBranch", GitBranchCurrent("../").FriendlyName);
 var isReleaseBuild = string.Equals(currentBranch, "master", StringComparison.OrdinalIgnoreCase);
 var configuration = "Release";
 var nugetApiKey = Argument<string>("nugetApiKey", null);
@@ -152,7 +152,7 @@ else
 }
 
 Task("Default")
-    .IsDependentOn("Restore");
+    .IsDependentOn("Build");
 
 
 RunTarget(target);
