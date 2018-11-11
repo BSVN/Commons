@@ -18,7 +18,6 @@ var configuration = "Release";
 var nugetApiKey = Argument<string>("nugetApiKey", null);
 var coverallsToken = Argument<string>("coverallsToken", null);
 var nugetSource = "https://api.nuget.org/v3/index.json";
-var target = Argument("target", "Default");
 
 Task("Clean")
     .Does(() => {
