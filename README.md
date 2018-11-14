@@ -3,10 +3,10 @@ ITNOA
 
 | | |
 | --- | --- |
-| **Build**** | [![Build status](https://ci.appveyor.com/api/projects/status/rqa6mmejdix3swlq?svg=true)](https://ci.appveyor.com/project/BSVN/commons) |
-| **OpenCover**** | [![Coveralls](https://coveralls.io/repos/github/tygerbytes/ResourceFitness/badge.svg?branch=master)](https://coveralls.io/github/tygerbytes/ResourceFitness?branch=master) |
-| **NuGet**** | [![nuget](https://img.shields.io/nuget/v/TW.Resfit.Core.svg)](https://www.nuget.org/packages/TW.Resfit.Core/)
+| **Build** | [![Build status](https://ci.appveyor.com/api/projects/status/rqa6mmejdix3swlq?svg=true)](https://ci.appveyor.com/project/BSVN/commons) |
+| **OpenCover** | [![Coverage Status](https://coveralls.io/repos/github/BSVN/Commons/badge.svg?branch=master)](https://coveralls.io/github/BSVN/Commons?branch=master) |
+| **NuGet** | [![nuget](https://img.shields.io/nuget/v/BSN.Commons.svg)](https://www.nuget.org/packages/BSN.Commons/)
   
-[![Build history](https://buildstats.info/appveyor/chart/tygerbytes/resourcefitness)](https://ci.appveyor.com/project/tygerbytes/resourcefitness/history)
+[![Build history](https://buildstats.info/appveyor/chart/BSVN/commons)](https://ci.appveyor.com/project/BSVN/commons/history)
 
 Commons library
