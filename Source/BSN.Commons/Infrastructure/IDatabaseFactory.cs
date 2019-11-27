@@ -5,6 +5,6 @@ namespace Commons.Infrastructure
 {
     public interface IDatabaseFactory : IDisposable
     {
-        DbContext Get();
+        ExtendedDbContext Get();
     }
 }
