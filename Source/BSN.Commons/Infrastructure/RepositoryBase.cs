@@ -8,10 +8,10 @@ namespace Commons.Infrastructure
 {
 	public abstract partial class RepositoryBase<T> : IRepository<T> where T : class
 	{
-		private DbContext _dataContext;
+		private ExtendedDbContext _dataContext;
 		protected readonly DbSet<T> dbSet;
 
-		protected DbContext DataContext => _dataContext ?? (_dataContext = DatabaseFactory.Get());
+		protected ExtendedDbContext DataContext => _dataContext ?? (_dataContext = DatabaseFactory.Get());
 		protected IDatabaseFactory DatabaseFactory { get; private set; }
 
 

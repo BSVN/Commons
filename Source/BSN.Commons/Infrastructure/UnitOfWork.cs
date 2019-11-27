@@ -7,32 +7,40 @@ namespace Commons.Infrastructure
 	public class UnitOfWork : IUnitOfWork
 	{
 		private readonly IDatabaseFactory _databaseFactory;
-		private DbContext _dataContext;
-        private Queue<Func<bool>> Queue { get; set; }
+		private ExtendedDbContext _dataContext;
 
 
-        protected DbContext DataContext => _dataContext ?? (_dataContext = _databaseFactory.Get());
+        protected ExtendedDbContext DataContext => _dataContext ?? (_dataContext = _databaseFactory.Get());
 
 
 		public UnitOfWork(IDatabaseFactory databaseFactory)
 		{
 			_databaseFactory = databaseFactory;
-            Queue = new Queue<Func<bool>>();
 		}
-
-        public void AddToQueue(Func<bool> func)
-        {
-            Queue.Enqueue(func);
-        }
 
         public void Commit()
 		{
-			DataContext.SaveChanges();
 
-            while (Queue.Count > 0)
+            using (var dbContextTransaction = DataContext.Database.BeginTransaction())
             {
-                var Function = Queue.Dequeue();
-                Function.Invoke();
+                try
+                {
+                    DataContext.SaveChanges();
+
+                    while (DataContext.QueueCount > 0)
+                    {
+                        var Function = DataContext.RemoveFromQueue();
+
+                        bool result = Function.Invoke();
+
+                        if (!result)
+                            throw new Exception("Function not invoked.");
+                    }
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
             }
         }
 	}
