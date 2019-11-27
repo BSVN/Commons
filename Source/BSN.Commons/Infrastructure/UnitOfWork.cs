@@ -4,22 +4,20 @@ using System.Data.Entity;
 
 namespace Commons.Infrastructure
 {
-	public class UnitOfWork : IUnitOfWork
-	{
-		private readonly IDatabaseFactory _databaseFactory;
-		private ExtendedDbContext _dataContext;
-
+    public class UnitOfWork : IUnitOfWork
+    {
+        private readonly IDatabaseFactory _databaseFactory;
+        private ExtendedDbContext _dataContext;
 
         protected ExtendedDbContext DataContext => _dataContext ?? (_dataContext = _databaseFactory.Get());
 
-
-		public UnitOfWork(IDatabaseFactory databaseFactory)
-		{
-			_databaseFactory = databaseFactory;
-		}
+        public UnitOfWork(IDatabaseFactory databaseFactory)
+        {
+            _databaseFactory = databaseFactory;
+        }
 
         public void Commit()
-		{
+        {
 
             using (var dbContextTransaction = DataContext.Database.BeginTransaction())
             {
@@ -43,5 +41,5 @@ namespace Commons.Infrastructure
                 }
             }
         }
-	}
+    }
 }
