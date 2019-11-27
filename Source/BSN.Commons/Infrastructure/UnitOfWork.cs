@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.Entity;
 
 namespace Commons.Infrastructure
 {

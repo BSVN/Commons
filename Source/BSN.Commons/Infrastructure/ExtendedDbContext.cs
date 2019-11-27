@@ -10,7 +10,7 @@ namespace Commons.Infrastructure
 
         public int QueueCount => Queue.Count;
 
-        public ExtendedDbContext()
+        public ExtendedDbContext(string nameOrConnectionString) : base(nameOrConnectionString)
         {
             Queue = new Queue<Func<bool>>();
         }
