@@ -18,30 +18,30 @@ namespace Commons.Infrastructure
 			_databaseFactory = databaseFactory;
 		}
 
-        public void Commit()
-		{
+            public void Commit()
+		    {
 
-            using (var dbContextTransaction = DataContext.Database.BeginTransaction())
-            {
-                try
+                using (var dbContextTransaction = DataContext.Database.BeginTransaction())
                 {
-                    DataContext.SaveChanges();
-
-                    while (DataContext.QueueCount > 0)
+                    try
                     {
-                        var Function = DataContext.RemoveFromQueue();
+                        DataContext.SaveChanges();
 
-                        bool result = Function.Invoke();
+                        while (DataContext.QueueCount > 0)
+                        {
+                            var Function = DataContext.RemoveFromQueue();
 
-                        if (!result)
-                            throw new Exception("Function not invoked.");
+                            bool result = Function.Invoke();
+
+                            if (!result)
+                                throw new Exception("Function not invoked.");
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        throw;
                     }
                 }
-                catch (Exception)
-                {
-                    throw;
-                }
             }
-        }
 	}
 }
