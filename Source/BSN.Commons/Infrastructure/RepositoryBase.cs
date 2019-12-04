@@ -9,6 +9,7 @@ namespace Commons.Infrastructure
     public abstract partial class RepositoryBase<T> : IRepository<T> where T : class
     {
         private DbContext _dataContext;
+        private readonly IUnitOfWork _unitOfWork;
         protected readonly DbSet<T> dbSet;
 
         protected DbContext DataContext => _dataContext ?? (_dataContext = DatabaseFactory.Get());
@@ -19,6 +20,11 @@ namespace Commons.Infrastructure
         {
             DatabaseFactory = databaseFactory;
             dbSet = DataContext.Set<T>();
+        }
+
+        protected RepositoryBase(IDatabaseFactory databaseFactory, IUnitOfWork unitOfWork) : this(databaseFactory)
+        {
+            _unitOfWork = unitOfWork;
         }
 
         public virtual void Add(T entity)

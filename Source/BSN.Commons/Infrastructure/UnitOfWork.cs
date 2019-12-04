@@ -10,7 +10,7 @@ namespace Commons.Infrastructure
     {
         private readonly IDatabaseFactory _databaseFactory;
         private DbContext _dataContext;
-        private readonly List<ITaskUnit> _tasks;
+        private readonly Queue<ITaskUnit> _tasks;
         public List<Exception> _exceptions { get; set; }
 
         protected DbContext DataContext => _dataContext ?? (_dataContext = _databaseFactory.Get());
@@ -20,7 +20,7 @@ namespace Commons.Infrastructure
         {
             _databaseFactory = databaseFactory;
             _exceptions = new List<Exception>();
-            _tasks = new List<ITaskUnit>();
+            _tasks = new Queue<ITaskUnit>();
         }
 
         public void AddToQueue(ITaskUnit task)
@@ -30,7 +30,7 @@ namespace Commons.Infrastructure
                 throw new ArgumentNullException(nameof(task));
             }
 
-            _tasks.Add(task);
+            _tasks.Enqueue(task);
         }
 
         public void AddToQueue(Task executeFunction, Task rollbackFunction)
@@ -44,30 +44,43 @@ namespace Commons.Infrastructure
                 throw new ArgumentNullException(nameof(rollbackFunction));
             }
 
-            _tasks.Add(new EnlistTask(executeFunction, rollbackFunction));
+            _tasks.Enqueue(new EnlistTask(executeFunction, rollbackFunction));
         }
 
 
 
         public void Commit()
         {
-            using (var tran = new TransactionScope())
+            using (var transaction = new TransactionScope())
             {
-                foreach (var task in _tasks)
+                Queue<ITaskUnit> executedTasks = new Queue<ITaskUnit>();
+
+                while (_tasks.Count > 0)
                 {
-                    Transaction.Current.EnlistVolatile(task, EnlistmentOptions.EnlistDuringPrepareRequired);
+                    var task = _tasks.Dequeue();
+                    executedTasks.Enqueue(task);
+
+                    task.Execute();
+
+                    if (task.Exception != null)
+                    {
+                        _exceptions.Add(task.Exception);
+
+                        while (executedTasks.Count > 0)
+                        {
+                            var rollbackTask = executedTasks.Dequeue();
+
+                            rollbackTask.Rollback();
+
+                            if (rollbackTask.Exception != null)
+                                _exceptions.Add(rollbackTask.Exception);
+                        }
+                        throw task.Exception;
+                    }
                 }
 
                 DataContext.SaveChanges();
-
-                tran.Complete();
-            }
-            foreach (var task in _tasks)
-            {
-                if (task._exception != null)
-                {
-                    _exceptions.Add(task._exception);
-                }
+                transaction.Complete();
             }
         }
     }

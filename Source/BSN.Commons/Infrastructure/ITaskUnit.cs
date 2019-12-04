@@ -4,9 +4,9 @@ using System.Transactions;
 
 namespace Commons.Infrastructure
 {
-    public interface ITaskUnit: IEnlistmentNotification
+    public interface ITaskUnit
     {
-        Exception _exception { get; set; }
+        Exception Exception { get; set; }
         Task Execute();
         Task Rollback();
     }
