@@ -1,10 +1,12 @@
-﻿using System;
-using System.Linq;
+﻿using BSN.Commons.Test.Infrastructure;
 using Commons.Infrastructure;
 using NUnit.Framework;
-using System.Data.Entity.Infrastructure;
+using BSN.Commons.Test.Data;
 using System.Collections.Generic;
+using BSN.Commons.Test.Mock;
+using System;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace BSN.Commons.Test
 {
@@ -13,11 +15,10 @@ namespace BSN.Commons.Test
         [Test]
         public void AddUserToDataBaseAndNullQueue_CorrectInput_UsereShouldBeCorectlyAddedToDatabase()
         {
-            var databaseFactory = new InMemoryDatabaseFactory();
+            var databaseFactory = new DatabaseFactory();
             IUnitOfWork unitOfWork = new UnitOfWork(databaseFactory);
 
-            var Context = databaseFactory.Get();
-            var Users = Context.Set<User>();
+            var usersRepository = new UserRepository(databaseFactory);
 
             User User = new User()
             {
@@ -27,68 +28,66 @@ namespace BSN.Commons.Test
                 Document = new Document() { Title = "Test" }
             };
 
-            Users.Add(User);
+            usersRepository.Add(User);
             unitOfWork.Commit();
 
-            Assert.AreEqual(User.FirstName, Users.First().FirstName);
-            Assert.AreEqual(User.LastName, Users.First().LastName);
-            Assert.AreEqual(User.Password, Users.First().Password);
-        }
-
-        [Test]
-        public void AddUserToDataBaseAndNullQueue_IncorrectInput_UsereShouldBeAddedToDatabase()
-        {
-            var databaseFactory = new InMemoryDatabaseFactory();
-            IUnitOfWork unitOfWork = new UnitOfWork(databaseFactory);
-
-            var Context = databaseFactory.Get();
-            var Users = Context.Set<User>();
-
-            User User = new User()
-            {
-                FirstName = "Reza",
-                LastName = "Alizadeh",
-                Password = "123456"
-            };
-
-            Users.Add(User);
-
-            System.Action action = () => unitOfWork.Commit();
-            Assert.Throws<DbUpdateException>(new TestDelegate(action));
+            Assert.IsNotEmpty(usersRepository.GetMany(x => x.FirstName == "Reza"));
         }
 
         [Test]
         public void AddTaskAndDataForDatabase_CorrectInput_UsereShouldBeAddedToDatabaseAndTaskShouldBeRunCorectly()
         {
-            var databaseFactory = new InMemoryDatabaseFactory();
+            var databaseFactory = new DatabaseFactory();
             IUnitOfWork unitOfWork = new UnitOfWork(databaseFactory);
 
             List<string> Names = new List<string>() { "Reza", "MohammadReza" };
 
-            unitOfWork.AddToQueue(new Task(() => Names.Add("Gholi")), new Task(() => Names.Remove("Gholi")));
+            var enlistTask = new EnlistTask
+                (
+                    new Task(() => Names.Add("Gholi")),
+                    new Task(() => Names.Remove("Gholi"))
+                );
+
+            var secondEnlistTask = new EnlistTask
+                (
+                    new Task(() => Names.Add("Qamar")),
+                    new Task(() => Names.Remove("Qamar"))
+                );
+
+            unitOfWork.AddToQueue(enlistTask);
+            unitOfWork.AddToQueue(secondEnlistTask);
             unitOfWork.Commit();
 
             Assert.AreEqual(Names.Where(P => P == "Gholi").FirstOrDefault(), "Gholi");
+            Assert.AreEqual(Names.Where(P => P == "Qamar").FirstOrDefault(), "Qamar");
         }
 
         [Test]
         public void AddTaskAndNullDatabase_ExceptionInjectedInput_AllTasksShouldBeRollback()
         {
-            var databaseFactory = new InMemoryDatabaseFactory();
+            var databaseFactory = new DatabaseFactory();
             IUnitOfWork unitOfWork = new UnitOfWork(databaseFactory);
+
+            var usersRepository = new UserRepository(databaseFactory);
 
             List<string> Names = new List<string>() { "Reza", "MohammadReza" };
 
-            unitOfWork.AddToQueue(new Task(() =>
-            {
-                Names.Add("Qamar");
-            }), new Task(() => Names.Remove("Qamar")));
+            var enlistTask = new EnlistTask
+                (
+                    new Task(() => { Names.Add("Qamar");}),
+                    new Task(() => Names.Remove("Qamar"))
+                );
 
-            unitOfWork.AddToQueue(new Task(() =>
-            {
-                Names.Add("Gholi");
-                throw new Exception();
-            }), new Task(() => Names.Remove("Gholi")));
+            unitOfWork.AddToQueue(enlistTask);
+
+            var enlistTask2 = new EnlistTask(
+                new Task(() =>
+                {
+                    Names.Add("Gholi");
+                    throw new Exception();
+                }), new Task(() => Names.Remove("Gholi")));
+
+            unitOfWork.AddToQueue(enlistTask2);
 
             try
             {
@@ -105,11 +104,10 @@ namespace BSN.Commons.Test
         [Test]
         public void AddTaskAndDataForDatabase_ExceptionInjectedInTask_AllTasksAndDatabaseShouldBeRollback()
         {
-            var databaseFactory = new InMemoryDatabaseFactory();
+            var databaseFactory = new DatabaseFactory();
             IUnitOfWork unitOfWork = new UnitOfWork(databaseFactory);
 
-            var Context = databaseFactory.Get();
-            var Users = Context.Set<User>();
+            var usersRepository = new UserRepository(databaseFactory);
 
             User User = new User()
             {
@@ -119,15 +117,19 @@ namespace BSN.Commons.Test
                 Document = new Document() { Title = "Test" }
             };
 
-            Users.Add(User);
+            usersRepository.Add(User);
 
             List<string> Names = new List<string>() { "Reza", "MohammadReza" };
 
-            unitOfWork.AddToQueue(new Task(() =>
-            {
-                Names.Add("Gholi");
-                throw new Exception();
-            }), new Task(() => Names.Remove("Gholi")));
+            var enlistTask = new EnlistTask(
+                new Task(() =>
+                {
+                    Names.Add("Qamar");
+                    throw new Exception();
+                }),
+                new Task(() => Names.Remove("Qamar")));
+
+            unitOfWork.AddToQueue(enlistTask);
 
             try
             {
@@ -136,19 +138,20 @@ namespace BSN.Commons.Test
             }
             catch (Exception)
             {
+                Assert.IsEmpty(usersRepository.GetMany(x => x.FirstName == "Reza"));
                 Assert.IsNull(Names.Where(P => P == "Gholi").FirstOrDefault());
-                Assert.AreEqual(Users.Count(), 0);
             }
         }
+
+
 
         [Test]
         public void AddTaskAndDataForDatabase_ExceptionInjectedInTaskAndIncorectInput_AllTasksAndDatabaseShouldBeRollback()
         {
-            var databaseFactory = new InMemoryDatabaseFactory();
+            var databaseFactory = new DatabaseFactory();
             IUnitOfWork unitOfWork = new UnitOfWork(databaseFactory);
 
-            var Context = databaseFactory.Get();
-            var Users = Context.Set<User>();
+            var usersRepository = new UserRepository(databaseFactory);
 
             User User = new User()
             {
@@ -157,15 +160,17 @@ namespace BSN.Commons.Test
                 Password = "123456",
             };
 
-            Users.Add(User);
+            usersRepository.Add(User);
 
             List<string> Names = new List<string>() { "Reza", "MohammadReza" };
 
-            unitOfWork.AddToQueue(new Task(() =>
-            {
-                Names.Add("Gholi");
-                throw new Exception();
-            }), new Task(() => Names.Remove("Gholi")));
+            var enlistTask = new EnlistTask
+            (
+                new Task(() => { Names.Add("Qamar"); throw new Exception();}),
+                new Task(() => Names.Remove("Qamar"))
+            );
+
+            unitOfWork.AddToQueue(enlistTask);
 
             try
             {
@@ -174,8 +179,94 @@ namespace BSN.Commons.Test
             catch (Exception)
             {
                 Assert.IsNull(Names.Where(P => P == "Gholi").FirstOrDefault());
-                Assert.AreEqual(Users.Count(), 0);
+                Assert.IsEmpty(usersRepository.GetMany(x => x.FirstName == "Reza"));
             }
         }
+
+        [Test]
+        public void AddTaskAndDataForDatabase_ExceptionInjectedInDataBase_AllTasksAndDatabaseShouldBeRollback()
+        {
+            var databaseFactory = new DatabaseFactory();
+            IUnitOfWork unitOfWork = new UnitOfWork(databaseFactory);
+
+            var usersRepository = new UserRepository(databaseFactory);
+
+            User User = new User()
+            {
+                FirstName = "AliiReza",
+                LastName = "Alizadeh",
+                Password = "123456",
+            };
+
+            usersRepository.Add(User);
+
+            List<string> Names = new List<string>() { "Reza", "MohammadReza" };
+
+            var enlistTask = new EnlistTask
+            (
+                new Task(() => { Names.Add("Qamar"); }),
+                new Task(() => Names.Remove("Qamar"))
+            );
+
+            unitOfWork.AddToQueue(enlistTask);
+
+            try
+            {
+                unitOfWork.Commit();
+            }
+            catch (Exception)
+            {
+                Assert.IsNull(Names.Where(P => P == "Gholi").FirstOrDefault());
+                Assert.IsEmpty(usersRepository.GetMany(x => x.FirstName == "AliiReza"));
+            }
+        }
+
+        [Test]
+        public void AddUserToDataBaseAndNullQueue_IncorrectInput_UsereShouldBeAddedToDatabase()
+        {
+            var databaseFactory = new DatabaseFactory();
+            IUnitOfWork unitOfWork = new UnitOfWork(databaseFactory);
+
+            var usersRepository = new UserRepository(databaseFactory);
+
+            User User = new User()
+            {
+                FirstName = "hamidReza",
+                LastName = "Alizadeh",
+                Password = "123456"
+            };
+
+            try
+            {
+                usersRepository.Add(User);
+                unitOfWork.Commit();
+            }
+            catch (Exception ex)
+            {
+                Assert.IsEmpty(usersRepository.GetMany(x => x.FirstName == "hamidReza"));
+            }
+        }
+
+        [Test]
+        public void NoTaskForQueueAndNoDataForDataBase_CorrectInput_ShouldHaveCorrectOutput()
+        {
+            var databaseFactory = new DatabaseFactory();
+            IUnitOfWork unitOfWork = new UnitOfWork(databaseFactory);
+
+            var usersRepository = new UserRepository(databaseFactory);
+
+            List<string> Names = new List<string>();
+
+            try
+            {
+                unitOfWork.Commit();
+            }
+            catch (Exception ex)
+            {
+                Assert.IsFalse(false);
+            }
+            Assert.IsEmpty(Names);
+        }
+
     }
 }
