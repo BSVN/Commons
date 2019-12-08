@@ -8,6 +8,5 @@ namespace Commons.Infrastructure
     {
         void Commit();
         void AddToQueue(ITaskUnit task);
-        void AddToQueue(Task task, Task rollback);
     }
 }

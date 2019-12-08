@@ -9,10 +9,7 @@ namespace Commons.Infrastructure
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly IDatabaseFactory _databaseFactory;
-        private DbContext _dataContext;
-        private readonly Queue<ITaskUnit> _tasks;
-        public List<Exception> _exceptions { get; set; }
+        public List<Exception> Exceptions { get; private set; }
 
         protected DbContext DataContext => _dataContext ?? (_dataContext = _databaseFactory.Get());
 
@@ -20,32 +17,14 @@ namespace Commons.Infrastructure
         public UnitOfWork(IDatabaseFactory databaseFactory)
         {
             _databaseFactory = databaseFactory;
-            _exceptions = new List<Exception>();
             _tasks = new Queue<ITaskUnit>();
+            Exceptions = new List<Exception>();
         }
 
         public void AddToQueue(ITaskUnit task)
         {
-            if (task == null)
-            {
-                throw new ArgumentNullException(nameof(task));
-            }
-
+            task = task ?? throw new ArgumentNullException(nameof(task));
             _tasks.Enqueue(task);
-        }
-
-        public void AddToQueue(Task executeFunction, Task rollbackFunction)
-        {
-            if (executeFunction == null)
-            {
-                throw new ArgumentNullException(nameof(executeFunction));
-            }
-            if (rollbackFunction == null)
-            {
-                throw new ArgumentNullException(nameof(rollbackFunction));
-            }
-
-            _tasks.Enqueue(new EnlistTask(executeFunction, rollbackFunction));
         }
 
         public void Commit()
@@ -73,8 +52,12 @@ namespace Commons.Infrastructure
             }
             finally
             {
-                _exceptions.AddRange(executedTasks.Select(a => a.Exception));
+                Exceptions.AddRange(executedTasks.Select(a => a.Exception));
             }
         }
+
+        private readonly IDatabaseFactory _databaseFactory;
+        private DbContext _dataContext;
+        private readonly Queue<ITaskUnit> _tasks;
     }
 }

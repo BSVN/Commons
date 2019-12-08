@@ -17,7 +17,6 @@
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.2.0" />
     <PackageReference Include="Microsoft.AspNet.Identity.EntityFramework" Version="2.2.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.0" />
   </ItemGroup>
 
 </Project>
