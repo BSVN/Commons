@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Threading.Tasks;
 using System.Transactions;
+using System.Linq;
 
 namespace Commons.Infrastructure
 {
@@ -47,40 +48,32 @@ namespace Commons.Infrastructure
             _tasks.Enqueue(new EnlistTask(executeFunction, rollbackFunction));
         }
 
-
-
         public void Commit()
         {
-            using (var transaction = new TransactionScope())
+            Queue<ITaskUnit> executedTasks = new Queue<ITaskUnit>();
+
+            try
             {
-                Queue<ITaskUnit> executedTasks = new Queue<ITaskUnit>();
-
-                while (_tasks.Count > 0)
+                using (var transaction = new TransactionScope())
                 {
-                    var task = _tasks.Dequeue();
-                    executedTasks.Enqueue(task);
-
-                    task.Execute();
-
-                    if (task.Exception != null)
+                    while (_tasks.Count > 0)
                     {
-                        _exceptions.Add(task.Exception);
-
-                        while (executedTasks.Count > 0)
-                        {
-                            var rollbackTask = executedTasks.Dequeue();
-
-                            rollbackTask.Rollback();
-
-                            if (rollbackTask.Exception != null)
-                                _exceptions.Add(rollbackTask.Exception);
-                        }
-                        throw task.Exception;
+                        var task = _tasks.Dequeue();
+                        executedTasks.Enqueue(task);
+                        Transaction.Current.EnlistVolatile(task, EnlistmentOptions.None);
                     }
-                }
 
-                DataContext.SaveChanges();
-                transaction.Complete();
+                    DataContext.SaveChanges();
+                    transaction.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                _exceptions.AddRange(executedTasks.Select(a => a.Exception));
             }
         }
     }

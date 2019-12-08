@@ -4,7 +4,7 @@ using System.Transactions;
 
 namespace Commons.Infrastructure
 {
-    public interface ITaskUnit
+    public interface ITaskUnit : IEnlistmentNotification
     {
         Exception Exception { get; set; }
         Task Execute();
