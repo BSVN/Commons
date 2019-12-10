@@ -52,11 +52,16 @@ Task("Restore")
 GitVersion versionInfo = null;
 Task("Version")
     .Does(() => {
+
         GitVersion(new GitVersionSettings{
             UpdateAssemblyInfo = true,
             OutputType = GitVersionOutput.BuildServer
         });
-        versionInfo = GitVersion(new GitVersionSettings{ OutputType = GitVersionOutput.Json });
+
+        versionInfo = GitVersion(new GitVersionSettings{
+            OutputType = GitVersionOutput.Json
+        });
+
         // Update project.json
         string pureVersion = XmlPeek(project, "//Version");
         string assemblyVersion = XmlPeek(project, "//AssemblyVersion");
