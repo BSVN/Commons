@@ -15,6 +15,7 @@ Source/BSN.Commons/obj
 /.vs/BSN.Commons/v15
 /.vs/Commons/v15/.suo
 /Build/tools
+/Build/artifacts
 Test/BSN.Commons.Tests/bin
 Test/BSN.Commons.Tests/obj
 /Test/BSN.Commons.Tests/bin

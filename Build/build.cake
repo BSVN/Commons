@@ -1,11 +1,12 @@
 #tool "nuget:?package=coveralls.io&version=1.4.2"
-#addin "nuget:?package=Cake.Git&version=0.18.0"
-#addin nuget:?package=Nuget.Core
-#addin "nuget:?package=Cake.Coveralls&version=0.9.0"
+#addin "nuget:?package=Cake.Git&version=0.21.0"
+#addin "nuget:?package=Nuget.Core"
+#addin "nuget:?package=Cake.Coveralls&version=0.10.1"
+#addin "nuget:?package=Cake.Coverlet&version=2.3.4"
 
 using NuGet;
 
-var target = Argument("target", "BuildAndTest");
+var target = Argument("target", "Default");
 var artifactsDir = "./artifacts/";
 var solutionPath = "../BSN.Commons.sln";
 var project = "../Source/BSN.Commons/BSN.Commons.csproj";
@@ -55,15 +56,21 @@ Task("Build")
 });
 
 Task("Test")
+    .IsDependentOn("Build")
     .Does(() => {
-        var settings = new DotNetCoreTestSettings
+       var settings = new DotNetCoreTestSettings
         {
-            ArgumentCustomization = args => args.Append("/p:CollectCoverage=true")
-                                                .Append("/p:CoverletOutputFormat=opencover")
-                                                .Append("/p:CoverletOutput=./" + coverageResultsFileName)
         };
-        DotNetCoreTest(testProject, settings);
-        MoveFile(testFolder + coverageResultsFileName, artifactsDir + coverageResultsFileName);
+
+        var coverletSettings = new CoverletSettings {
+            CollectCoverage = true,
+            CoverletOutputFormat = CoverletOutputFormat.opencover,
+            CoverletOutputDirectory = Directory(@"./coverage-test/"),
+            CoverletOutputName = coverageResultsFileName
+        };
+ 
+        DotNetCoreTest(testProject, settings, coverletSettings);
+        //MoveFile("./" + coverageResultsFileName, artifactsDir + coverageResultsFileName);
 });
 
 Task("UploadCoverage")
@@ -81,7 +88,8 @@ Task("Package")
         var settings = new DotNetCorePackSettings
         {
             OutputDirectory = artifactsDir,
-            NoBuild = true
+            NoBuild = true,
+            Configuration = configuration
         };
         DotNetCorePack(project, settings);
 });
@@ -153,7 +161,8 @@ else
 
 Task("Default")
     .IsDependentOn("Build")
-	.IsDependentOn("Test");
+	.IsDependentOn("Test")
+    .IsDependentOn("Package");
 
 
 RunTarget(target);
