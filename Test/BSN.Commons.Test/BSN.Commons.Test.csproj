@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\BSN.Commons\BSN.Commons.csproj" />
+    <ProjectReference Include="..\..\Source\BSN.Commons\BSN.Commons.csproj" />
   </ItemGroup>
 
 </Project>
