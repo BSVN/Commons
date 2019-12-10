@@ -5,7 +5,7 @@
 
 using NuGet;
 
-var target = Argument("target", "Default");
+var target = Argument("target", "BuildAndTest");
 var artifactsDir = "./artifacts/";
 var solutionPath = "../BSN.Commons.sln";
 var project = "../Source/BSN.Commons/BSN.Commons.csproj";
@@ -152,7 +152,8 @@ else
 }
 
 Task("Default")
-    .IsDependentOn("Build");
+    .IsDependentOn("Build")
+	.IsDependentOn("Test");
 
 
 RunTarget(target);
