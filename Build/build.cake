@@ -1,4 +1,8 @@
 #tool "nuget:?package=coveralls.io&version=1.4.2"
+#tool "nuget:?package=GitVersion.CommandLine"
+#tool "nuget:?package=gitlink"
+#tool "nuget:?package=GitReleaseNotes"
+
 #addin "nuget:?package=Cake.Git&version=0.21.0"
 #addin "nuget:?package=Nuget.Core"
 #addin "nuget:?package=Cake.Coveralls&version=0.10.1"
@@ -9,6 +13,7 @@ using NuGet;
 var target = Argument("target", "Default");
 var artifactsDir = "./artifacts/";
 var solutionPath = "../BSN.Commons.sln";
+var projectName = "BSN.Commons";
 var project = "../Source/BSN.Commons/BSN.Commons.csproj";
 var testFolder = "../Test/BSN.Commons.Tests/";
 var testProject = testFolder + "BSN.Commons.Tests.csproj";
@@ -19,6 +24,8 @@ var configuration = "Release";
 var nugetApiKey = Argument<string>("nugetApiKey", null);
 var coverallsToken = Argument<string>("coverallsToken", null);
 var nugetSource = "https://api.nuget.org/v3/index.json";
+var repoUrl = "https://github.com/BSVN/Commons.git";
+var projectUrl = "https://github.com/BSVN/Commons";
 
 Task("Clean")
     .Does(() => {
@@ -40,6 +47,27 @@ Task("Clean")
 Task("Restore")
     .Does(() => {
         DotNetCoreRestore(solutionPath);
+});
+
+GitVersion versionInfo = null;
+Task("Version")
+    .Does(() => {
+        GitVersion(new GitVersionSettings{
+            UpdateAssemblyInfo = true,
+            OutputType = GitVersionOutput.BuildServer
+        });
+        versionInfo = GitVersion(new GitVersionSettings{ OutputType = GitVersionOutput.Json });
+        // Update project.json
+        string pureVersion = XmlPeek(project, "//Version");
+        string assemblyVersion = XmlPeek(project, "//AssemblyVersion");
+        string fileVersion = XmlPeek(project, "//FileVersion");
+
+        var updatedProjectJson = System.IO.File.ReadAllText(project)
+            .Replace(pureVersion, versionInfo.NuGetVersion)
+            .Replace(fileVersion, versionInfo.NuGetVersion)
+            .Replace(assemblyVersion, versionInfo.NuGetVersion);
+
+        System.IO.File.WriteAllText(project, updatedProjectJson);
 });
 
 Task("Build")
@@ -84,6 +112,7 @@ Task("UploadCoverage")
 });
 
 Task("Package")
+    .IsDependentOn("Version")
     .Does(() => {
         var settings = new DotNetCorePackSettings
         {
@@ -91,7 +120,23 @@ Task("Package")
             NoBuild = true,
             Configuration = configuration
         };
+
+        //GenerateReleaseNotes();
+
         DotNetCorePack(project, settings);
+/*
+        System.IO.File.WriteAllLines(artifactsDir, new[]{
+            "nuget:" + projectName + "." + versionInfo.NuGetVersion + ".nupkg",
+            "nugetSymbols:" + projectName + "." + versionInfo.NuGetVersion + ".symbols.nupkg",
+            "releaseNotes:releasenotes.md"
+        });
+        */
+
+        if (AppVeyor.IsRunningOnAppVeyor)
+        {
+            foreach (var file in GetFiles(artifactsDir + "**/*"))
+                AppVeyor.UploadArtifact(file.FullPath);
+        }
 });
 
 Task("Publish")
@@ -130,6 +175,24 @@ private bool IsNuGetPublished(FilePath packagePath) {
     );
 
     return latestPublishedVersions.Any(p => package.Version.Equals(new SemanticVersion(p.Version)));
+}
+
+private void GenerateReleaseNotes()
+{
+    GitReleaseNotes(artifactsDir + "/releasenotes.md", new GitReleaseNotesSettings {
+        WorkingDirectory         = artifactsDir,
+        Verbose                  = true,
+        IssueTracker             = GitReleaseNotesIssueTracker.GitHub,
+        AllTags                  = true,
+        RepoUrl                  = repoUrl,
+        RepoBranch               = "master",
+        IssueTrackerUrl          = projectUrl,
+        Version                  = versionInfo.NuGetVersion,
+        AllLabels                = true
+    });
+
+    if (string.IsNullOrEmpty(System.IO.File.ReadAllText("./artifacts/releasenotes.md")))
+        System.IO.File.WriteAllText("./artifacts/releasenotes.md", "No issues closed since last release");
 }
 
 Task("BuildAndTest")
