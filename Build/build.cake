@@ -102,7 +102,8 @@ Task("Test")
             CoverletOutputName = coverageResultsFileName
         };
  
-        DotNetCoreTest(testProject, settings, coverletSettings);
+        //DotNetCoreTest(testProject, settings, coverletSettings);
+        DotNetCoreTest(testProject);
         //MoveFile("./" + coverageResultsFileName, artifactsDir + coverageResultsFileName);
 });
 
