@@ -17,7 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Document", "Document", "{5A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BSN.Commons", "Source\BSN.Commons\BSN.Commons.csproj", "{FFEF752B-4E11-44FF-82FA-9AEC0B607990}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BSN.Commons.Test", "Test\BSN.Commons.Test\BSN.Commons.Test.csproj", "{128FAA47-21B1-4FBE-AC24-E33C6AE218CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BSN.Commons.Tests", "Test\BSN.Commons.Test\BSN.Commons.Tests.csproj", "{128FAA47-21B1-4FBE-AC24-E33C6AE218CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
