@@ -1,19 +1,23 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2050
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{DC377ADC-CC9D-4785-81BE-726DBF5F3096}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{5C6BA7B5-832A-495A-AF5E-C2A74F6A1EF9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{6F9A45A1-05A3-4DAD-B4F2-DCD4836E110A}"
+	ProjectSection(SolutionItems) = preProject
+		Build\build.cake = Build\build.cake
+		Build\build.ps1 = Build\build.ps1
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Document", "Document", "{5AB50B7C-5BB7-4B35-B208-A0920294CFEE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BSN.Commons", "Source\BSN.Commons\BSN.Commons.csproj", "{FFEF752B-4E11-44FF-82FA-9AEC0B607990}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BSN.Commons.Test", "Source\Test\BSN.Commons.Test\BSN.Commons.Test.csproj", "{128FAA47-21B1-4FBE-AC24-E33C6AE218CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BSN.Commons.Tests", "Test\BSN.Commons.Tests\BSN.Commons.Tests.csproj", "{128FAA47-21B1-4FBE-AC24-E33C6AE218CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

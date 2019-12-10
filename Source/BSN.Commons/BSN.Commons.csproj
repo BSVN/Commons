@@ -2,16 +2,19 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyVersion>1.4.1.0</AssemblyVersion>
-    <FileVersion>1.4.1.0</FileVersion>
+    <AssemblyVersion>1.5.0</AssemblyVersion>
+    <FileVersion>1.5.0</FileVersion>
     <Company>BSN Company</Company>
     <Authors>BSN Developers</Authors>
-    <Copyright>BSN Co 2018</Copyright>
+    <Copyright>BSN Co 2019</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.4.1</Version>
+    <Version>1.5.0</Version>
     <PackageProjectUrl>https://github.com/BSVN/Commons</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/BSVN/Commons/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseUrl></PackageLicenseUrl>
     <Description>Commons library for enterprise application</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/BSVN/Commons.git</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

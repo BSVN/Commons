@@ -9,8 +9,14 @@
 Source/BSN.Commons/bin
 Source/BSN.Commons/obj
 *.lock
+*.dtbcache
+/.vs/
+/.vs/BSN.Commons/DesignTimeBuild/
 /.vs/BSN.Commons/v15
 /.vs/Commons/v15/.suo
 /Build/tools
-/Source/Test/BSN.Commons.Test/bin
-/Source/Test/BSN.Commons.Test/obj
+/Build/artifacts
+Test/BSN.Commons.Tests/bin
+Test/BSN.Commons.Tests/obj
+/Test/BSN.Commons.Tests/bin
+/Test/BSN.Commons.Tests/obj
