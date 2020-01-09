@@ -1,19 +1,8 @@
-﻿using System;
-
-namespace BSN.Commons.PresentationInfrastructure
+﻿namespace BSN.Commons.PresentationInfrastructure
 {
     public enum ResponseStatusCode
-    {
-        //
-        // Summary:
-        //     Equivalent to HTTP status 100. System.Net.HttpStatusCode.Continue indicates that
-        //     the client can continue with its request.
-        Continue = 100,
-        //
-        // Summary:
-        //     Equivalent to HTTP status 101. System.Net.HttpStatusCode.SwitchingProtocols indicates
-        //     that the protocol version or protocol is being changed.
-        SwitchingProtocols = 101,
+    {       
+        
         //
         // Summary:
         //     Equivalent to HTTP status 200. System.Net.HttpStatusCode.OK indicates that the
@@ -69,21 +58,6 @@ namespace BSN.Commons.PresentationInfrastructure
         MultipleChoices = 300,
         //
         // Summary:
-        //     Equivalent to HTTP status 301. System.Net.HttpStatusCode.Moved indicates that
-        //     the requested information has been moved to the URI specified in the Location
-        //     header. The default action when this status is received is to follow the Location
-        //     header associated with the response. When the original request method was POST,
-        //     the redirected request will use the GET method.
-        Moved = 301,
-        //
-        // Summary:
-        //     Equivalent to HTTP status 301. System.Net.HttpStatusCode.MovedPermanently indicates
-        //     that the requested information has been moved to the URI specified in the Location
-        //     header. The default action when this status is received is to follow the Location
-        //     header associated with the response.
-        MovedPermanently = 301,
-        //
-        // Summary:
         //     Equivalent to HTTP status 302. System.Net.HttpStatusCode.Found indicates that
         //     the requested information is located at the URI specified in the Location header.
         //     The default action when this status is received is to follow the Location header
@@ -92,59 +66,15 @@ namespace BSN.Commons.PresentationInfrastructure
         Found = 302,
         //
         // Summary:
-        //     Equivalent to HTTP status 302. System.Net.HttpStatusCode.Redirect indicates that
-        //     the requested information is located at the URI specified in the Location header.
-        //     The default action when this status is received is to follow the Location header
-        //     associated with the response. When the original request method was POST, the
-        //     redirected request will use the GET method.
-        Redirect = 302,
-        //
-        // Summary:
-        //     Equivalent to HTTP status 303. System.Net.HttpStatusCode.RedirectMethod automatically
-        //     redirects the client to the URI specified in the Location header as the result
-        //     of a POST. The request to the resource specified by the Location header will
-        //     be made with a GET.
-        RedirectMethod = 303,
-        //
-        // Summary:
-        //     Equivalent to HTTP status 303. System.Net.HttpStatusCode.SeeOther automatically
-        //     redirects the client to the URI specified in the Location header as the result
-        //     of a POST. The request to the resource specified by the Location header will
-        //     be made with a GET.
-        SeeOther = 303,
-        //
-        // Summary:
         //     Equivalent to HTTP status 304. System.Net.HttpStatusCode.NotModified indicates
         //     that the client's cached copy is up to date. The contents of the resource are
         //     not transferred.
         NotModified = 304,
         //
         // Summary:
-        //     Equivalent to HTTP status 305. System.Net.HttpStatusCode.UseProxy indicates that
-        //     the request should use the proxy server at the URI specified in the Location
-        //     header.
-        UseProxy = 305,
-        //
-        // Summary:
         //     Equivalent to HTTP status 306. System.Net.HttpStatusCode.Unused is a proposed
         //     extension to the HTTP/1.1 specification that is not fully specified.
         Unused = 306,
-        //
-        // Summary:
-        //     Equivalent to HTTP status 307. System.Net.HttpStatusCode.RedirectKeepVerb indicates
-        //     that the request information is located at the URI specified in the Location
-        //     header. The default action when this status is received is to follow the Location
-        //     header associated with the response. When the original request method was POST,
-        //     the redirected request will also use the POST method.
-        RedirectKeepVerb = 307,
-        //
-        // Summary:
-        //     Equivalent to HTTP status 307. System.Net.HttpStatusCode.TemporaryRedirect indicates
-        //     that the request information is located at the URI specified in the Location
-        //     header. The default action when this status is received is to follow the Location
-        //     header associated with the response. When the original request method was POST,
-        //     the redirected request will also use the POST method.
-        TemporaryRedirect = 307,
         //
         // Summary:
         //     Equivalent to HTTP status 400. System.Net.HttpStatusCode.BadRequest indicates
@@ -186,12 +116,6 @@ namespace BSN.Commons.PresentationInfrastructure
         NotAcceptable = 406,
         //
         // Summary:
-        //     Equivalent to HTTP status 407. System.Net.HttpStatusCode.ProxyAuthenticationRequired
-        //     indicates that the requested proxy requires authentication. The Proxy-authenticate
-        //     header contains the details of how to perform the authentication.
-        ProxyAuthenticationRequired = 407,
-        //
-        // Summary:
         //     Equivalent to HTTP status 408. System.Net.HttpStatusCode.RequestTimeout indicates
         //     that the client did not send a request within the time the server was expecting
         //     the request.
@@ -230,11 +154,6 @@ namespace BSN.Commons.PresentationInfrastructure
         RequestUriTooLong = 414,
         //
         // Summary:
-        //     Equivalent to HTTP status 415. System.Net.HttpStatusCode.UnsupportedMediaType
-        //     indicates that the request is an unsupported type.
-        UnsupportedMediaType = 415,
-        //
-        // Summary:
         //     Equivalent to HTTP status 416. System.Net.HttpStatusCode.RequestedRangeNotSatisfiable
         //     indicates that the range of data requested from the resource cannot be returned,
         //     either because the beginning of the range is before the beginning of the resource,
@@ -245,11 +164,6 @@ namespace BSN.Commons.PresentationInfrastructure
         //     Equivalent to HTTP status 417. System.Net.HttpStatusCode.ExpectationFailed indicates
         //     that an expectation given in an Expect header could not be met by the server.
         ExpectationFailed = 417,
-        //
-        // Summary:
-        //     Equivalent to HTTP status 426. System.Net.HttpStatusCode.UpgradeRequired indicates
-        //     that the client should switch to a different protocol such as TLS/1.0.
-        UpgradeRequired = 426,
         //
         // Summary:
         //     Equivalent to HTTP status 500. System.Net.HttpStatusCode.InternalServerError

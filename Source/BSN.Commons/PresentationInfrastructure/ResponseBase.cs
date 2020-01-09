@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
+
 
 namespace BSN.Commons.PresentationInfrastructure
 {
-    public abstract class ResponseBase
+    public abstract class ResponseBase : IResponse<ValidationResult>
     {
         public virtual bool IsSuccess => StatusCode == ResponseStatusCode.OK;
 
