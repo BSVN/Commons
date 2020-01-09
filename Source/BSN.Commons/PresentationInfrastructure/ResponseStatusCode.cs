@@ -1,8 +1,7 @@
 ﻿namespace BSN.Commons.PresentationInfrastructure
 {
     public enum ResponseStatusCode
-    {       
-        
+    {
         //
         // Summary:
         //     Equivalent to HTTP status 200. System.Net.HttpStatusCode.OK indicates that the
