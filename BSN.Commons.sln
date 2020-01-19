@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BSN.Commons", "Source\BSN.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BSN.Commons.Tests", "Test\BSN.Commons.Tests\BSN.Commons.Tests.csproj", "{128FAA47-21B1-4FBE-AC24-E33C6AE218CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BSN.Commons.PresentationInfrastructure", "BSN.Commons.PresentationInfrastructure\BSN.Commons.PresentationInfrastructure.csproj", "{97DFD661-4AD7-4315-8F11-F2B81CDB6529}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BSN.Commons.PresentationInfrastructure", "Source\BSN.Commons.PresentationInfrastructure\BSN.Commons.PresentationInfrastructure.csproj", "{BFA36BA8-621F-490D-AB4E-ECEFB639CAC4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,10 @@ Global
 		{128FAA47-21B1-4FBE-AC24-E33C6AE218CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{128FAA47-21B1-4FBE-AC24-E33C6AE218CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{128FAA47-21B1-4FBE-AC24-E33C6AE218CA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{97DFD661-4AD7-4315-8F11-F2B81CDB6529}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{97DFD661-4AD7-4315-8F11-F2B81CDB6529}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{97DFD661-4AD7-4315-8F11-F2B81CDB6529}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{97DFD661-4AD7-4315-8F11-F2B81CDB6529}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFA36BA8-621F-490D-AB4E-ECEFB639CAC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFA36BA8-621F-490D-AB4E-ECEFB639CAC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFA36BA8-621F-490D-AB4E-ECEFB639CAC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFA36BA8-621F-490D-AB4E-ECEFB639CAC4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,7 +46,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{FFEF752B-4E11-44FF-82FA-9AEC0B607990} = {DC377ADC-CC9D-4785-81BE-726DBF5F3096}
 		{128FAA47-21B1-4FBE-AC24-E33C6AE218CA} = {5C6BA7B5-832A-495A-AF5E-C2A74F6A1EF9}
-		{97DFD661-4AD7-4315-8F11-F2B81CDB6529} = {DC377ADC-CC9D-4785-81BE-726DBF5F3096}
+		{BFA36BA8-621F-490D-AB4E-ECEFB639CAC4} = {DC377ADC-CC9D-4785-81BE-726DBF5F3096}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BCAF76D3-AA3C-4D0F-8D10-34065F8FED09}
