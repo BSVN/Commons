@@ -7,7 +7,7 @@
   "targets": {
     ".NETStandard,Version=v2.0": {},
     ".NETStandard,Version=v2.0/": {
-      "BSN.Commons.PresentationInfrastructure/1.6.1": {
+      "BSN.Commons.PresentationInfrastructure/1.6.2": {
         "dependencies": {
           "NETStandard.Library": "2.0.3",
           "System.ComponentModel.Annotations": "4.7.0"
@@ -33,7 +33,7 @@
     }
   },
   "libraries": {
-    "BSN.Commons.PresentationInfrastructure/1.6.1": {
+    "BSN.Commons.PresentationInfrastructure/1.6.2": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

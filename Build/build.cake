@@ -15,7 +15,7 @@ var artifactsDir = "./artifacts/";
 var solutionPath = "../BSN.Commons.sln";
 var projectName = "BSN.Commons";
 var mainProject = "../Source/BSN.Commons/BSN.Commons.csproj";
-var presentationProject = "../Source/BSN.Commons/BSN.Commons.PresentationInfrastructure.csproj";
+var presentationProject = "../Source/BSN.Commons.PresentationInfrastructure/BSN.Commons.PresentationInfrastructure.csproj";
 var testFolder = "../Test/BSN.Commons.Tests/";
 var testProject = testFolder + "BSN.Commons.Tests.csproj";
 var coverageResultsFileName = "coverage.xml";
@@ -194,19 +194,22 @@ private void GenerateReleaseNotes()
         System.IO.File.WriteAllText("./artifacts/releasenotes.md", "No issues closed since last release");
 }
 
-private void UpdateVersion(string project)
+private void UpdateVersion(string projectPath)
 {
-    // Update project.json
-    string pureVersion = XmlPeek(project, "//Version");
-    string assemblyVersion = XmlPeek(project, "//AssemblyVersion");
-    string fileVersion = XmlPeek(project, "//FileVersion");
+    Information("UpdateVersion .................................................");
+    Information(projectPath);
+    // Update projectPath.json
+    string pureVersion = XmlPeek(projectPath, "//Version");
+    Information(pureVersion);
+    string assemblyVersion = XmlPeek(projectPath, "//AssemblyVersion");
+    string fileVersion = XmlPeek(projectPath, "//FileVersion");
 
-    var updatedProjectJson = System.IO.File.ReadAllText(project)
+    var updatedProjectJson = System.IO.File.ReadAllText(projectPath)
         .Replace(pureVersion, versionInfo.NuGetVersion)
         .Replace(fileVersion, versionInfo.NuGetVersion)
         .Replace(assemblyVersion, versionInfo.NuGetVersion);
 
-    System.IO.File.WriteAllText(project, updatedProjectJson);
+    System.IO.File.WriteAllText(projectPath, updatedProjectJson);
 }
 
 Task("BuildAndTest")
