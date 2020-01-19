@@ -1,0 +1,8 @@
+C:\Users\sooro\Documents\Visual Studio 2019\Projects\soroshsabz\Commons\BSN.Commons.PresentationInfrastructure\bin\Debug\netstandard2.0\BSN.Commons.PresentationInfrastructure.deps.json
+C:\Users\sooro\Documents\Visual Studio 2019\Projects\soroshsabz\Commons\BSN.Commons.PresentationInfrastructure\bin\Debug\netstandard2.0\BSN.Commons.PresentationInfrastructure.dll
+C:\Users\sooro\Documents\Visual Studio 2019\Projects\soroshsabz\Commons\BSN.Commons.PresentationInfrastructure\obj\Debug\netstandard2.0\BSN.Commons.PresentationInfrastructure.csprojAssemblyReference.cache
+C:\Users\sooro\Documents\Visual Studio 2019\Projects\soroshsabz\Commons\BSN.Commons.PresentationInfrastructure\obj\Debug\netstandard2.0\BSN.Commons.PresentationInfrastructure.AssemblyInfoInputs.cache
+C:\Users\sooro\Documents\Visual Studio 2019\Projects\soroshsabz\Commons\BSN.Commons.PresentationInfrastructure\obj\Debug\netstandard2.0\BSN.Commons.PresentationInfrastructure.AssemblyInfo.cs
+C:\Users\sooro\Documents\Visual Studio 2019\Projects\soroshsabz\Commons\BSN.Commons.PresentationInfrastructure\bin\Debug\netstandard2.0\BSN.Commons.PresentationInfrastructure.pdb
+C:\Users\sooro\Documents\Visual Studio 2019\Projects\soroshsabz\Commons\BSN.Commons.PresentationInfrastructure\obj\Debug\netstandard2.0\BSN.Commons.PresentationInfrastructure.dll
+C:\Users\sooro\Documents\Visual Studio 2019\Projects\soroshsabz\Commons\BSN.Commons.PresentationInfrastructure\obj\Debug\netstandard2.0\BSN.Commons.PresentationInfrastructure.pdb

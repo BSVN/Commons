@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Description>Presentation infrastructure layer of Commons library for enterprise application.</Description>
+    <Version>1.6.1</Version>
+    <Authors>BSN Developers</Authors>
+    <Company>BSN Company</Company>
+    <Copyright>BSN Co 2019</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/BSVN/Commons.git</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/BSVN/Commons</PackageProjectUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
+  </ItemGroup>
+
+</Project>

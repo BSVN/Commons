@@ -14,7 +14,8 @@ var target = Argument("target", "Default");
 var artifactsDir = "./artifacts/";
 var solutionPath = "../BSN.Commons.sln";
 var projectName = "BSN.Commons";
-var project = "../Source/BSN.Commons/BSN.Commons.csproj";
+var mainProject = "../Source/BSN.Commons/BSN.Commons.csproj";
+var presentationProject = "../Source/BSN.Commons/BSN.Commons.PresentationInfrastructure.csproj";
 var testFolder = "../Test/BSN.Commons.Tests/";
 var testProject = testFolder + "BSN.Commons.Tests.csproj";
 var coverageResultsFileName = "coverage.xml";
@@ -62,17 +63,9 @@ Task("Version")
             OutputType = GitVersionOutput.Json
         });
 
-        // Update project.json
-        string pureVersion = XmlPeek(project, "//Version");
-        string assemblyVersion = XmlPeek(project, "//AssemblyVersion");
-        string fileVersion = XmlPeek(project, "//FileVersion");
+        UpdateVersion(mainProject);
+        UpdateVersion(presentationProject);
 
-        var updatedProjectJson = System.IO.File.ReadAllText(project)
-            .Replace(pureVersion, versionInfo.NuGetVersion)
-            .Replace(fileVersion, versionInfo.NuGetVersion)
-            .Replace(assemblyVersion, versionInfo.NuGetVersion);
-
-        System.IO.File.WriteAllText(project, updatedProjectJson);
 });
 
 Task("Build")
@@ -128,7 +121,8 @@ Task("Package")
 
         //GenerateReleaseNotes();
 
-        DotNetCorePack(project, settings);
+        DotNetCorePack(mainProject, settings);
+        DotNetCorePack(presentationProject, settings);
 /*
         System.IO.File.WriteAllLines(artifactsDir, new[]{
             "nuget:" + projectName + "." + versionInfo.NuGetVersion + ".nupkg",
@@ -198,6 +192,21 @@ private void GenerateReleaseNotes()
 
     if (string.IsNullOrEmpty(System.IO.File.ReadAllText("./artifacts/releasenotes.md")))
         System.IO.File.WriteAllText("./artifacts/releasenotes.md", "No issues closed since last release");
+}
+
+private void UpdateVersion(string project)
+{
+    // Update project.json
+    string pureVersion = XmlPeek(project, "//Version");
+    string assemblyVersion = XmlPeek(project, "//AssemblyVersion");
+    string fileVersion = XmlPeek(project, "//FileVersion");
+
+    var updatedProjectJson = System.IO.File.ReadAllText(project)
+        .Replace(pureVersion, versionInfo.NuGetVersion)
+        .Replace(fileVersion, versionInfo.NuGetVersion)
+        .Replace(assemblyVersion, versionInfo.NuGetVersion);
+
+    System.IO.File.WriteAllText(project, updatedProjectJson);
 }
 
 Task("BuildAndTest")
