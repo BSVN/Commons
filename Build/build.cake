@@ -69,8 +69,8 @@ Task("Version")
 });
 
 Task("Build")
-    .IsDependentOn("Clean")
     .IsDependentOn("Restore")
+    .IsDependentOn("Clean")
     .Does(() => {
         DotNetCoreBuild(
             solutionPath,
