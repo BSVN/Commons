@@ -1,6 +1,6 @@
 #tool "nuget:?package=coveralls.io&version=1.4.2"
-#tool "nuget:?package=GitVersion.CommandLine"
-#tool "nuget:?package=gitlink"
+#tool "nuget:?package=GitVersion.CommandLine&version=5.1.3"
+#tool "nuget:?package=gitlink&version=3.1.0"
 #tool "nuget:?package=GitReleaseNotes"
 
 #addin "nuget:?package=Cake.Git&version=0.21.0"
