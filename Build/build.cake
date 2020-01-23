@@ -96,7 +96,7 @@ Task("Test")
         };
  
         DotNetCoreTest(testProject, settings, coverletSettings);
-        MoveFile("./" + coverageResultsFileName, artifactsDir + coverageResultsFileName);
+        //MoveFile("./" + coverageResultsFileName, artifactsDir + coverageResultsFileName);
 });
 
 Task("UploadCoverage")
