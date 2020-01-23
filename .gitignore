@@ -6,8 +6,12 @@
 /BSN.Commons/packages
 /BSN.Commons/BSN.Commons/bin
 /BSN.Commons/BSN.Commons/obj
+/BSN.Commons/BSN.Commons.PresentationInfrastructure/bin
+/BSN.Commons/BSN.Commons.PresentationInfrastructure/obj
 Source/BSN.Commons/bin
 Source/BSN.Commons/obj
+Source/BSN.Commons.PresentationInfrastructure/bin
+Source/BSN.Commons.PresentationInfrastructure/obj
 *.lock
 *.dtbcache
 /.vs/
