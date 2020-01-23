@@ -47,7 +47,7 @@ Task("Clean")
 
 Task("Restore")
     .Does(() => {
-        DotNetCoreRestore(solutionPath);
+        NuGetRestore(solutionPath);
 });
 
 GitVersion versionInfo = null;
