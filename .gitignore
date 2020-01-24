@@ -25,3 +25,6 @@ Test/BSN.Commons.Tests/bin
 Test/BSN.Commons.Tests/obj
 /Test/BSN.Commons.Tests/bin
 /Test/BSN.Commons.Tests/obj
+Source/BSN.Commons.PresentationInfrastructure/obj/BSN.Commons.PresentationInfrastructure.csproj.nuget.cache
+Source/BSN.Commons.PresentationInfrastructure/obj/BSN.Commons.PresentationInfrastructure.csproj.nuget.dgspec.json
+Source/BSN.Commons.PresentationInfrastructure/obj/project.assets.json

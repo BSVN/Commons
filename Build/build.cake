@@ -3,7 +3,7 @@
 #tool "nuget:?package=gitlink&version=3.1.0"
 #tool "nuget:?package=GitReleaseNotes&version=0.7.1"
 
-#addin "nuget:?package=Cake.Git&version=0.21.0"
+//#addin "nuget:?package=Cake.Git&version=0.21.0"
 #addin "nuget:?package=Nuget.Core&version=2.14.0"
 #addin "nuget:?package=Cake.Coveralls&version=0.10.1"
 #addin "nuget:?package=Cake.Coverlet&version=2.3.4"
@@ -19,8 +19,8 @@ var presentationProject = "../Source/BSN.Commons.PresentationInfrastructure/BSN.
 var testFolder = "../Test/BSN.Commons.Tests/";
 var testProject = testFolder + "BSN.Commons.Tests.csproj";
 var coverageResultsFileName = "coverage.xml";
-var currentBranch = Argument<string>("currentBranch", GitBranchCurrent("../").FriendlyName);
-var isReleaseBuild = string.Equals(currentBranch, "master", StringComparison.OrdinalIgnoreCase);
+//var currentBranch = Argument<string>("currentBranch", GitBranchCurrent("../").FriendlyName);
+var isReleaseBuild = false;//string.Equals(currentBranch, "master", StringComparison.OrdinalIgnoreCase);
 var configuration = "Release";
 var nugetApiKey = Argument<string>("nugetApiKey", null);
 var coverallsToken = Argument<string>("coverallsToken", null);
@@ -50,7 +50,7 @@ Task("Restore")
         NuGetRestore(solutionPath);
 });
 
-GitVersion versionInfo = null;
+//GitVersion versionInfo = null;
 Task("Version")
     .Does(() => {
 
@@ -178,6 +178,7 @@ private bool IsNuGetPublished(FilePath packagePath) {
     return latestPublishedVersions.Any(p => package.Version.Equals(new SemanticVersion(p.Version)));
 }
 
+/*
 private void GenerateReleaseNotes()
 {
     GitReleaseNotes(artifactsDir + "/releasenotes.md", new GitReleaseNotesSettings {
@@ -195,7 +196,8 @@ private void GenerateReleaseNotes()
     if (string.IsNullOrEmpty(System.IO.File.ReadAllText("./artifacts/releasenotes.md")))
         System.IO.File.WriteAllText("./artifacts/releasenotes.md", "No issues closed since last release");
 }
-
+*/
+/*
 private void UpdateVersion(string projectPath)
 {
     Information("UpdateVersion .................................................");
@@ -213,6 +215,7 @@ private void UpdateVersion(string projectPath)
 
     System.IO.File.WriteAllText(projectPath, updatedProjectJson);
 }
+*/
 
 Task("BuildAndTest")
     .IsDependentOn("Build")
