@@ -99,6 +99,8 @@ Task("Test")
  
         DotNetCoreTest(testProject, settings, coverletSettings);
         MoveFile("./coverage-test/" + coverageResultsFileName, artifactsDir + coverageResultsFileName);
+        if (AppVeyor.IsRunningOnAppVeyor)
+            AppVeyor.UploadTestResults(artifactsDir + coverageResultsFileName, AppVeyorTestResultsType.NUnit);
 });
 
 Task("UploadCoverage")
