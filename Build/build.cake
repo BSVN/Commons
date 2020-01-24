@@ -54,6 +54,7 @@ GitVersion versionInfo = null;
 Task("Version")
     .Does(() => {
 
+/*
         GitVersion(new GitVersionSettings{
             UpdateAssemblyInfo = true,
             OutputType = GitVersionOutput.BuildServer
@@ -65,6 +66,7 @@ Task("Version")
 
         UpdateVersion(mainProject);
         UpdateVersion(presentationProject);
+        */
 
 });
 
