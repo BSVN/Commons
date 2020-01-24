@@ -14,5 +14,5 @@ environment:
 build_script:
 - ps: Build/build.ps1 -Script Build/build.cake --currentBranch=$env:APPVEYOR_REPO_BRANCH 
 
-test: on #tests handled by cake script
+test: off #tests handled by cake script
 deploy: off #deploy handled by cake script
