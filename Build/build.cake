@@ -2,6 +2,7 @@
 #tool "nuget:?package=GitVersion.CommandLine&version=5.1.3"
 #tool "nuget:?package=gitlink&version=3.1.0"
 #tool "nuget:?package=GitReleaseNotes&version=0.7.1"
+#tool "nuget:?package=NUnit.ConsoleRunner&version=3.10.0"
 
 //#addin "nuget:?package=Cake.Git&version=0.21.0"
 #addin "nuget:?package=Nuget.Core&version=2.14.0"
@@ -86,8 +87,7 @@ Task("Build")
 Task("Test")
     .IsDependentOn("Build")
     .Does(() => {
-       var settings = new DotNetCoreTestSettings
-        {
+        var settings = new DotNetCoreTestSettings {
         };
 
         var coverletSettings = new CoverletSettings {
