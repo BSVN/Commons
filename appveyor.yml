@@ -12,9 +12,10 @@ environment:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
 
 before_build:
-- ps: git fetch --unshallow
+- ps: if ((git rev-parse --is-shallow-repository) -eq $True) { git fetch --unshallow }
 - ps: git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*" 
 - ps: git fetch origin
+- ps: git branch master origin/master
 
 build_script:
 - ps: Build/build.ps1 -Script Build/build.cake --currentBranch=$env:APPVEYOR_REPO_BRANCH 
