@@ -55,7 +55,6 @@ GitVersion versionInfo = null;
 Task("Version")
     .Does(() => {
 
-/*
         GitVersion(new GitVersionSettings{
             UpdateAssemblyInfo = true,
             OutputType = GitVersionOutput.BuildServer
@@ -67,8 +66,6 @@ Task("Version")
 
         UpdateVersion(mainProject);
         UpdateVersion(presentationProject);
-        */
-
 });
 
 Task("Build")
@@ -180,7 +177,6 @@ private bool IsNuGetPublished(FilePath packagePath) {
     return latestPublishedVersions.Any(p => package.Version.Equals(new SemanticVersion(p.Version)));
 }
 
-/*
 private void GenerateReleaseNotes()
 {
     GitReleaseNotes(artifactsDir + "/releasenotes.md", new GitReleaseNotesSettings {
@@ -198,8 +194,7 @@ private void GenerateReleaseNotes()
     if (string.IsNullOrEmpty(System.IO.File.ReadAllText("./artifacts/releasenotes.md")))
         System.IO.File.WriteAllText("./artifacts/releasenotes.md", "No issues closed since last release");
 }
-*/
-/*
+
 private void UpdateVersion(string projectPath)
 {
     Information("UpdateVersion .................................................");
@@ -217,7 +212,6 @@ private void UpdateVersion(string projectPath)
 
     System.IO.File.WriteAllText(projectPath, updatedProjectJson);
 }
-*/
 
 Task("BuildAndTest")
     .IsDependentOn("Build")
