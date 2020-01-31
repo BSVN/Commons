@@ -16,6 +16,7 @@ before_build:
 - ps: git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*" 
 - ps: git fetch origin
 - ps: git branch
+- ps: git checkout master
 #- ps: if ((git branch).Contains('master') -eq $False) { git branch master origin/master }
 
 build_script:
