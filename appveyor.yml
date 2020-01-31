@@ -15,7 +15,8 @@ before_build:
 - ps: if ((git rev-parse --is-shallow-repository) -eq $True) { git fetch --unshallow }
 - ps: git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*" 
 - ps: git fetch origin
-- ps: if ((git branch).Contains('master') -eq $False) { git branch master origin/master }
+- ps: git branch
+#- ps: if ((git branch).Contains('master') -eq $False) { git branch master origin/master }
 
 build_script:
 - ps: Build/build.ps1 -Script Build/build.cake --currentBranch=$env:APPVEYOR_REPO_BRANCH 
