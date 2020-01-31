@@ -4,7 +4,7 @@
 #tool "nuget:?package=GitReleaseNotes&version=0.7.1"
 #tool "nuget:?package=NUnit.ConsoleRunner&version=3.10.0"
 
-//#addin "nuget:?package=Cake.Git&version=0.21.0"
+#addin "nuget:?package=Cake.Git&version=0.21.0"
 #addin "nuget:?package=Nuget.Core&version=2.14.0"
 #addin "nuget:?package=Cake.Coveralls&version=0.10.1"
 #addin "nuget:?package=Cake.Coverlet&version=2.3.4"
@@ -20,7 +20,7 @@ var presentationProject = "../Source/BSN.Commons.PresentationInfrastructure/BSN.
 var testFolder = "../Test/BSN.Commons.Tests/";
 var testProject = testFolder + "BSN.Commons.Tests.csproj";
 var coverageResultsFileName = "coverage.xml";
-//var currentBranch = Argument<string>("currentBranch", GitBranchCurrent("../").FriendlyName);
+var currentBranch = Argument<string>("currentBranch", GitBranchCurrent("../").FriendlyName);
 var isReleaseBuild = false;//string.Equals(currentBranch, "master", StringComparison.OrdinalIgnoreCase);
 var configuration = "Release";
 var nugetApiKey = Argument<string>("nugetApiKey", null);
