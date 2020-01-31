@@ -21,7 +21,7 @@ var testFolder = "../Test/BSN.Commons.Tests/";
 var testProject = testFolder + "BSN.Commons.Tests.csproj";
 var coverageResultsFileName = "coverage.xml";
 var currentBranch = Argument<string>("currentBranch", GitBranchCurrent("../").FriendlyName);
-var isReleaseBuild = false;//string.Equals(currentBranch, "master", StringComparison.OrdinalIgnoreCase);
+var isReleaseBuild = string.Equals(currentBranch, "master", StringComparison.OrdinalIgnoreCase);
 var configuration = "Release";
 var nugetApiKey = Argument<string>("nugetApiKey", null);
 var coverallsToken = Argument<string>("coverallsToken", null);
@@ -51,7 +51,7 @@ Task("Restore")
         NuGetRestore(solutionPath);
 });
 
-//GitVersion versionInfo = null;
+GitVersion versionInfo = null;
 Task("Version")
     .Does(() => {
 
