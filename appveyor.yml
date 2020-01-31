@@ -16,7 +16,7 @@ before_build:
 - ps: git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*" 
 - ps: git fetch origin
 - ps: git branch
-- ps: git checkout -b newbranch 2>&1 | write-host
+- ps: git checkout -q -b newbranch
 - ps: git checkout master
 - ps: git merge newbranch 2>&1 | write-host
 #- ps: if ((git branch).Contains('master') -eq $False) { git branch master origin/master }
