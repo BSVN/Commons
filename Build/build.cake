@@ -18,8 +18,10 @@ var projectName = "BSN.Commons";
 var mainProject = "../Source/BSN.Commons/BSN.Commons.csproj";
 var presentationProject = "../Source/BSN.Commons.PresentationInfrastructure/BSN.Commons.PresentationInfrastructure.csproj";
 var testFolder = "../Test/BSN.Commons.Tests/";
+var testProjectDll = testFolder + "bin/Release/net472/BSN.Commons.Tests.dll";
 var testProject = testFolder + "BSN.Commons.Tests.csproj";
 var coverageResultsFileName = "coverage.xml";
+var testResultsFileName = "nunitResults.xml";
 var currentBranch = Argument<string>("currentBranch", GitBranchCurrent("../").FriendlyName);
 var isReleaseBuild = string.Equals(currentBranch, "master", StringComparison.OrdinalIgnoreCase);
 var configuration = "Release";
@@ -96,8 +98,14 @@ Task("Test")
  
         DotNetCoreTest(testProject, settings, coverletSettings);
         MoveFile("./coverage-test/" + coverageResultsFileName, artifactsDir + coverageResultsFileName);
+
+        NUnit3(testProjectDll, new NUnit3Settings()
+        {
+            Results = new [] {new NUnit3Result() { FileName = artifactsDir + testResultsFileName } },
+        });
+
         if (AppVeyor.IsRunningOnAppVeyor)
-            AppVeyor.UploadTestResults(artifactsDir + coverageResultsFileName, AppVeyorTestResultsType.NUnit3);
+            AppVeyor.UploadTestResults(artifactsDir + testResultsFileName, AppVeyorTestResultsType.NUnit3);
 });
 
 Task("UploadCoverage")
