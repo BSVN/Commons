@@ -11,6 +11,18 @@ environment:
   DOTNET_CLI_TELEMETRY_OPTOUT: 1
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
 
+before_build:
+- ps: if ((git rev-parse --is-shallow-repository) -eq $True) { git fetch --unshallow }
+- ps: git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*" 
+- ps: git fetch origin
+- ps: git branch
+- ps: git checkout -q -b newbranch
+- ps: git branch
+- ps: git checkout -q master
+- ps: git merge -q newbranch
+- ps: git branch
+#- ps: if ((git branch).Contains('master') -eq $False) { git branch master origin/master }
+
 build_script:
 - ps: Build/build.ps1 -Script Build/build.cake --currentBranch=$env:APPVEYOR_REPO_BRANCH 
 

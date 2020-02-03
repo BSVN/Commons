@@ -2,8 +2,9 @@
 #tool "nuget:?package=GitVersion.CommandLine&version=5.1.3"
 #tool "nuget:?package=gitlink&version=3.1.0"
 #tool "nuget:?package=GitReleaseNotes&version=0.7.1"
+#tool "nuget:?package=NUnit.ConsoleRunner&version=3.10.0"
 
-//#addin "nuget:?package=Cake.Git&version=0.21.0"
+#addin "nuget:?package=Cake.Git&version=0.21.0"
 #addin "nuget:?package=Nuget.Core&version=2.14.0"
 #addin "nuget:?package=Cake.Coveralls&version=0.10.1"
 #addin "nuget:?package=Cake.Coverlet&version=2.3.4"
@@ -17,10 +18,12 @@ var projectName = "BSN.Commons";
 var mainProject = "../Source/BSN.Commons/BSN.Commons.csproj";
 var presentationProject = "../Source/BSN.Commons.PresentationInfrastructure/BSN.Commons.PresentationInfrastructure.csproj";
 var testFolder = "../Test/BSN.Commons.Tests/";
+var testProjectDll = testFolder + "bin/Release/net472/BSN.Commons.Tests.dll";
 var testProject = testFolder + "BSN.Commons.Tests.csproj";
 var coverageResultsFileName = "coverage.xml";
-//var currentBranch = Argument<string>("currentBranch", GitBranchCurrent("../").FriendlyName);
-var isReleaseBuild = false;//string.Equals(currentBranch, "master", StringComparison.OrdinalIgnoreCase);
+var testResultsFileName = "nunitResults.xml";
+var currentBranch = Argument<string>("currentBranch", GitBranchCurrent("../").FriendlyName);
+var isReleaseBuild = string.Equals(currentBranch, "master", StringComparison.OrdinalIgnoreCase);
 var configuration = "Release";
 var nugetApiKey = Argument<string>("nugetApiKey", null);
 var coverallsToken = Argument<string>("coverallsToken", null);
@@ -50,11 +53,10 @@ Task("Restore")
         NuGetRestore(solutionPath);
 });
 
-//GitVersion versionInfo = null;
+GitVersion versionInfo = null;
 Task("Version")
     .Does(() => {
 
-/*
         GitVersion(new GitVersionSettings{
             UpdateAssemblyInfo = true,
             OutputType = GitVersionOutput.BuildServer
@@ -66,8 +68,6 @@ Task("Version")
 
         UpdateVersion(mainProject);
         UpdateVersion(presentationProject);
-        */
-
 });
 
 Task("Build")
@@ -86,8 +86,7 @@ Task("Build")
 Task("Test")
     .IsDependentOn("Build")
     .Does(() => {
-       var settings = new DotNetCoreTestSettings
-        {
+        var settings = new DotNetCoreTestSettings {
         };
 
         var coverletSettings = new CoverletSettings {
@@ -99,6 +98,14 @@ Task("Test")
  
         DotNetCoreTest(testProject, settings, coverletSettings);
         MoveFile("./coverage-test/" + coverageResultsFileName, artifactsDir + coverageResultsFileName);
+
+        NUnit3(testProjectDll, new NUnit3Settings()
+        {
+            Results = new [] {new NUnit3Result() { FileName = artifactsDir + testResultsFileName } },
+        });
+
+        if (AppVeyor.IsRunningOnAppVeyor)
+            AppVeyor.UploadTestResults(artifactsDir + testResultsFileName, AppVeyorTestResultsType.NUnit3);
 });
 
 Task("UploadCoverage")
@@ -178,7 +185,6 @@ private bool IsNuGetPublished(FilePath packagePath) {
     return latestPublishedVersions.Any(p => package.Version.Equals(new SemanticVersion(p.Version)));
 }
 
-/*
 private void GenerateReleaseNotes()
 {
     GitReleaseNotes(artifactsDir + "/releasenotes.md", new GitReleaseNotesSettings {
@@ -196,8 +202,7 @@ private void GenerateReleaseNotes()
     if (string.IsNullOrEmpty(System.IO.File.ReadAllText("./artifacts/releasenotes.md")))
         System.IO.File.WriteAllText("./artifacts/releasenotes.md", "No issues closed since last release");
 }
-*/
-/*
+
 private void UpdateVersion(string projectPath)
 {
     Information("UpdateVersion .................................................");
@@ -215,7 +220,6 @@ private void UpdateVersion(string projectPath)
 
     System.IO.File.WriteAllText(projectPath, updatedProjectJson);
 }
-*/
 
 Task("BuildAndTest")
     .IsDependentOn("Build")
