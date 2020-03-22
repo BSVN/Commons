@@ -9,13 +9,19 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 3.1.101
-    - name: Build with dotnet
-      run: dotnet build --configuration Release
+      
+    - name: setup-msbuild
+      uses: microsoft/setup-msbuild@v1
+
+    - name: Setup NuGet.exe for use with actions
+      uses: NuGet/setup-nuget@v1.0.2
+
+    - name: Restore Package
+      run: nuget restore
+      
+    - name: Build with msbuild
+      run: msbuild /verbosity:normal /t:Rebuild /p:Configuration=Debug
