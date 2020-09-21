@@ -17,9 +17,13 @@ var solutionPath = "../BSN.Commons.sln";
 var projectName = "BSN.Commons";
 var mainProject = "../Source/BSN.Commons/BSN.Commons.csproj";
 var presentationProject = "../Source/BSN.Commons.PresentationInfrastructure/BSN.Commons.PresentationInfrastructure.csproj";
-var testFolder = "../Test/BSN.Commons.Tests/";
-var testProjectDll = testFolder + "bin/Release/net472/BSN.Commons.Tests.dll";
-var testProject = testFolder + "BSN.Commons.Tests.csproj";
+var testFolder = "../Test/";
+var testProjects = new List<(string path, string name, string dll)>
+{
+    ("BSN.Commons.Tests/", "BSN.Commons.Tests.csproj", "bin/Release/net472/BSN.Commons.Tests.dll"),
+    ("BSN.Commons.Orm.EntityFramework.Tests/", "BSN.Commons.Orm.EntityFramework.Tests.csproj",
+        "bin/Release/net48/BSN.Commons.Orm.EntityFramework.Tests.dll")
+};
 var coverageResultsFileName = "coverage.xml";
 var testResultsFileName = "nunitResults.xml";
 var currentBranch = Argument<string>("currentBranch", GitBranchCurrent("../").FriendlyName);
@@ -89,23 +93,30 @@ Task("Test")
         var settings = new DotNetCoreTestSettings {
         };
 
-        var coverletSettings = new CoverletSettings {
-            CollectCoverage = true,
-            CoverletOutputFormat = CoverletOutputFormat.opencover,
-            CoverletOutputDirectory = Directory(@"./coverage-test/"),
-            CoverletOutputName = coverageResultsFileName
-        };
- 
-        DotNetCoreTest(testProject, settings, coverletSettings);
-        MoveFile("./coverage-test/" + coverageResultsFileName, artifactsDir + coverageResultsFileName);
 
-        NUnit3(testProjectDll, new NUnit3Settings()
+        foreach (var testProject in testProjects)
         {
-            Results = new [] {new NUnit3Result() { FileName = artifactsDir + testResultsFileName } },
-        });
+            var specificCoverageResultsFileName = testProject.name + coverageResultsFileName;
+            var specificTestResultsFileName = testProject.name + testResultsFileName;
 
-        if (AppVeyor.IsRunningOnAppVeyor)
-            AppVeyor.UploadTestResults(artifactsDir + testResultsFileName, AppVeyorTestResultsType.NUnit3);
+            var coverletSettings = new CoverletSettings {
+                CollectCoverage = true,
+                CoverletOutputFormat = CoverletOutputFormat.opencover,
+                CoverletOutputDirectory = Directory(@"./coverage-test/"),
+                CoverletOutputName = specificCoverageResultsFileName
+            };
+    
+            DotNetCoreTest(testFolder + testProject.path + testProject.name, settings, coverletSettings);
+            MoveFile("./coverage-test/" + specificCoverageResultsFileName, artifactsDir + specificCoverageResultsFileName);
+
+            NUnit3(testFolder + testProject.path + testProject.dll, new NUnit3Settings()
+            {
+                Results = new [] {new NUnit3Result() { FileName = artifactsDir + specificTestResultsFileName } },
+            });
+
+            if (AppVeyor.IsRunningOnAppVeyor)
+                AppVeyor.UploadTestResults(artifactsDir + specificTestResultsFileName, AppVeyorTestResultsType.NUnit3);
+        }
 });
 
 Task("UploadCoverage")
