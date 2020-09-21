@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.SqlClient;
 using System.IO;
 using System.Reflection;
 using System.Text;
 
 namespace BSN.Commons.Test.Data
 {
-    public class TestContext : DbContext
+    public class TestContext : DbContext, global::Commons.Infrastructure.IDbContext
     {
         public TestContext(string connString) : base(connString)
         {
@@ -30,5 +29,15 @@ namespace BSN.Commons.Test.Data
             modelBuilder.Entity<User>().HasOptional(P => P.Document).WithRequired(Q => Q.User);
             base.OnModelCreating(modelBuilder);
         }
-    }
+
+		void global::Commons.Infrastructure.IDbContext.SaveChanges()
+		{
+            this.SaveChanges();
+		}
+
+		global::Commons.Infrastructure.IDbSet<TEntity> global::Commons.Infrastructure.IDbContext.Set<TEntity>()
+		{
+            return (global::Commons.Infrastructure.IDbSet<TEntity>)this.Set<TEntity>();
+		}
+	}
 }

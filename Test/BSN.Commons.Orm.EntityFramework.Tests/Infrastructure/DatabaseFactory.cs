@@ -12,9 +12,9 @@ namespace BSN.Commons.Test.Infrastructure
         private DbContext _dataContext;
 
 
-        public DbContext Get()
+        public IDbContext Get()
         {
-            return _dataContext ?? (_dataContext = TestContext.Create());
+            return (IDbContext)(_dataContext ?? (_dataContext = TestContext.Create()));
         }
 
         protected override void DisposeCore()

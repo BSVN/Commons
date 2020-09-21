@@ -29,9 +29,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BSN.Commons.Orm.EntityFrameworkCore", "Source\BSN.Commons.Orm.EntityFrameworkCore\BSN.Commons.Orm.EntityFrameworkCore.csproj", "{6E3ADBF6-9D8E-4FA4-AD9B-F3B28234BDAB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BSN.Commons.Orm.EntityFrameworkCore", "Source\BSN.Commons.Orm.EntityFrameworkCore\BSN.Commons.Orm.EntityFrameworkCore.csproj", "{6E3ADBF6-9D8E-4FA4-AD9B-F3B28234BDAB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BSN.Commons.Orm.EntityFramework", "Source\BSN.Commons.Orm.EntityFramework\BSN.Commons.Orm.EntityFramework.csproj", "{20EBDA57-83DC-4557-BBD2-535CF3C6751B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BSN.Commons.Orm.EntityFramework.Tests", "Test\BSN.Commons.Orm.EntityFramework.Tests\BSN.Commons.Orm.EntityFramework.Tests.csproj", "{2DF9D69C-E6F0-4CDA-8D8D-12F5D9C91494}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +61,10 @@ Global
 		{20EBDA57-83DC-4557-BBD2-535CF3C6751B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20EBDA57-83DC-4557-BBD2-535CF3C6751B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20EBDA57-83DC-4557-BBD2-535CF3C6751B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DF9D69C-E6F0-4CDA-8D8D-12F5D9C91494}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DF9D69C-E6F0-4CDA-8D8D-12F5D9C91494}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DF9D69C-E6F0-4CDA-8D8D-12F5D9C91494}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DF9D69C-E6F0-4CDA-8D8D-12F5D9C91494}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,6 +75,7 @@ Global
 		{BFA36BA8-621F-490D-AB4E-ECEFB639CAC4} = {DC377ADC-CC9D-4785-81BE-726DBF5F3096}
 		{6E3ADBF6-9D8E-4FA4-AD9B-F3B28234BDAB} = {DC377ADC-CC9D-4785-81BE-726DBF5F3096}
 		{20EBDA57-83DC-4557-BBD2-535CF3C6751B} = {DC377ADC-CC9D-4785-81BE-726DBF5F3096}
+		{2DF9D69C-E6F0-4CDA-8D8D-12F5D9C91494} = {5C6BA7B5-832A-495A-AF5E-C2A74F6A1EF9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BCAF76D3-AA3C-4D0F-8D10-34065F8FED09}

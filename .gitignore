@@ -34,3 +34,6 @@ Source/BSN.Commons.PresentationInfrastructure/obj/project.assets.json
 /Source/BSN.Commons.Orm.EntityFramework/bin/Debug
 /Source/BSN.Commons.Orm.EntityFramework/obj
 /Source/BSN.Commons.Orm.EntityFrameworkCore/obj
+/Source/BSN.Commons.Orm.EntityFrameworkCore/bin/Debug/netstandard2.0
+/Test/BSN.Commons.Orm.EntityFramework.Tests/bin/Debug
+/Test/BSN.Commons.Orm.EntityFramework.Tests/obj
