@@ -167,8 +167,8 @@ Task("Package")
                     ArgumentCustomization = args => args.Append("-Prop Configuration=" + configuration),
                     Files = new [] {
                         new NuSpecContent {
-                            Source = "bin/" + configuration + "BSN.Commons.Orm.EntityFramework.dll",
-                            Target = "bin"
+                            Source = "BSN.Commons.Orm.EntityFramework.dll",
+                            Target = "lib"
                         }
                     }
                 };
