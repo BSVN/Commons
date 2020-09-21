@@ -165,10 +165,21 @@ Task("Package")
                     BasePath = projectFolder + project.path + "bin/" + Directory(configuration),
                     OutputDirectory = artifactsDir,
                     ArgumentCustomization = args => args.Append("-Prop Configuration=" + configuration)
+                    Files = new [] {
+                        new NuSpecContent {
+                            Source = "bin/" + configuration + "BSN.Commons.Orm.EntityFramework.dll",
+                            Target = "bin"
+                        }
+                    }
                 };
 
                 NuGetPack("BSN.Commons.Orm.EntityFramework.nuspec", nuGetPackSettings);
 
+                if (AppVeyor.IsRunningOnAppVeyor)
+                {
+                    foreach (var file in GetFiles(artifactsDir + "**/*"))
+                        AppVeyor.UploadArtifact(file.FullPath);
+                }
                 continue;
             }
             DotNetCorePack(projectFolder + project.path + project.name, settings);
