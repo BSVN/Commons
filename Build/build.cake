@@ -15,6 +15,14 @@ var target = Argument("target", "Default");
 var artifactsDir = "./artifacts/";
 var solutionPath = "../BSN.Commons.sln";
 var projectName = "BSN.Commons";
+var projectFolder = "../Source/"
+var projects = new List<(string path, string name)>
+{
+    ("BSN.Commons/", "BSN.Commons.csproj"),
+    ("BSN.Commons.PresentationInfrastructure/", "BSN.Commons.PresentationInfrastructure.csproj"),
+    ("BSN.Commons.Orm.EntityFramework/", "BSN.Commons.Orm.EntityFramework.csproj")
+};
+
 var mainProject = "../Source/BSN.Commons/BSN.Commons.csproj";
 var presentationProject = "../Source/BSN.Commons.PresentationInfrastructure/BSN.Commons.PresentationInfrastructure.csproj";
 var testFolder = "../Test/";
@@ -141,8 +149,16 @@ Task("Package")
 
         //GenerateReleaseNotes();
 
-        DotNetCorePack(mainProject, settings);
-        DotNetCorePack(presentationProject, settings);
+        foreach (var project in projects)
+        {
+            DotNetCorePack(projectFolder + project.path + project.name, settings);
+
+            if (AppVeyor.IsRunningOnAppVeyor)
+            {
+                foreach (var file in GetFiles(artifactsDir + "**/*"))
+                    AppVeyor.UploadArtifact(file.FullPath);
+            }
+        }
 /*
         System.IO.File.WriteAllLines(artifactsDir, new[]{
             "nuget:" + projectName + "." + versionInfo.NuGetVersion + ".nupkg",
@@ -150,12 +166,6 @@ Task("Package")
             "releaseNotes:releasenotes.md"
         });
         */
-
-        if (AppVeyor.IsRunningOnAppVeyor)
-        {
-            foreach (var file in GetFiles(artifactsDir + "**/*"))
-                AppVeyor.UploadArtifact(file.FullPath);
-        }
 });
 
 Task("Publish")
