@@ -12,6 +12,8 @@ Source/BSN.Commons/bin
 Source/BSN.Commons/obj
 Source/BSN.Commons.PresentationInfrastructure/bin
 Source/BSN.Commons.PresentationInfrastructure/obj
+Source/BSN.Commons.PresentationInfrastructure/obj/Debug
+Source/BSN.Commons.PresentationInfrastructure/obj/Release
 *.lock
 *.dtbcache
 /.vs/
@@ -28,3 +30,7 @@ Test/BSN.Commons.Tests/obj
 Source/BSN.Commons.PresentationInfrastructure/obj/BSN.Commons.PresentationInfrastructure.csproj.nuget.cache
 Source/BSN.Commons.PresentationInfrastructure/obj/BSN.Commons.PresentationInfrastructure.csproj.nuget.dgspec.json
 Source/BSN.Commons.PresentationInfrastructure/obj/project.assets.json
+/packages
+/Source/BSN.Commons.Orm.EntityFramework/bin/Debug
+/Source/BSN.Commons.Orm.EntityFramework/obj
+/Source/BSN.Commons.Orm.EntityFrameworkCore/obj

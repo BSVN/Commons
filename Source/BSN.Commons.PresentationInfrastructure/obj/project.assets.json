@@ -278,25 +278,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\sooro\\.nuget\\packages\\": {},
-    "C:\\Microsoft\\Xamarin\\NuGet\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\ssoroosh\\.nuget\\packages\\": {},
+    "C:\\Microsoft\\Xamarin\\NuGet\\": {}
   },
   "project": {
     "version": "1.6.2",
     "restore": {
-      "projectUniqueName": "C:\\Users\\sooro\\Documents\\Visual Studio 2019\\Projects\\soroshsabz\\Commons\\Source\\BSN.Commons.PresentationInfrastructure\\BSN.Commons.PresentationInfrastructure.csproj",
+      "projectUniqueName": "D:\\Source\\Repos\\BSVN\\Commons\\Source\\BSN.Commons.PresentationInfrastructure\\BSN.Commons.PresentationInfrastructure.csproj",
       "projectName": "BSN.Commons.PresentationInfrastructure",
-      "projectPath": "C:\\Users\\sooro\\Documents\\Visual Studio 2019\\Projects\\soroshsabz\\Commons\\Source\\BSN.Commons.PresentationInfrastructure\\BSN.Commons.PresentationInfrastructure.csproj",
-      "packagesPath": "C:\\Users\\sooro\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\sooro\\Documents\\Visual Studio 2019\\Projects\\soroshsabz\\Commons\\Source\\BSN.Commons.PresentationInfrastructure\\obj\\",
+      "projectPath": "D:\\Source\\Repos\\BSVN\\Commons\\Source\\BSN.Commons.PresentationInfrastructure\\BSN.Commons.PresentationInfrastructure.csproj",
+      "packagesPath": "C:\\Users\\ssoroosh\\.nuget\\packages\\",
+      "outputPath": "D:\\Source\\Repos\\BSVN\\Commons\\Source\\BSN.Commons.PresentationInfrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Microsoft\\Xamarin\\NuGet\\",
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        "C:\\Microsoft\\Xamarin\\NuGet\\"
       ],
       "configFilePaths": [
-        "C:\\Users\\sooro\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\ssoroosh\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
@@ -305,6 +303,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "I:\\NugetRepo": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -342,7 +341,7 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
       }
     }
   }

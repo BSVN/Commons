@@ -17,9 +17,4 @@
     <RepositoryUrl>https://github.com/BSVN/Commons.git</RepositoryUrl>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="EntityFramework" Version="6.2.0" />
-    <PackageReference Include="Microsoft.AspNet.Identity.EntityFramework" Version="2.2.2" />
-  </ItemGroup>
-
 </Project>
