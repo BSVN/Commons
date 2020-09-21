@@ -282,7 +282,7 @@
     "C:\\Microsoft\\Xamarin\\NuGet\\": {}
   },
   "project": {
-    "version": "1.7.0-alpha0032",
+    "version": "1.6.3",
     "restore": {
       "projectUniqueName": "D:\\Source\\Repos\\BSVN\\Commons\\Source\\BSN.Commons.PresentationInfrastructure\\BSN.Commons.PresentationInfrastructure.csproj",
       "projectName": "BSN.Commons.PresentationInfrastructure",
