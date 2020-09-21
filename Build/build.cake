@@ -164,7 +164,7 @@ Task("Package")
                 {   
                     BasePath = projectFolder + project.path + "bin/" + Directory(configuration),
                     OutputDirectory = artifactsDir,
-                    ArgumentCustomization = args => args.Append("-Prop Configuration=" + configuration)
+                    ArgumentCustomization = args => args.Append("-Prop Configuration=" + configuration),
                     Files = new [] {
                         new NuSpecContent {
                             Source = "bin/" + configuration + "BSN.Commons.Orm.EntityFramework.dll",
