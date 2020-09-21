@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{5C6BA7B5-8
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{6F9A45A1-05A3-4DAD-B4F2-DCD4836E110A}"
 	ProjectSection(SolutionItems) = preProject
+		Build\BSN.Commons.Orm.EntityFramework.nuspec = Build\BSN.Commons.Orm.EntityFramework.nuspec
 		Build\build.cake = Build\build.cake
 		Build\build.ps1 = Build\build.ps1
 	EndProjectSection

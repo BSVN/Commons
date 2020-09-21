@@ -78,8 +78,15 @@ Task("Version")
             OutputType = GitVersionOutput.Json
         });
 
-        UpdateVersion(mainProject);
-        UpdateVersion(presentationProject);
+        foreach (var project in projects)
+        {
+           if (project.name.Contains("EntityFramework.csproj"))
+           {
+               UpdateVersion("BSN.Commons.Orm.EntityFramework.nuspec", projectFolder + project.path + "/Properties/AssemblyInfo.cs");
+               continue;
+           }
+           UpdateVersion(projectFolder + project.path + project.name);
+        }
 });
 
 Task("Build")
@@ -151,6 +158,19 @@ Task("Package")
 
         foreach (var project in projects)
         {
+            if (project.name.Contains("EntityFramework.csproj"))
+            {
+                var nuGetPackSettings = new NuGetPackSettings
+                {   
+                    BasePath = projectFolder + project.path + "bin/" + Directory(configuration),
+                    OutputDirectory = artifactsDir,
+                    ArgumentCustomization = args => args.Append("-Prop Configuration=" + configuration)
+                };
+
+                NuGetPack("BSN.Commons.Orm.EntityFramework.nuspec", nuGetPackSettings);
+
+                continue;
+            }
             DotNetCorePack(projectFolder + project.path + project.name, settings);
 
             if (AppVeyor.IsRunningOnAppVeyor)
@@ -240,6 +260,40 @@ private void UpdateVersion(string projectPath)
         .Replace(assemblyVersion, versionInfo.NuGetVersion);
 
     System.IO.File.WriteAllText(projectPath, updatedProjectJson);
+}
+
+private void UpdateVersion(string nuspecPath, string assemblyInfoPath)
+{
+    Information("UpdateVersion .................................................");
+    Information(nuspecPath);
+    // Update nuspec file
+    string pureVersion = XmlPeek(nuspecPath, "//version");
+    Information(pureVersion);
+
+    var updatedProjectJson = System.IO.File.ReadAllText(nuspecPath)
+        .Replace(pureVersion, versionInfo.NuGetVersion);
+
+    System.IO.File.WriteAllText(nuspecPath, updatedProjectJson);
+
+    var assemblyInfo = ParseAssemblyInfo(assemblyInfoPath);
+    Information("Change AssemblyInfo.cs of " + assemblyInfoPath);
+    Information("Before change version is: " + assemblyInfo.AssemblyVersion);
+    CreateAssemblyInfo(assemblyInfoPath, new AssemblyInfoSettings {
+        FileVersion = versionInfo.NuGetVersion,
+        InformationalVersion = versionInfo.NuGetVersion,
+        Version = versionInfo.NuGetVersion,
+        CLSCompliant = assemblyInfo.ClsCompliant,
+        Company = assemblyInfo.Company,
+        ComVisible = assemblyInfo.ComVisible,
+        Configuration = assemblyInfo.Configuration,
+        Copyright = assemblyInfo.Copyright,
+        Description = assemblyInfo.Description,
+        Guid = assemblyInfo.Guid,
+        InternalsVisibleTo = assemblyInfo.InternalsVisibleTo,
+        Product = assemblyInfo.Product,
+        Title = assemblyInfo.Title,
+        Trademark = assemblyInfo.Trademark
+    });
 }
 
 Task("BuildAndTest")
