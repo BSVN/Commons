@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Threading.Tasks;
 using System.Transactions;
 using System.Linq;
 
@@ -11,7 +9,7 @@ namespace Commons.Infrastructure
     {
         public List<Exception> Exceptions { get; private set; }
 
-        protected DbContext DataContext => _dataContext ?? (_dataContext = _databaseFactory.Get());
+        protected IDbContext DataContext => _dataContext ?? (_dataContext = _databaseFactory.Get());
 
 
         public UnitOfWork(IDatabaseFactory databaseFactory)
@@ -57,7 +55,7 @@ namespace Commons.Infrastructure
         }
 
         private readonly IDatabaseFactory _databaseFactory;
-        private DbContext _dataContext;
+        private IDbContext _dataContext;
         private readonly Queue<ITaskUnit> _tasks;
     }
 }
