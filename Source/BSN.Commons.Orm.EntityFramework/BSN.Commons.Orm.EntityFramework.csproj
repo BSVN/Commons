@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{20EBDA57-83DC-4557-BBD2-535CF3C6751B}</ProjectGuid>
+    <ProjectGuid>{746AF465-DE8E-41C9-B558-CFFC6E3638D4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BSN.Commons.Orm.EntityFramework</RootNamespace>
@@ -63,14 +63,14 @@
     <Compile Include="Users\UserRole.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\BSN.Commons\BSN.Commons.csproj">
       <Project>{ffef752b-4e11-44ff-82fa-9aec0b607990}</Project>
       <Name>BSN.Commons</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

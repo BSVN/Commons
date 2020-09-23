@@ -34,10 +34,5 @@ namespace BSN.Commons.Test.Data
 		{
             this.SaveChanges();
 		}
-
-		global::Commons.Infrastructure.IDbSet<TEntity> global::Commons.Infrastructure.IDbContext.Set<TEntity>()
-		{
-            return (global::Commons.Infrastructure.IDbSet<TEntity>)this.Set<TEntity>();
-		}
 	}
 }
