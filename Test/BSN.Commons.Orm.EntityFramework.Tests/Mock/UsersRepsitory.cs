@@ -1,5 +1,6 @@
 ﻿using BSN.Commons.Test.Data;
 using Commons.Infrastructure;
+using Commons.Orm.EntityFramework;
 
 namespace BSN.Commons.Test.Mock
 {
