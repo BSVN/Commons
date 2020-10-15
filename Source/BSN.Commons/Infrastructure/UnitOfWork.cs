@@ -11,7 +11,6 @@ namespace Commons.Infrastructure
 
         protected IDbContext DataContext => _dataContext ?? (_dataContext = _databaseFactory.Get());
 
-
         public UnitOfWork(IDatabaseFactory databaseFactory)
         {
             _databaseFactory = databaseFactory;

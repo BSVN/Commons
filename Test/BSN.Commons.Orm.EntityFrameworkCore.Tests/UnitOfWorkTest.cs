@@ -74,7 +74,7 @@ namespace BSN.Commons.Test
 
             var enlistTask = new EnlistTask
                 (
-                    new Task(() => { Names.Add("Qamar"); }),
+                    new Task(() => { Names.Add("Qamar");}),
                     new Task(() => Names.Remove("Qamar"))
                 );
 
@@ -168,11 +168,11 @@ namespace BSN.Commons.Test
 
             var enlistTask = new EnlistTask
             (
-                new Task(() =>
+                new Task(() => 
                 {
                     usersRepository.Add(User);
                 }),
-                new Task(() =>
+                new Task(() => 
                 {
                     usersRepository.Delete(User);
                 })

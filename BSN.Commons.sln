@@ -30,11 +30,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BSN.Commons.Orm.EntityFrameworkCore", "Source\BSN.Commons.Orm.EntityFrameworkCore\BSN.Commons.Orm.EntityFrameworkCore.csproj", "{6E3ADBF6-9D8E-4FA4-AD9B-F3B28234BDAB}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BSN.Commons.Orm.EntityFramework.Tests", "Test\BSN.Commons.Orm.EntityFramework.Tests\BSN.Commons.Orm.EntityFramework.Tests.csproj", "{2DF9D69C-E6F0-4CDA-8D8D-12F5D9C91494}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BSN.Commons.Orm.EntityFramework", "Source\BSN.Commons.Orm.EntityFramework\BSN.Commons.Orm.EntityFramework.csproj", "{746AF465-DE8E-41C9-B558-CFFC6E3638D4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BSN.Commons.Orm.EntityFrameworkCore.Tests", "Test\BSN.Commons.Orm.EntityFrameworkCore.Tests\BSN.Commons.Orm.EntityFrameworkCore.Tests.csproj", "{906FEED8-23E0-4EEF-B902-C39325C50480}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BSN.Commons.Orm.EntityFrameworkCore", "Source\BSN.Commons.Orm.EntityFrameworkCore\BSN.Commons.Orm.EntityFrameworkCore.csproj", "{335F645B-C85F-42C2-9185-A216101F60C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,10 +56,6 @@ Global
 		{BFA36BA8-621F-490D-AB4E-ECEFB639CAC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFA36BA8-621F-490D-AB4E-ECEFB639CAC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFA36BA8-621F-490D-AB4E-ECEFB639CAC4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6E3ADBF6-9D8E-4FA4-AD9B-F3B28234BDAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6E3ADBF6-9D8E-4FA4-AD9B-F3B28234BDAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6E3ADBF6-9D8E-4FA4-AD9B-F3B28234BDAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6E3ADBF6-9D8E-4FA4-AD9B-F3B28234BDAB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2DF9D69C-E6F0-4CDA-8D8D-12F5D9C91494}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2DF9D69C-E6F0-4CDA-8D8D-12F5D9C91494}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2DF9D69C-E6F0-4CDA-8D8D-12F5D9C91494}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -66,6 +64,14 @@ Global
 		{746AF465-DE8E-41C9-B558-CFFC6E3638D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{746AF465-DE8E-41C9-B558-CFFC6E3638D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{746AF465-DE8E-41C9-B558-CFFC6E3638D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{906FEED8-23E0-4EEF-B902-C39325C50480}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{906FEED8-23E0-4EEF-B902-C39325C50480}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{906FEED8-23E0-4EEF-B902-C39325C50480}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{906FEED8-23E0-4EEF-B902-C39325C50480}.Release|Any CPU.Build.0 = Release|Any CPU
+		{335F645B-C85F-42C2-9185-A216101F60C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{335F645B-C85F-42C2-9185-A216101F60C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{335F645B-C85F-42C2-9185-A216101F60C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{335F645B-C85F-42C2-9185-A216101F60C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -74,9 +80,10 @@ Global
 		{FFEF752B-4E11-44FF-82FA-9AEC0B607990} = {DC377ADC-CC9D-4785-81BE-726DBF5F3096}
 		{128FAA47-21B1-4FBE-AC24-E33C6AE218CA} = {5C6BA7B5-832A-495A-AF5E-C2A74F6A1EF9}
 		{BFA36BA8-621F-490D-AB4E-ECEFB639CAC4} = {DC377ADC-CC9D-4785-81BE-726DBF5F3096}
-		{6E3ADBF6-9D8E-4FA4-AD9B-F3B28234BDAB} = {DC377ADC-CC9D-4785-81BE-726DBF5F3096}
 		{2DF9D69C-E6F0-4CDA-8D8D-12F5D9C91494} = {5C6BA7B5-832A-495A-AF5E-C2A74F6A1EF9}
 		{746AF465-DE8E-41C9-B558-CFFC6E3638D4} = {DC377ADC-CC9D-4785-81BE-726DBF5F3096}
+		{906FEED8-23E0-4EEF-B902-C39325C50480} = {5C6BA7B5-832A-495A-AF5E-C2A74F6A1EF9}
+		{335F645B-C85F-42C2-9185-A216101F60C7} = {DC377ADC-CC9D-4785-81BE-726DBF5F3096}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BCAF76D3-AA3C-4D0F-8D10-34065F8FED09}
