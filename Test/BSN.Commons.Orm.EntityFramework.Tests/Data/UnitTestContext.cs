@@ -36,9 +36,9 @@ namespace BSN.Commons.Test.Data
             base.OnModelCreating(modelBuilder);
         }
 
-		void global::Commons.Infrastructure.IDbContext.SaveChanges()
+		int global::Commons.Infrastructure.IDbContext.SaveChanges()
 		{
-            this.SaveChanges();
+            return this.SaveChanges();
 		}
 	}
 }

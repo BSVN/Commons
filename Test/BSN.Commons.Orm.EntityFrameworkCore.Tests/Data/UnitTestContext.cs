@@ -27,9 +27,9 @@ namespace BSN.Commons.Test.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Document> Documents { get; set; }
 
-		void global::Commons.Infrastructure.IDbContext.SaveChanges()
+		int global::Commons.Infrastructure.IDbContext.SaveChanges()
 		{
-            this.SaveChanges();
+            return this.SaveChanges();
 		}
 	}
 }
