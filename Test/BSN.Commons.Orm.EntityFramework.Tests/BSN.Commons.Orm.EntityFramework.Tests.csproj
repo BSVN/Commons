@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Source\BSN.Commons\BSN.Commons.csproj" />
     <ProjectReference Include="..\..\Source\BSN.Commons.Orm.EntityFramework\BSN.Commons.Orm.EntityFramework.csproj" />
+    <ProjectReference Include="..\BSN.Commons.Tests\BSN.Commons.Tests.csproj" />
   </ItemGroup>
 
   <ItemGroup>

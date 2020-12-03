@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BSN.Commons.Infrastructure;
+using BSN.Commons.Tests;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,7 +9,7 @@ using System.Text;
 
 namespace BSN.Commons.Test.Data
 {
-    public class UnitTestContext : DbContext, global::Commons.Infrastructure.IDbContext
+    public class UnitTestContext : DbContext, IDbContext
     {
         public UnitTestContext(DbContextOptions options) : base(options) 
         {
@@ -27,9 +29,9 @@ namespace BSN.Commons.Test.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Document> Documents { get; set; }
 
-		int global::Commons.Infrastructure.IDbContext.SaveChanges()
+        public override int SaveChanges()
 		{
-            return this.SaveChanges();
+            return base.SaveChanges();
 		}
 	}
 }

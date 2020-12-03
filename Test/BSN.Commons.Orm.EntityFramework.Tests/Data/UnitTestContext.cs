@@ -1,4 +1,5 @@
 ﻿using BSN.Commons.Infrastructure;
+using BSN.Commons.Tests;
 using System.Data.Entity;
 
 namespace BSN.Commons.Test.Data
@@ -33,7 +34,7 @@ namespace BSN.Commons.Test.Data
 
 		public override int SaveChanges()
 		{
-            return this.SaveChanges();
+            return base.SaveChanges();
 		}
 	}
 }

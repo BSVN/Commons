@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace BSN.Commons.Test.Data
+namespace BSN.Commons.Tests
 {
     public class Document
     {
