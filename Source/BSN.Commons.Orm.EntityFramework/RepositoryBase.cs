@@ -10,23 +10,10 @@ namespace BSN.Commons.Orm.EntityFramework
 
     public abstract partial class RepositoryBase<T> : IRepository<T> where T : class
     {
-        private DbContext _dataContext;
-        private readonly IUnitOfWork _unitOfWork;
-        protected readonly DbSet<T> dbSet;
-
-        protected DbContext DataContext => _dataContext ?? (_dataContext = (DbContext)DatabaseFactory.Get());
-        protected IDatabaseFactory DatabaseFactory { get; private set; }
-
-
         protected RepositoryBase(IDatabaseFactory databaseFactory)
         {
             DatabaseFactory = databaseFactory;
             dbSet = DataContext.Set<T>();
-        }
-
-        protected RepositoryBase(IDatabaseFactory databaseFactory, IUnitOfWork unitOfWork) : this(databaseFactory)
-        {
-            _unitOfWork = unitOfWork;
         }
 
         public virtual void Add(T entity)
@@ -166,5 +153,11 @@ namespace BSN.Commons.Orm.EntityFramework
         {
             return dbSet.Where(where).FirstOrDefault();
         }
+
+        protected readonly DbSet<T> dbSet;
+        protected DbContext DataContext => _dataContext ?? (_dataContext = (DbContext)DatabaseFactory.Get());
+        protected IDatabaseFactory DatabaseFactory { get; private set; }
+
+        private DbContext _dataContext;
     }
 }

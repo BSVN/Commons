@@ -9,6 +9,12 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
 {
     public class RepositoryBase<T> : IRepository<T> where T : class
     {
+        protected RepositoryBase(IDatabaseFactory databaseFactory)
+        {
+            DatabaseFactory = databaseFactory;
+            dbSet = DataContext.Set<T>();
+        }
+
         public void Add(T entity)
         {
             dbSet.Add(entity);
@@ -150,22 +156,6 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
         protected DbContext DataContext => _dataContext ?? (_dataContext = (DbContext)DatabaseFactory.Get());
         protected IDatabaseFactory DatabaseFactory { get; private set; }
 
-        protected RepositoryBase(IDatabaseFactory databaseFactory)
-        {
-            DatabaseFactory = databaseFactory;
-            dbSet = DataContext.Set<T>();
-        }
-
-        protected RepositoryBase(IDatabaseFactory databaseFactory, IUnitOfWork unitOfWork) : this(databaseFactory)
-        {
-            _unitOfWork = unitOfWork;
-        }
-
-        public RepositoryBase()
-        {
-        }
-
         private DbContext _dataContext;
-        private readonly IUnitOfWork _unitOfWork;
     }
 }
