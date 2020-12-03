@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Commons.Infrastructure
+namespace BSN.Commons.Infrastructure
 {
 	public class Disposable : IDisposable
 	{

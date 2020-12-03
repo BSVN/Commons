@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace Commons.Infrastructure
+namespace BSN.Commons.Infrastructure
 {
     /// <summary>
     /// Update Config is useful when you are using Update method on Repository classes

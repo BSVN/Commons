@@ -1,14 +1,13 @@
-﻿using Commons.Infrastructure;
+﻿using BSN.Commons.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace BSN.Commons.Orm.EntityFrameworkCore
 {
-    public class RepositoryBase<T> : global::Commons.Infrastructure.IRepository<T> where T : class
+    public class RepositoryBase<T> : IRepository<T> where T : class
     {
         public void Add(T entity)
         {
@@ -160,6 +159,10 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
         protected RepositoryBase(IDatabaseFactory databaseFactory, IUnitOfWork unitOfWork) : this(databaseFactory)
         {
             _unitOfWork = unitOfWork;
+        }
+
+        public RepositoryBase()
+        {
         }
 
         private DbContext _dataContext;

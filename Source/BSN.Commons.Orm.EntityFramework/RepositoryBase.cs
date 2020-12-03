@@ -4,9 +4,9 @@ using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Commons.Orm.EntityFramework
+namespace BSN.Commons.Orm.EntityFramework
 {
-    using Commons.Infrastructure;
+    using BSN.Commons.Infrastructure;
 
     public abstract partial class RepositoryBase<T> : IRepository<T> where T : class
     {

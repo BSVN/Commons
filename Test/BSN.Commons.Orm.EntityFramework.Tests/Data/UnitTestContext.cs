@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BSN.Commons.Infrastructure;
 using System.Data.Entity;
-using System.IO;
-using System.Reflection;
-using System.Text;
-using System.Transactions;
 
 namespace BSN.Commons.Test.Data
 {
-    public class UnitTestContext : DbContext, global::Commons.Infrastructure.IDbContext
+    public class UnitTestContext : DbContext, IDbContext
     {
         public UnitTestContext(System.Data.Common.DbConnection dbConnection) : base(dbConnection, false) 
         {
@@ -36,7 +31,7 @@ namespace BSN.Commons.Test.Data
             base.OnModelCreating(modelBuilder);
         }
 
-		int global::Commons.Infrastructure.IDbContext.SaveChanges()
+		public override int SaveChanges()
 		{
             return this.SaveChanges();
 		}

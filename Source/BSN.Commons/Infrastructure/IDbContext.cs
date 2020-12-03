@@ -1,4 +1,4 @@
-﻿namespace Commons.Infrastructure
+﻿namespace BSN.Commons.Infrastructure
 {
 	public interface IDbContext
 	{

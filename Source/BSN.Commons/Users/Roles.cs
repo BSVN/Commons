@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Commons.Users
+namespace BSN.Commons.Users
 {
 	public enum Roles
 	{

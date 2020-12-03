@@ -1,5 +1,5 @@
 ﻿using BSN.Commons.Test.Infrastructure;
-using Commons.Infrastructure;
+using BSN.Commons.Infrastructure;
 using NUnit.Framework;
 using BSN.Commons.Test.Data;
 using System.Collections.Generic;

@@ -1,8 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Description>Presentation infrastructure layer of Commons library for enterprise application.</Description>
+    <Description>Presentation infrastructure layer of BSN.Commons library for enterprise application.</Description>
     <AssemblyVersion>1.8.0</AssemblyVersion>
     <FileVersion>1.8.0</FileVersion>
     <Version>1.8.0</Version>

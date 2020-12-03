@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Transactions;
 using System.Linq;
 
-namespace Commons.Infrastructure
+namespace BSN.Commons.Infrastructure
 {
     public class UnitOfWork : IUnitOfWork
     {
