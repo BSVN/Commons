@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Transactions;
 using System.Linq;
 
-namespace Commons.Infrastructure
+namespace BSN.Commons.Infrastructure
 {
     public class UnitOfWork : IUnitOfWork
     {
         public List<Exception> Exceptions { get; private set; }
 
         protected IDbContext DataContext => _dataContext ?? (_dataContext = _databaseFactory.Get());
-
 
         public UnitOfWork(IDatabaseFactory databaseFactory)
         {

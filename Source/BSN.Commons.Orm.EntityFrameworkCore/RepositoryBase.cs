@@ -1,14 +1,13 @@
-﻿using System;
+﻿using BSN.Commons.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace BSN.Commons.Orm.EntityFramework
+namespace BSN.Commons.Orm.EntityFrameworkCore
 {
-    using BSN.Commons.Infrastructure;
-
-    public abstract partial class RepositoryBase<T> : IRepository<T> where T : class
+    public class RepositoryBase<T> : IRepository<T> where T : class
     {
         protected RepositoryBase(IDatabaseFactory databaseFactory)
         {
@@ -16,115 +15,27 @@ namespace BSN.Commons.Orm.EntityFramework
             dbSet = DataContext.Set<T>();
         }
 
-        public virtual void Add(T entity)
+        public void Add(T entity)
         {
             dbSet.Add(entity);
         }
 
-        public virtual void AddRange(IEnumerable<T> entities)
+        public void AddRange(IEnumerable<T> entities)
         {
             dbSet.AddRange(entities);
         }
 
-        public virtual void Update(T entity)
-        {
-            Update(entity, cfg => cfg.IncludeAllProperties());
-        }
-
-        public virtual void Update(T entity, Action<IUpdateConfig<T>> configurer)
-        {
-            var updateConfig = new UpdateConfig<T>();
-            configurer.Invoke(updateConfig);
-
-            if (updateConfig.AutoDetectChangedPropertiesEnabled)
-            {
-                _dataContext.Configuration.AutoDetectChangesEnabled = true;
-                return;
-            }
-
-            bool autoDetectChangesPreviousValue = _dataContext.Configuration.AutoDetectChangesEnabled;
-
-            try
-            {
-                _dataContext.Configuration.AutoDetectChangesEnabled = false;
-
-                dbSet.Attach(entity);
-
-                if (updateConfig.IncludeAllPropertiesEnabled)
-                {
-                    _dataContext.Entry(entity).State = EntityState.Modified;
-                }
-                else
-                {
-                    foreach (string propertyName in updateConfig.PropertyNames)
-                        _dataContext.Entry(entity).Property(propertyName).IsModified = true;
-                }
-            }
-            finally
-            {
-                _dataContext.Configuration.AutoDetectChangesEnabled = autoDetectChangesPreviousValue;
-            }
-        }
-
-        public virtual void UpdateRange(IEnumerable<T> entities)
-        {
-            UpdateRange(entities, cfg => cfg.IncludeAllProperties());
-        }
-
-        public virtual void UpdateRange(IEnumerable<T> entities, Action<IUpdateConfig<T>> configurer)
-        {
-            var updateConfig = new UpdateConfig<T>();
-            configurer.Invoke(updateConfig);
-
-            if (updateConfig.AutoDetectChangedPropertiesEnabled)
-            {
-                _dataContext.Configuration.AutoDetectChangesEnabled = true;
-                return;
-            }
-
-            bool autoDetectChangesPreviousValue = _dataContext.Configuration.AutoDetectChangesEnabled;
-
-            try
-            {
-                _dataContext.Configuration.AutoDetectChangesEnabled = false;
-
-                if (updateConfig.IncludeAllPropertiesEnabled)
-                {
-                    foreach (T entity in entities)
-                    {
-                        dbSet.Attach(entity);
-                        _dataContext.Entry(entity).State = EntityState.Modified;
-                    }
-                }
-                else
-                {
-                    foreach (T entity in entities)
-                    {
-                        dbSet.Attach(entity);
-                        foreach (string propertyName in updateConfig.PropertyNames)
-                            _dataContext.Entry(entity).Property(propertyName).IsModified = true;
-                    }
-                }
-            }
-            finally
-            {
-                _dataContext.Configuration.AutoDetectChangesEnabled = autoDetectChangesPreviousValue;
-            }
-        }
-
-        public virtual void Delete(T entity)
+        public void Delete(T entity)
         {
             dbSet.Remove(entity);
         }
 
-        public virtual void Delete(Expression<Func<T, bool>> where)
+        public void Delete(Expression<Func<T, bool>> where)
         {
-            var objects = dbSet.Where(where).AsEnumerable();
-            foreach (var obj in objects)
-                dbSet.Remove(obj);
+            dbSet.RemoveRange(dbSet.Where(where));
         }
 
-        public virtual void DeleteRange(IEnumerable<T> entities)
+        public void DeleteRange(IEnumerable<T> entities)
         {
             dbSet.RemoveRange(entities);
         }
@@ -152,6 +63,93 @@ namespace BSN.Commons.Orm.EntityFramework
         public T Get(Expression<Func<T, bool>> where)
         {
             return dbSet.Where(where).FirstOrDefault();
+        }
+
+        public void Update(T entity)
+        {
+            Update(entity, cfg => cfg.IncludeAllProperties());
+        }
+
+        public void Update(T entity, Action<IUpdateConfig<T>> configurer)
+        {
+            var updateConfig = new UpdateConfig<T>();
+            configurer.Invoke(updateConfig);
+
+            // TODO: Why this behaviour exist?
+            if (updateConfig.AutoDetectChangedPropertiesEnabled)
+            {
+                _dataContext.ChangeTracker.AutoDetectChangesEnabled = true;
+                return;
+            }
+
+            bool autoDetectChangesPreviousValue = _dataContext.ChangeTracker.AutoDetectChangesEnabled;
+
+            try
+            {
+                _dataContext.ChangeTracker.AutoDetectChangesEnabled = true;
+
+                dbSet.Attach(entity);
+
+                if (updateConfig.IncludeAllPropertiesEnabled)
+                {
+                    _dataContext.Entry(entity).State = EntityState.Modified;
+                }
+                else
+                {
+                    foreach (string propertyName in updateConfig.PropertyNames)
+                        _dataContext.Entry(entity).Property(propertyName).IsModified = true;
+                }
+            }
+            finally
+            {
+                _dataContext.ChangeTracker.AutoDetectChangesEnabled = autoDetectChangesPreviousValue;
+            }
+        }
+
+        public void UpdateRange(IEnumerable<T> entities)
+        {
+            UpdateRange(entities, cfg => cfg.IncludeAllProperties());
+        }
+
+        public void UpdateRange(IEnumerable<T> entities, Action<IUpdateConfig<T>> configurer)
+        {
+            var updateConfig = new UpdateConfig<T>();
+            configurer.Invoke(updateConfig);
+
+            if (updateConfig.AutoDetectChangedPropertiesEnabled)
+            {
+                _dataContext.ChangeTracker.AutoDetectChangesEnabled = true;
+                return;
+            }
+
+            bool autoDetectChangesPreviousValue = _dataContext.ChangeTracker.AutoDetectChangesEnabled;
+
+            try
+            {
+                _dataContext.ChangeTracker.AutoDetectChangesEnabled = false;
+
+                if (updateConfig.IncludeAllPropertiesEnabled)
+                {
+                    foreach (T entity in entities)
+                    {
+                        dbSet.Attach(entity);
+                        _dataContext.Entry(entity).State = EntityState.Modified;
+                    }
+                }
+                else
+                {
+                    foreach (T entity in entities)
+                    {
+                        dbSet.Attach(entity);
+                        foreach (string propertyName in updateConfig.PropertyNames)
+                            _dataContext.Entry(entity).Property(propertyName).IsModified = true;
+                    }
+                }
+            }
+            finally
+            {
+                _dataContext.ChangeTracker.AutoDetectChangesEnabled = autoDetectChangesPreviousValue;
+            }
         }
 
         protected readonly DbSet<T> dbSet;

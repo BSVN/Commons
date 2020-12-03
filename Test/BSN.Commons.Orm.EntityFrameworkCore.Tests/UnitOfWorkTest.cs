@@ -1,12 +1,7 @@
 ﻿using BSN.Commons.Test.Infrastructure;
 using BSN.Commons.Infrastructure;
 using NUnit.Framework;
-using BSN.Commons.Test.Data;
-using System.Collections.Generic;
 using BSN.Commons.Test.Mock;
-using System;
-using System.Threading.Tasks;
-using System.Linq;
 using BSN.Commons.Tests;
 
 namespace BSN.Commons.Test
@@ -16,11 +11,11 @@ namespace BSN.Commons.Test
     {
         public override UnitOfWorkArrangementsAbstractFactory ArrangemenetAbstractFactoryMethod()
         {
-            return new EFUnitOfWorkTestFactory();
+            return new EFCoreUnitOfWorkTestFactory();
         }
     }
 
-    public class EFUnitOfWorkTestFactory : UnitOfWorkArrangementsAbstractFactory
+    public class EFCoreUnitOfWorkTestFactory : UnitOfWorkArrangementsAbstractFactory
     {
         public override IDatabaseFactory CreateDatabaseFactory()
         {
