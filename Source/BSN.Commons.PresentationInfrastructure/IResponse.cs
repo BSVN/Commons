@@ -7,7 +7,7 @@ namespace BSN.Commons.PresentationInfrastructure
     public interface IResponse<ValidationResultType>
     {
         IList<ValidationResultType> InvalidItems { get; set; }
-        bool IsSuccessStatusCode { get; }
+        bool IsSuccess { get; }
         string Message { get; set; }
         ResponseStatusCode StatusCode { get; set; }
     }
