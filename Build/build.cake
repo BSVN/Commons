@@ -18,9 +18,10 @@ var projectName = "BSN.Commons";
 var projectFolder = "../Source/";
 var projects = new List<(string path, string name, string version)>
 {
-    ("BSN.Commons/", "BSN.Commons.csproj", "1.7.0"),
-    ("BSN.Commons.PresentationInfrastructure/", "BSN.Commons.PresentationInfrastructure.csproj", "1.7.0"),
-    ("BSN.Commons.Orm.EntityFramework/", "BSN.Commons.Orm.EntityFramework.csproj", "1.7.0")
+    ("BSN.Commons/", "BSN.Commons.csproj", "1.8.0"),
+    ("BSN.Commons.PresentationInfrastructure/", "BSN.Commons.PresentationInfrastructure.csproj", "1.8.0"),
+    ("BSN.Commons.Orm.EntityFramework/", "BSN.Commons.Orm.EntityFramework.csproj", "1.8.0"),
+    ("BSN.Commons.Orm.EntityFrameworkCore/", "BSN.Commons.Orm.EntityFrameworkCore.csproj", "1.8.0")
 };
 
 var mainProject = "../Source/BSN.Commons/BSN.Commons.csproj";
