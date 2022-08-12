@@ -16,10 +16,11 @@ var artifactsDir = "./artifacts/";
 var solutionPath = "../BSN.Commons.sln";
 var projectName = "BSN.Commons";
 var projectFolder = "../Source/";
-var solutionVersion = "1.7.1";
+var solutionVersion = "1.7.2";
 var projects = new List<(string path, string name, string version)>
 {
     ("BSN.Commons/", "BSN.Commons.csproj", solutionVersion),
+    ("BSN.Commons.Users/", "BSN.Commons.Users.csproj", solutionVersion),
     ("BSN.Commons.PresentationInfrastructure/", "BSN.Commons.PresentationInfrastructure.csproj", solutionVersion),
     ("BSN.Commons.Orm.EntityFramework/", "BSN.Commons.Orm.EntityFramework.csproj", solutionVersion),
     ("BSN.Commons.Orm.EntityFrameworkCore/", "BSN.Commons.Orm.EntityFrameworkCore.csproj", solutionVersion)
@@ -72,12 +73,16 @@ Task("Version")
         foreach (var project in projects)
         {
            var finalVersion=project.version;
-           if (project.name.Contains("EntityFramework.csproj"))
+           if (project.name.Contains("EntityFramework.csproj") || project.name.Contains("Users.csproj"))
            {
-               UpdateVersion("BSN.Commons.Orm.EntityFramework.nuspec", projectFolder + project.path + "/Properties/AssemblyInfo.cs", finalVersion);
+               string pureName = project.name.Remove(project.name.IndexOf(".csproj"));
+               UpdateVersion(pureName + ".nuspec", projectFolder + project.path + "/Properties/AssemblyInfo.cs", finalVersion);
                continue;
            }
-           UpdateVersion(projectFolder + project.path + project.name, finalVersion);
+           else
+           {
+               UpdateVersion(projectFolder + project.path + project.name, finalVersion);
+           }
         }
 });
 
@@ -97,9 +102,6 @@ Task("Build")
 Task("Test")
     .IsDependentOn("Build")
     .Does(() => {
-        
-
-
         foreach (var testProject in testProjects)
         {
             var specificCoverageResultsFileName = testProject.name + coverageResultsFileName;
@@ -146,8 +148,9 @@ Task("Package")
 
         foreach (var project in projects)
         {
-            if (project.name.Contains("EntityFramework.csproj"))
+            if (project.name.Contains("EntityFramework.csproj") || project.name.Contains("Users.csproj"))
             {
+                string pureName = project.name.Remove(project.name.IndexOf(".csproj"));
                 var nuGetPackSettings = new NuGetPackSettings
                 {   
                     BasePath = projectFolder + project.path + "bin/" + Directory(configuration),
@@ -155,28 +158,23 @@ Task("Package")
                     ArgumentCustomization = args => args.Append("-Prop Configuration=" + configuration),
                     Files = new [] {
                         new NuSpecContent {
-                            Source = "BSN.Commons.Orm.EntityFramework.dll",
+                            Source = pureName + ".dll",
                             Target = "lib"
                         }
                     }
                 };
 
-                NuGetPack("BSN.Commons.Orm.EntityFramework.nuspec", nuGetPackSettings);
+                NuGetPack(pureName + ".nuspec", nuGetPackSettings);
 
-                if (AppVeyor.IsRunningOnAppVeyor)
-                {
-                    foreach (var file in GetFiles(artifactsDir + "**/*"))
-                        AppVeyor.UploadArtifact(file.FullPath);
-                }
                 continue;
             }
             DotNetCorePack(projectFolder + project.path + project.name, settings);
+        }
 
-            if (AppVeyor.IsRunningOnAppVeyor)
-            {
-                foreach (var file in GetFiles(artifactsDir + "**/*"))
-                    AppVeyor.UploadArtifact(file.FullPath);
-            }
+        if (AppVeyor.IsRunningOnAppVeyor)
+        {
+            foreach (var file in GetFiles(artifactsDir + "**/*"))
+                AppVeyor.UploadArtifact(file.FullPath);
         }
 });
 
