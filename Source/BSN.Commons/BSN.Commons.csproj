@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyVersion>1.7.1</AssemblyVersion>
-    <FileVersion>1.7.1</FileVersion>
+    <AssemblyVersion>1.7.2</AssemblyVersion>
+    <FileVersion>1.7.2</FileVersion>
     <Company>BSN Company</Company>
     <Authors>BSN Developers</Authors>
-    <Copyright>BSN Co 2019</Copyright>
+    <Copyright>BSN Co 2019-2022</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.7.1</Version>
+    <Version>1.7.2</Version>
     <PackageProjectUrl>https://github.com/BSVN/Commons</PackageProjectUrl>
     <PackageLicenseUrl></PackageLicenseUrl>
     <Description>Commons library for enterprise application</Description>
@@ -16,9 +16,5 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/BSVN/Commons.git</RepositoryUrl>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNet.Identity.EntityFramework" Version="2.2.3" />
-  </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>BSN.Commons.Orm.EntityFramework</id>
+    <id>BSN.Commons.Users</id>
     <version>1.7.2</version>
     <authors>Seyyed Soroosh Hosseinalipour</authors>
     <owners>sorosh_sabz, BSN</owners>
@@ -9,10 +9,10 @@
     <projectUrl>https://github.com/BSVN/Commons</projectUrl>
     <iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>ORM Helpers for using entity framework in enterprise application</description>
+    <description>Some identity and user management facilities in enterprise application</description>
     <releaseNotes>Seperate dependencies</releaseNotes>
     <copyright>BSN Co 2020</copyright>
-    <tags>Commons ORM Enterprise</tags>
+    <tags>Commons Users Enterprise</tags>
 	<dependencies>
 		<dependency id="BSN.Commons" version="1.7.2" />
 		<dependency id="EntityFramework" version="6.2.0" />

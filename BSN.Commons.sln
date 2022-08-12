@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29519.87
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{DC377ADC-CC9D-4785-81BE-726DBF5F3096}"
 EndProject
@@ -10,6 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{6F9A45A1-05A3-4DAD-B4F2-DCD4836E110A}"
 	ProjectSection(SolutionItems) = preProject
 		Build\BSN.Commons.Orm.EntityFramework.nuspec = Build\BSN.Commons.Orm.EntityFramework.nuspec
+		Build\BSN.Commons.Users.nuspec = Build\BSN.Commons.Users.nuspec
 		Build\build.cake = Build\build.cake
 		Build\build.ps1 = Build\build.ps1
 	EndProjectSection
@@ -28,6 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		GitVersion.yml = GitVersion.yml
 		LICENSE = LICENSE
 		README.md = README.md
+		sbuild.bat = sbuild.bat
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BSN.Commons.Orm.EntityFramework.Tests", "Test\BSN.Commons.Orm.EntityFramework.Tests\BSN.Commons.Orm.EntityFramework.Tests.csproj", "{2DF9D69C-E6F0-4CDA-8D8D-12F5D9C91494}"
@@ -37,6 +39,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BSN.Commons.Orm.EntityFrameworkCore.Tests", "Test\BSN.Commons.Orm.EntityFrameworkCore.Tests\BSN.Commons.Orm.EntityFrameworkCore.Tests.csproj", "{906FEED8-23E0-4EEF-B902-C39325C50480}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BSN.Commons.Orm.EntityFrameworkCore", "Source\BSN.Commons.Orm.EntityFrameworkCore\BSN.Commons.Orm.EntityFrameworkCore.csproj", "{335F645B-C85F-42C2-9185-A216101F60C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BSN.Commons.Users", "Source\BSN.Commons.Users\BSN.Commons.Users.csproj", "{213ABCEF-7E9A-4CE5-A3EF-289C9781344D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -72,6 +76,10 @@ Global
 		{335F645B-C85F-42C2-9185-A216101F60C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{335F645B-C85F-42C2-9185-A216101F60C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{335F645B-C85F-42C2-9185-A216101F60C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{213ABCEF-7E9A-4CE5-A3EF-289C9781344D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{213ABCEF-7E9A-4CE5-A3EF-289C9781344D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{213ABCEF-7E9A-4CE5-A3EF-289C9781344D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{213ABCEF-7E9A-4CE5-A3EF-289C9781344D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -84,6 +92,7 @@ Global
 		{746AF465-DE8E-41C9-B558-CFFC6E3638D4} = {DC377ADC-CC9D-4785-81BE-726DBF5F3096}
 		{906FEED8-23E0-4EEF-B902-C39325C50480} = {5C6BA7B5-832A-495A-AF5E-C2A74F6A1EF9}
 		{335F645B-C85F-42C2-9185-A216101F60C7} = {DC377ADC-CC9D-4785-81BE-726DBF5F3096}
+		{213ABCEF-7E9A-4CE5-A3EF-289C9781344D} = {DC377ADC-CC9D-4785-81BE-726DBF5F3096}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BCAF76D3-AA3C-4D0F-8D10-34065F8FED09}
