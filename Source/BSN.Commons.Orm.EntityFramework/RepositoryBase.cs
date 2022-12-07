@@ -139,6 +139,11 @@ namespace BSN.Commons.Orm.EntityFramework
             return dbSet.Find(id);
         }
 
+        public virtual T GetById(Guid id)
+        {
+            return dbSet.Find(id);
+        }
+
         public virtual IEnumerable<T> GetAll()
         {
             return dbSet.ToList();
