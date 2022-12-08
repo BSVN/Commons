@@ -40,17 +40,7 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
             dbSet.RemoveRange(entities);
         }
 
-        public virtual T GetById(long id)
-        {
-            return dbSet.Find(id);
-        }
-
-        public virtual T GetById(string id)
-        {
-            return dbSet.Find(id);
-        }
-
-        public virtual T GetById(Guid id) 
+        public virtual T GetById<KeyType>(KeyType id) 
         {
             return dbSet.Find(id);
         }
