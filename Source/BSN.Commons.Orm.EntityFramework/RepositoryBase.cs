@@ -129,12 +129,7 @@ namespace BSN.Commons.Orm.EntityFramework
             dbSet.RemoveRange(entities);
         }
 
-        public virtual T GetById(long id)
-        {
-            return dbSet.Find(id);
-        }
-
-        public virtual T GetById(string id)
+        public virtual T GetById<KeyType>(KeyType id)
         {
             return dbSet.Find(id);
         }

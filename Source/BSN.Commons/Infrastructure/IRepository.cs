@@ -66,14 +66,7 @@ namespace BSN.Commons.Infrastructure
         /// </summary>
         /// <param name="id">Object Id</param>
         /// <returns>Retrived Object or null</returns>
-		T GetById(long id);
-
-        /// <summary>
-        /// Get Object by id.
-        /// </summary>
-        /// <param name="id">Object Id</param>
-        /// <returns>Retrived Object or null</returns>
-        T GetById(string id);
+        T GetById<KeyType>(KeyType id);
 
         /// <summary>
         /// Get Object by Expression.
