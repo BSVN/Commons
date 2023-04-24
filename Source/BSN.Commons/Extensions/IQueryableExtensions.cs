@@ -6,6 +6,10 @@ namespace BSN.Commons.Extensions
 {
     public static partial class IQueryableExtensions
     {
+        /// <summary>
+        /// Paginate IQueryable of <T>
+        /// with given pageNumber and pageSize
+        /// </summary>
         public static PagedEntityCollection<T> Paginate<T>(this IQueryable<T> query, uint pageNumber, uint pageSize)
         {
             if (pageNumber == 0)
