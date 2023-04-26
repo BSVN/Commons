@@ -1,5 +1,4 @@
-﻿using BSN.Commons.Dto;
-using System;
+﻿using System;
 using System.Linq;
 
 namespace BSN.Commons.Extensions

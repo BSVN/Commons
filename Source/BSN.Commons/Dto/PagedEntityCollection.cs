@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace BSN.Commons.Dto
+namespace BSN.Commons
 {
     /// <summary>
     /// Stores the paginated data for the given entity type.
