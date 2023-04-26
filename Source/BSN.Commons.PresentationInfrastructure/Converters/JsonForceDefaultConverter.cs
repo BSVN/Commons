@@ -6,6 +6,7 @@ namespace BSN.Commons.Converters
 {
     /// <summary>
     ///  Force to keep numeral object or value, while convert an object or value to or from JSON.
+    ///  for example 'StatusCode' in Response that should stay numeral.
     /// </summary>
     /// <typeparam name="T"> The type of object or value handled by the converter. </typeparam> 
     public class JsonForceDefaultConverter<T> : JsonConverter<T>
