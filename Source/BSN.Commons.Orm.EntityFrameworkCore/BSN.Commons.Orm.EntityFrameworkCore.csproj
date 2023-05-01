@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyVersion>1.9.0</AssemblyVersion>
-    <FileVersion>1.9.0</FileVersion>
+    <AssemblyVersion>1.9.1</AssemblyVersion>
+    <FileVersion>1.9.1</FileVersion>
     <Authors>BSN Developers</Authors>
     <Company>BSN Company</Company>
     <Description>ORM Helpers for using entity framework core in enterprise application</Description>
@@ -13,7 +13,7 @@
     <RepositoryUrl>https://github.com/BSVN/Commons.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageReleaseNotes>Initial of project</PackageReleaseNotes>
-    <Version>1.9.0</Version>
+    <Version>1.9.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
