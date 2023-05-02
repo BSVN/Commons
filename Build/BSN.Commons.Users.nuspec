@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>BSN.Commons.Users</id>
-    <version>1.8.0</version>
+    <version>1.9.1</version>
     <authors>Seyyed Soroosh Hosseinalipour</authors>
     <owners>sorosh_sabz, BSN</owners>
     <license type="expression">MIT</license>
@@ -10,11 +10,14 @@
     <iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Some identity and user management facilities in enterprise application</description>
-    <releaseNotes>Seperate dependencies</releaseNotes>
+    <releaseNotes>
+		* Revert .Net Framework to 4.6.2 for backward compatiblity
+		* Seperate dependencies
+	</releaseNotes>
     <copyright>BSN Co 2020</copyright>
     <tags>Commons Users Enterprise</tags>
 	<dependencies>
-		<dependency id="BSN.Commons" version="1.8.0" />
+		<dependency id="BSN.Commons" version="1.9.1" />
 		<dependency id="EntityFramework" version="6.2.0" />
 		<dependency id="Microsoft.AspNet.Identity.EntityFramework" version="2.2.3" />
 	</dependencies>

@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyVersion>1.8.0</AssemblyVersion>
-    <FileVersion>1.8.0</FileVersion>
+    <AssemblyVersion>1.9.1</AssemblyVersion>
+    <FileVersion>1.9.1</FileVersion>
     <Company>BSN Company</Company>
     <Authors>BSN Developers</Authors>
     <Copyright>BSN Co 2019-2022</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.8.0</Version>
+    <Version>1.9.1</Version>
     <PackageProjectUrl>https://github.com/BSVN/Commons</PackageProjectUrl>
     <PackageLicenseUrl></PackageLicenseUrl>
     <Description>Commons library for enterprise application</Description>
