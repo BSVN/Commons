@@ -17,7 +17,7 @@
     <tags>Commons ORM Enterprise</tags>
 	<dependencies>
 		<dependency id="BSN.Commons" version="1.9.2" />
-		<dependency id="EntityFramework" version="6.2.0" />
+		<dependency id="EntityFramework" version="6.4.0" />
 		<dependency id="Microsoft.AspNet.Identity.EntityFramework" version="2.2.3" />
 	</dependencies>
   </metadata>
