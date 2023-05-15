@@ -3,9 +3,9 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Description>Presentation infrastructure layer of BSN.Commons library for enterprise application.</Description>
-    <AssemblyVersion>1.9.2</AssemblyVersion>
-    <FileVersion>1.9.2</FileVersion>
-    <Version>1.9.2</Version>
+    <AssemblyVersion>1.9.3</AssemblyVersion>
+    <FileVersion>1.9.3</FileVersion>
+    <Version>1.9.3</Version>
     <Authors>BSN Developers</Authors>
     <Company>BSN Company</Company>
     <Copyright>BSN Co 2019</Copyright>
