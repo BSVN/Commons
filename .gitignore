@@ -1,3 +1,4 @@
+# ITNOA
 
 bin/
 obj/
@@ -6,3 +7,6 @@ packages/
 build/tools/
 build/artifacts/
 *.log
+**/*.un~
+**/*.cake~
+**/*.yml~
