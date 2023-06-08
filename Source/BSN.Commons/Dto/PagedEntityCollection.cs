@@ -3,9 +3,9 @@
 namespace BSN.Commons
 {
     /// <summary>
-    /// Stores the paginated data for the given entity type.
+    /// Paginated collection of an entity type.
     /// </summary>
-    /// <typeparam name="T">Type of Entity for which pagination is being implemented.</typeparam>
+    /// <typeparam name="T">Entity type.</typeparam>
     public class PagedEntityCollection<T>
     {
         /// <summary>
