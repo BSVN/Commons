@@ -7,8 +7,8 @@
     <FileVersion>1.9.3</FileVersion>
     <Version>1.9.3</Version>
     <Authors>BSN Developers</Authors>
-    <Company>BSN Company</Company>
-    <Copyright>BSN Co 2019</Copyright>
+    <Company>BSN Company</Company>PagedEntityCollection
+	  <Copyright>BSN Co 2019</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/BSVN/Commons.git</RepositoryUrl>
     <PackageProjectUrl>https://github.com/BSVN/Commons</PackageProjectUrl>
@@ -18,6 +18,10 @@
   <ItemGroup>
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
     <PackageReference Include="System.Text.Json" Version="7.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Requests\" />
   </ItemGroup>
 
 </Project>

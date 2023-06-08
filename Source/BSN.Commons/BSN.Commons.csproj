@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -16,5 +16,15 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/BSVN/Commons.git</RepositoryUrl>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="JsonConverter\**" />
+    <EmbeddedResource Remove="JsonConverter\**" />
+    <None Remove="JsonConverter\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="7.0.2" />
+  </ItemGroup>
 
 </Project>
