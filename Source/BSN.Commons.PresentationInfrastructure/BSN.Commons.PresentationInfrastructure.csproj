@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -7,8 +7,8 @@
     <FileVersion>1.9.3</FileVersion>
     <Version>1.9.3</Version>
     <Authors>BSN Developers</Authors>
-    <Company>BSN Company</Company>PagedEntityCollection
-	  <Copyright>BSN Co 2019</Copyright>
+    <Company>BSN Company</Company>
+    <Copyright>BSN Co 2019</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/BSVN/Commons.git</RepositoryUrl>
     <PackageProjectUrl>https://github.com/BSVN/Commons</PackageProjectUrl>
