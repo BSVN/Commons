@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace BSN.Resa.Vns.Commons.Converters
+namespace BSN.Commons.JsonConverters
 {
     public class JsonDateWithoutTimeConverter : JsonConverter<DateTime>
     {
