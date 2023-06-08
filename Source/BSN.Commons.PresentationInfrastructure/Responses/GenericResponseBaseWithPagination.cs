@@ -12,6 +12,8 @@ namespace BSN.Commons.Responses
     [Obsolete("Due to incompatability with Grpc this response type is only used for backward compatibility.")]
     public class GenericResponseBaseWithPagination<T> : GenericResponseBase<T> where T : class
     {
+        public GenericResponseBaseWithPagination() { }
+
         /// <summary>
         /// Pagination metada used by the client as the parameters for navigation through whole records.
         /// </summary>
