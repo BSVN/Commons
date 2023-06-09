@@ -1,14 +1,14 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyVersion>1.9.3</AssemblyVersion>
-    <FileVersion>1.9.3</FileVersion>
+    <AssemblyVersion>1.10.0</AssemblyVersion>
+    <FileVersion>1.10.0</FileVersion>
     <Company>BSN Company</Company>
     <Authors>BSN Developers</Authors>
     <Copyright>BSN Co 2019-2022</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.9.3</Version>
+    <Version>1.10.0</Version>
     <PackageProjectUrl>https://github.com/BSVN/Commons</PackageProjectUrl>
     <PackageLicenseUrl></PackageLicenseUrl>
     <Description>Commons library for enterprise application</Description>
