@@ -2,23 +2,43 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
-    <AssemblyVersion>1.10.1</AssemblyVersion>
-    <FileVersion>1.10.1</FileVersion>
+    <AssemblyVersion>1.10.2</AssemblyVersion>
+    <FileVersion>1.10.2</FileVersion>
     <Authors>BSN Developers</Authors>
     <Company>BSN Company</Company>
     <Description>ORM Helpers for using entity framework core in enterprise application</Description>
-    <Copyright>BSN Co 2020</Copyright>
+    <Copyright>BSN Co 2019-2023</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/BSVN/Commons</PackageProjectUrl>
     <RepositoryUrl>https://github.com/BSVN/Commons.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>Initial of project</PackageReleaseNotes>
-    <Version>1.10.1</Version>
+    <PackageReleaseNotes>Please see CHANGELOG.md</PackageReleaseNotes>
+    <Version>1.10.2</Version>
+    <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <Title>BSN.Commons.Orm.EntityFrameworkCore</Title>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageIcon>BSN.jpg</PackageIcon>
+    <PackageTags>BSN;Commons;Onion;Enterprise;Infrastructure;DDD</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TF_BUILD)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'net6.0'">
   	<ImplicitUsings>disable</ImplicitUsings>
   	<Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
@@ -29,9 +49,35 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.32" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="..\..\BSN.jpg">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
 
   <ItemGroup>
     <ProjectReference Include="..\BSN.Commons\BSN.Commons.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Update="README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -2,19 +2,39 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyVersion>1.10.1</AssemblyVersion>
-    <FileVersion>1.10.1</FileVersion>
+    <AssemblyVersion>1.10.2</AssemblyVersion>
+    <FileVersion>1.10.2</FileVersion>
     <Company>BSN Company</Company>
     <Authors>BSN Developers</Authors>
-    <Copyright>BSN Co 2019-2022</Copyright>
+    <Copyright>BSN Co 2019-2023</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.10.1</Version>
+    <Version>1.10.2</Version>
     <PackageProjectUrl>https://github.com/BSVN/Commons</PackageProjectUrl>
     <PackageLicenseUrl></PackageLicenseUrl>
     <Description>Commons library for enterprise application</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/BSVN/Commons.git</RepositoryUrl>
+    <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Title>BSN.Commons</Title>
+    <!-- Optional: Embed source files that are not tracked by the source control manager in the PDB -->
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageIcon>BSN.jpg</PackageIcon>
+    <PackageReleaseNotes>Please see CHANGELOG.md</PackageReleaseNotes>
+    <PackageTags>BSN;Commons;Onion;Enterprise;Infrastructure;DDD</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TF_BUILD)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,7 +44,25 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\..\BSN.jpg">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="System.Text.Json" Version="6.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

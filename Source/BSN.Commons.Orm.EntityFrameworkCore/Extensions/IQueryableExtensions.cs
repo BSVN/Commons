@@ -5,10 +5,13 @@ using System.Threading.Tasks;
 
 namespace BSN.Commons.Extensions
 {
+    /// <summary>
+    /// The place for IQuerubable extenstions
+    /// </summary>
     public static partial class IQueryableExtensions
     {
         /// <summary>
-        /// Paginate IQueryable of <T>
+        /// Paginate IQueryable of <typeparamref name="T"/>
         /// with given pageNumber and pageSize
         /// </summary>
         public static PagedEntityCollection<T> Paginate<T>(this IQueryable<T> query, uint pageNumber, uint pageSize)
@@ -33,7 +36,7 @@ namespace BSN.Commons.Extensions
         }
 
         /// <summary>
-        /// Paginate IQueryable of <T>
+        /// Paginate IQueryable of <typeparamref name="T"/>
         /// with given pageNumber and pageSize
         /// </summary>
         public static async Task<PagedEntityCollection<T>> PaginateAsync<T>(this IQueryable<T> query, uint pageNumber, uint pageSize)
