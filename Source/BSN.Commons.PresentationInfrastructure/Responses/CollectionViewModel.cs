@@ -10,6 +10,8 @@ namespace BSN.Commons.Responses
     [DataContract]
     public class CollectionViewModel<T>
     {
+        public CollectionViewModel() { }
+
         /// <summary>
         /// Elements.
         /// </summary>

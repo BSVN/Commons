@@ -8,6 +8,8 @@ namespace BSN.Commons.Responses
     [DataContract]
     public class PaginationMetadata
     {
+        public PaginationMetadata() { }
+
         /// <summary>
         /// Current page number
         /// </summary>

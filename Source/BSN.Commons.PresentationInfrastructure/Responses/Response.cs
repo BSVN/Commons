@@ -17,6 +17,8 @@ namespace BSN.Commons.Responses
     [DataContract]
     public class Response
     {
+        public Response() { }
+
         /// <summary>
         /// Corresponding HttpStatusCode.
         /// </summary>

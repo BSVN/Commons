@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using BSN.Commons.Converters;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-
+using System.Text.Json.Serialization;
 
 namespace BSN.Commons.PresentationInfrastructure
 {
@@ -17,6 +18,7 @@ namespace BSN.Commons.PresentationInfrastructure
 
         public string Message { get; set; }
 
+        [JsonConverter(typeof(JsonForceDefaultConverter<ResponseStatusCode>))]
         public ResponseStatusCode StatusCode { get; set; }
 
         public IList<ValidationResult> InvalidItems { get; set; }

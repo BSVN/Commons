@@ -8,6 +8,8 @@ namespace BSN.Commons.Responses
     [DataContract]
     public class InvalidItem
     {
+        public InvalidItem() { }
+
         /// <summary>
         /// Name of the request item.
         /// </summary>
