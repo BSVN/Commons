@@ -21,14 +21,14 @@ namespace BSN.Commons.Responses
         /// <summary>
         /// Corresponding HttpStatusCode.
         /// </summary>
-        [DataMember(Order = 2)]
+        [DataMember(Order = 1)]
         [JsonConverter(typeof(JsonForceDefaultConverter<ResponseStatusCode>))]
         public ResponseStatusCode StatusCode { get; set; }
 
         /// <summary>
         /// Data payload (Collection).
         /// </summary>
-        [DataMember(Order = 1)]
+        [DataMember(Order = 2)]
         public CollectionViewModel<T> Data { get; set; }
 
         /// <summary>
