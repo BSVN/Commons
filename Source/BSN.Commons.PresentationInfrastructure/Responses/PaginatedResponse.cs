@@ -28,7 +28,7 @@ namespace BSN.Commons.Responses
         /// Data payload (Collection).
         /// </summary>
         [DataMember(Order = 1)]
-        public IEnumerable<T> Data { get; set; }
+        public CollectionViewModel<T> Data { get; set; }
 
         [DataMember(Order = 3)]
         public string Message { get; set; }
@@ -41,5 +41,4 @@ namespace BSN.Commons.Responses
 
         public bool IsSuccess => (int)StatusCode >= 200 && (int)StatusCode <= 299;
     }
-
 }
