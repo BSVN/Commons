@@ -4,6 +4,10 @@ using System.Linq.Expressions;
 
 namespace BSN.Commons.Infrastructure
 {
+    /// <summary>
+    /// Repository Pattern Interface for abstract communicating with DataBase
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
 	public interface IRepository<T> where T : class
 	{
         /// <summary>

@@ -16,7 +16,7 @@ var artifactsDir = "./artifacts/";
 var solutionPath = "../BSN.Commons.sln";
 var projectName = "BSN.Commons";
 var projectFolder = "../Source/";
-var solutionVersion = "1.9.3";
+var solutionVersion = "1.10.2";
 var projects = new List<(string path, string name, string version)>
 {
     ("BSN.Commons/", "BSN.Commons.csproj", solutionVersion),
@@ -160,6 +160,10 @@ Task("Package")
                         new NuSpecContent {
                             Source = pureName + ".dll",
                             Target = "lib"
+                        },
+                        new NuSpecContent {
+                            Source = "README.md",
+                            Target = "docs"
                         }
                     }
                 };

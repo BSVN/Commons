@@ -26,6 +26,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{320ED66B-71A0-473E-AC25-A464A9485EEE}"
 	ProjectSection(SolutionItems) = preProject
 		appveyor.yml = appveyor.yml
+		BSN.jpg = BSN.jpg
 		GitVersion.yml = GitVersion.yml
 		LICENSE = LICENSE
 		README.md = README.md
