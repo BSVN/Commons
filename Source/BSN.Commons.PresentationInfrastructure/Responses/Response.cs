@@ -15,7 +15,7 @@ namespace BSN.Commons.Responses
     /// namely the 'StatusCode' property of the 'ResponseBase' class which should keep it's default numeral value when being converted.
     /// </remark>
     [DataContract]
-    public class Response
+    public class Response: IResponse<InvalidItem>
     {
         public Response() { }
 
