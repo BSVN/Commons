@@ -1,10 +1,12 @@
 ﻿using BSN.Commons.Converters;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace BSN.Commons.PresentationInfrastructure
 {
+    [Obsolete("Due to incompatability with Grpc this response type is only used for backward compatibility.")]
     public class ResponseBase : IResponse<ValidationResult>
     {
         /// <summary>
