@@ -1,7 +1,6 @@
 ﻿using BSN.Commons.Converters;
 using BSN.Commons.PresentationInfrastructure;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 
@@ -15,31 +14,44 @@ namespace BSN.Commons.Responses
     /// </remarks>
     /// <typeparam name="T">Data type.</typeparam>
     [DataContract]
-    public class PaginatedResponse<T> where T : class
+    public class PaginatedResponse<T>: IResponse<InvalidItem> where T : class 
     {
+        public PaginatedResponse() { }
+
         /// <summary>
         /// Corresponding HttpStatusCode.
         /// </summary>
-        [DataMember(Order = 2)]
+        [DataMember(Order = 1)]
         [JsonConverter(typeof(JsonForceDefaultConverter<ResponseStatusCode>))]
         public ResponseStatusCode StatusCode { get; set; }
 
         /// <summary>
         /// Data payload (Collection).
         /// </summary>
-        [DataMember(Order = 1)]
-        public IEnumerable<T> Data { get; set; }
+        [DataMember(Order = 2)]
+        public CollectionViewModel<T> Data { get; set; }
 
+        /// <summary>
+        /// Human-readable message for the End-User.
+        /// </summary>
         [DataMember(Order = 3)]
         public string Message { get; set; }
 
+        /// <summary>
+        /// Pagination metadata used by the client for data navigation purposes.
+        /// </summary>
         [DataMember(Order = 4)]
         public PaginationMetadata Meta { get; set; }
 
+        /// <summary>
+        /// Invalid items of the request object.
+        /// </summary>
         [DataMember(Order = 5)]
-        public IList<ValidationResult> InvalidItems { get; set; }
+        public IList<InvalidItem> InvalidItems { get; set; }
 
+        /// <summary>
+        /// Distinction between successful and unsuccessful result.
+        /// </summary>
         public bool IsSuccess => (int)StatusCode >= 200 && (int)StatusCode <= 299;
     }
-
 }

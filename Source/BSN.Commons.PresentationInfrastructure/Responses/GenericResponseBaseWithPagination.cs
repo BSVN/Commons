@@ -15,7 +15,7 @@ namespace BSN.Commons.Responses
         public GenericResponseBaseWithPagination() { }
 
         /// <summary>
-        /// Pagination metada used by the client as the parameters for navigation through whole records.
+        /// Pagination metadata used by the client for data navigation purposes.
         /// </summary>
         public PaginationMetadata Meta { get; set; }
     }
