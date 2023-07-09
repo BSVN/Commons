@@ -6,6 +6,8 @@ namespace BSN.Commons.Infrastructure
 {
     public interface IUnitOfWork
     {
+        IDatabaseFactory DatabaseFactory { get; }
+
         void Commit();
         void AddToQueue(ITaskUnit task);
     }

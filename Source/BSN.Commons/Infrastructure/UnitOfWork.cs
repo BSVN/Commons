@@ -7,13 +7,16 @@ namespace BSN.Commons.Infrastructure
 {
     public class UnitOfWork : IUnitOfWork
     {
+        public IDatabaseFactory DatabaseFactory { get; }
+
         public List<Exception> Exceptions { get; private set; }
 
-        protected IDbContext DataContext => _dataContext ?? (_dataContext = _databaseFactory.Get());
+        protected IDbContext DataContext => _dataContext ?? (_dataContext = DatabaseFactory.Get());
+
 
         public UnitOfWork(IDatabaseFactory databaseFactory)
         {
-            _databaseFactory = databaseFactory;
+            DatabaseFactory = databaseFactory;
             _tasks = new Queue<ITaskUnit>();
             Exceptions = new List<Exception>();
         }
@@ -53,7 +56,6 @@ namespace BSN.Commons.Infrastructure
             }
         }
 
-        private readonly IDatabaseFactory _databaseFactory;
         private IDbContext _dataContext;
         private readonly Queue<ITaskUnit> _tasks;
     }
