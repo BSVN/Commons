@@ -15,7 +15,7 @@ namespace BSN.Commons.Infrastructure.MessageBroker.RabbitMqEventAggregator
         /// <summary>
         /// Gets or sets the type of RabbitMQ exchange, such as direct, topic, headers, or fanout.
         /// </summary>
-        public BrokerType ExchangeType { get; set; } = BrokerType.direct;
+        public BrokerType ExchangeType { get; set; } = BrokerType.Direct;
 
         /// <summary>
         /// Gets or sets whether the exchange is durable, meaning it survives server restarts.

@@ -11,8 +11,7 @@ namespace BSN.Commons.Infrastructure.MessageBroker.RabbitMqEventAggregator
         /// Gets or sets whether automatic acknowledgment (auto-ack) is enabled.
         /// </summary>
         public bool AutoAck { get; set; } = false;
-
-
+        
         /// <summary>
         /// Gets or sets whether consuming messages from the same channel is prohibited.
         /// </summary>

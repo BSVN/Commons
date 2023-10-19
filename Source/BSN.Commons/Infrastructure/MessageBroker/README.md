@@ -1,9 +1,3 @@
-[Resa Call Control System](/Home-Page/Call-Control-System.md)
-=======
-<!-- Chapter 2 -->
-[Sub-systems and Components](/Home-Page/Call-Control-System/Subsystems-and-Components.md)
--------------------------
-<!-- Section 2.2 -->
 __Event Aggregator - Overview__
 ------
 
@@ -22,33 +16,25 @@ Implementation
 ------
 
 
-Implementation of __Resa call control system__'s Event aggregator, includes _(1)_ Setting up Event aggregation server and _(2)_ [a class library project](/Home-Page/Call-Control-System/Projects.md#infrastructure) containing __Event__ class and its related data models, an EventAggregator class as a wrapper on RabbitMQ for system components to easily interact with server and abstraction for event subscribers.
+Implementation of Event aggregator, includes _(1)_ Setting up Event aggregation server and _(2)_ a class library project containing __Event__ class and its related data models, an EventAggregator class as a wrapper on RabbitMQ for system components to easily interact with server and abstraction for event subscribers.
 
 __RabbitMQ__:
 
-Resa Call control system, uses RabbitMQ for event aggregation. 
-RabbitMQ is setup and configured on its own server. Following table lists details of server configurations:
-
-|Table 2.2.1: RabbitMQ Configuration details|
-|:------------------------------------------------------:|
-
-|Title|Description|
-|:------------------|:-----------------------------------|
-|Server:||
-<!-- TODO: Complete this table regarding applied configurations -->
+Resaa uses RabbitMQ for event aggregation. 
+RabbitMQ is setup and configured on its own server.
 
 __Infrastructure__:
 
 Infrastructure is a .Net core class library application, containing RabbitMQ wrapper and interfaces and Event class and its data models. These class set follows following class diagram.
 
 
-| Figure 2.2.1: Event Aggregator Class diagram|
+| Figure 1: Event Aggregator Class diagram|
 |:-------------------------------------------:|
-|![Class Diagram](/.attachments/Call-Control-System/event-aggregator-class-diagram.png)     |
+|![Class Diagram](event-aggregator-class-diagram.png)     |
 
 ---
 
-|Table 2.2.2: Introduced Types|
+|Table 1: Introduced Types|
 |:------------------------------------------------------:|
 
 | Class/Interface | Descriptions |

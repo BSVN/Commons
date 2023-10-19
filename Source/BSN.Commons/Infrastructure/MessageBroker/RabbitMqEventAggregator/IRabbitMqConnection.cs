@@ -24,7 +24,6 @@ namespace BSN.Commons.Infrastructure.MessageBroker.RabbitMqEventAggregator
         /// <returns><c>true</c> if the connection is established; otherwise, <c>false</c>.</returns>
         bool TryConnect();
 
-
         /// <summary>
         /// Creates a new RabbitMQ channel for message processing.
         /// </summary>

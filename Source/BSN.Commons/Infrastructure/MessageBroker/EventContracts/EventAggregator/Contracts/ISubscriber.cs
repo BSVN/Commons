@@ -3,7 +3,8 @@
 namespace BSN.Commons.Infrastructure.MessageBroker.EventContracts.EventAggregator.Contracts
 {
     /// <summary>
-    /// Represents an interface for an event subscriber, responsible for managing event subscriptions.
+    /// Represents an interface for an event subscriber, a key component in an event-driven architecture, responsible for managing event subscriptions.
+    /// In an event-driven system, subscribers express their interest in specific events and their associated data models, enabling them to react to relevant changes or notifications.
     /// </summary>
     public interface ISubscriber
     {

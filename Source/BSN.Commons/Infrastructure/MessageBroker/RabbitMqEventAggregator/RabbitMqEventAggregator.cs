@@ -18,8 +18,18 @@ using RabbitMQ.Client.Exceptions;
 
 namespace BSN.Commons.Infrastructure.MessageBroker.RabbitMqEventAggregator
 {
+    /// <summary>
+    /// Provides event aggregation and message distribution functionality using RabbitMQ as the message broker.
+    /// </summary>
     public class RabbitMqEventAggregator : IEventAggregator
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RabbitMqEventAggregator"/> class.
+        /// </summary>
+        /// <param name="connection">The RabbitMQ connection to use.</param>
+        /// <param name="eventAggregatorSubscriptionsManager">The event aggregator subscription manager.</param>
+        /// <param name="rabbitMqOptions">The RabbitMQ options for configuration.</param>
+        /// <param name="logger">The logger for capturing log events.</param>
         public RabbitMqEventAggregator(IRabbitMqConnection connection, IEventAggregatorSubscriptionManager eventAggregatorSubscriptionsManager,
             IOptions<RabbitMqOptions> rabbitMqOptions, ILogger logger)
         {
@@ -33,11 +43,13 @@ namespace BSN.Commons.Infrastructure.MessageBroker.RabbitMqEventAggregator
             _consumeTag = StartBasicConsume();
         }
 
+        /// <inheritdoc />
         public bool HasSubscriptionForEvent<TEvent, TEventDataModel>() where TEvent : IEvent<TEventDataModel> where TEventDataModel : IEventDataModel
         {
             return _subscriptionsManager.HasSubscriptionsForEvent<TEvent>();
         }
 
+        /// <inheritdoc />
         public void Subscribe<TEvent, TEventDataModel>(IEventReceiver eventReceiver) where TEvent : IEvent<TEventDataModel> where TEventDataModel : IEventDataModel
         {
             string eventName = _subscriptionsManager.GetEventKey<TEvent>();
@@ -63,6 +75,7 @@ namespace BSN.Commons.Infrastructure.MessageBroker.RabbitMqEventAggregator
             }
         }
 
+        /// <inheritdoc />
         public void UnSubscribe<TEvent, TEventDataModel>(IEventReceiver eventReceiver) where TEvent : IEvent<TEventDataModel> where TEventDataModel : IEventDataModel
         {
             string eventName = _subscriptionsManager.GetEventKey<TEvent>();
@@ -76,6 +89,7 @@ namespace BSN.Commons.Infrastructure.MessageBroker.RabbitMqEventAggregator
             DoUnSubscribe(eventName);
         }
 
+        /// <inheritdoc />
         public void Publish<TModel>(IEvent<TModel> @event) where TModel : IEventDataModel
         {
             if (!_connection.IsConnected)
@@ -123,9 +137,21 @@ namespace BSN.Commons.Infrastructure.MessageBroker.RabbitMqEventAggregator
             }
         }
 
+        /// <inheritdoc />
         public async Task PublishAsync<TModel>(IEvent<TModel> @event) where TModel : IEventDataModel
         {
             await Task.Run(() => Publish<TModel>(@event));
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            if (_consumerChannel != null)
+            {
+                _consumerChannel.Dispose();
+            }
+
+            _subscriptionsManager.Clear();
         }
 
         private string StartBasicConsume()
@@ -279,16 +305,6 @@ namespace BSN.Commons.Infrastructure.MessageBroker.RabbitMqEventAggregator
             {
                 _logger.LogWarning("No subscription for RabbitMQ event: {EventName}", eventName);
             }
-        }
-
-        public void Dispose()
-        {
-            if (_consumerChannel != null)
-            {
-                _consumerChannel.Dispose();
-            }
-
-            _subscriptionsManager.Clear();
         }
 
         private readonly Dictionary<string, Action<object, IEventReceiver>> _eventReceiverCallers;
