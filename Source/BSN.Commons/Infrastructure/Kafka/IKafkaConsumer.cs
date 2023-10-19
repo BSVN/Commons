@@ -1,0 +1,17 @@
+﻿using System.Threading.Tasks;
+
+namespace BSN.Commons.Infrastructure.Kafka
+{
+    /// <summary>
+    /// Represents A Kafka Api compatible consumer class
+    /// </summary>
+    /// <typeparam name="T">The object type that is being consumed</typeparam>
+    public interface IKafkaConsumer<T>
+    {
+        /// <summary>
+        /// Consumes the Kafka api 
+        /// </summary>
+        /// <returns>a task which will return the consumed message after its ready</returns>
+        Task<T> ConsumeAsync();
+    }
+}
