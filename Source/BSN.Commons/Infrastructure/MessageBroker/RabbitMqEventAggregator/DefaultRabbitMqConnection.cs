@@ -11,8 +11,16 @@ using RabbitMQ.Client.Exceptions;
 
 namespace BSN.Commons.Infrastructure.MessageBroker.RabbitMqEventAggregator
 {
+    /// <summary>
+    /// Represents a default implementation of an RabbitMQ connection.
+    /// </summary>
     public class DefaultRabbitMqConnection : IRabbitMqConnection
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DefaultRabbitMqConnection"/> class with the specified options and logger.
+        /// </summary>
+        /// <param name="options">The RabbitMQ connection options.</param>
+        /// <param name="logger">The logger for capturing log messages.</param>
         public DefaultRabbitMqConnection(IOptions<RabbitMqConnectionOptions> options, ILogger logger)
         {
             _connectionFactory = new ConnectionFactory()
@@ -28,6 +36,7 @@ namespace BSN.Commons.Infrastructure.MessageBroker.RabbitMqEventAggregator
             _logger = logger;
         }
 
+        /// <inheritdoc />
         public IModel CreateModel()
         {
             if (!IsConnected)
@@ -38,6 +47,7 @@ namespace BSN.Commons.Infrastructure.MessageBroker.RabbitMqEventAggregator
             return _connection.CreateModel();
         }
 
+        /// <inheritdoc />
         public bool TryConnect()
         {
             var policy = RetryPolicy.Handle<SocketException>().Or<BrokerUnreachableException>()
@@ -70,6 +80,39 @@ namespace BSN.Commons.Infrastructure.MessageBroker.RabbitMqEventAggregator
             }
         }
 
+        /// <summary>
+        /// Disposes of the RabbitMQ connection and resources.
+        /// </summary>
+        public void Dispose()
+        {
+            if (_isDisposed)
+                return;
+
+            try
+            {
+                _connection.Dispose();
+
+                _isDisposed = true;
+            }
+            catch (IOException ex)
+            {
+                _logger.LogCritical(ex.Message);
+            }
+        }
+
+        /// <inheritdoc />
+        public bool IsConnected => _connection != null && _connection.IsOpen && !_isDisposed;
+
+        /// <summary>
+        /// The underlying RabbitMQ connection instance.
+        /// </summary>
+        public IConnection _connection { get; private set; }
+
+        /// <summary>
+        /// Returns the username associated with the RabbitMQ connection.
+        /// </summary>
+        public string UserName => _connectionFactory.UserName;
+
         private void OnConnectionBlocked(object sender, ConnectionBlockedEventArgs e)
         {
             if (_isDisposed)
@@ -100,26 +143,6 @@ namespace BSN.Commons.Infrastructure.MessageBroker.RabbitMqEventAggregator
             TryConnect();
         }
 
-        public void Dispose()
-        {
-            if (_isDisposed)
-                return;
-
-            try
-            {
-                _connection.Dispose();
-
-                _isDisposed = true;
-            }
-            catch (IOException ex)
-            {
-                _logger.LogCritical(ex.Message);
-            }
-        }
-
-        public bool IsConnected => _connection != null && _connection.IsOpen && !_isDisposed;
-        public IConnection _connection { get; private set; }
-        public string UserName => _connectionFactory.UserName;
         private readonly IConnectionFactory _connectionFactory;
         private readonly int _retryCount;
         private readonly ILogger _logger;

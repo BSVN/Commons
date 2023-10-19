@@ -98,7 +98,7 @@ namespace BSN.Commons.Infrastructure.MessageBroker.RabbitMqEventAggregator
             {
                 ExchangeOptions exchangeOptions = _options.Value.ExchangeOptions;
 
-                channel.ExchangeDeclare(exchangeOptions.BrokerName, exchangeOptions.BrokerType, exchangeOptions.Durable,
+                channel.ExchangeDeclare(exchangeOptions.BrokerName, exchangeOptions.ExchangeType.ToString(), exchangeOptions.Durable,
                     exchangeOptions.AutoDelete, exchangeOptions.Arguments);
 
                 string message = JsonConvert.SerializeObject(@event);
@@ -109,7 +109,7 @@ namespace BSN.Commons.Infrastructure.MessageBroker.RabbitMqEventAggregator
                 {
                     IBasicProperties properties = channel.CreateBasicProperties();
 
-                    properties.DeliveryMode = (byte)_options.Value.CunsumeOptions.DeliveryMode;
+                    properties.DeliveryMode = (byte)_options.Value.ConsumeOptions.DeliveryMode;
 
                     _logger.LogTrace($"Publishing event to RabbitMQ: {eventName}");
 
@@ -144,7 +144,7 @@ namespace BSN.Commons.Infrastructure.MessageBroker.RabbitMqEventAggregator
                 consumer.Received += ConsumerReceived;
 
                 string tag = _consumerChannel.BasicConsume(queue: queueOptions.DefaultQueueName,
-                    autoAck: _options.Value.CunsumeOptions.AutoAck, consumer: consumer);
+                    autoAck: _options.Value.ConsumeOptions.AutoAck, consumer: consumer);
 
                 return tag;
             }
@@ -193,7 +193,7 @@ namespace BSN.Commons.Infrastructure.MessageBroker.RabbitMqEventAggregator
             ExchangeOptions exchangeOptions = _options.Value.ExchangeOptions;
             QueueOptions queueOptions = _options.Value.QueueOptions;
 
-            channel.ExchangeDeclare(exchangeOptions.BrokerName, exchangeOptions.BrokerType, exchangeOptions.Durable,
+            channel.ExchangeDeclare(exchangeOptions.BrokerName, exchangeOptions.ExchangeType.ToString(), exchangeOptions.Durable,
                     exchangeOptions.AutoDelete, exchangeOptions.Arguments);
 
             channel.QueueDeclare(queue: _connection.UserName, durable: queueOptions.Durable, exclusive: queueOptions.Exclusive,
