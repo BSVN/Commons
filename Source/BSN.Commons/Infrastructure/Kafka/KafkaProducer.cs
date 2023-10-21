@@ -23,9 +23,9 @@ namespace BSN.Commons.Infrastructure.Kafka
             {
                 await _producer.ProduceAsync(_topic, messageObject);
             }
-            catch (ProduceException<Null, T>)
+            catch (ProduceException<Null, T> e)
             {
-                throw new KafkaProduceException<T>();
+                throw new KafkaProduceException<T>(e.Error.Reason);
             }
         }
 

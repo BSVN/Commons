@@ -6,7 +6,14 @@ namespace BSN.Commons.Infrastructure.Kafka
     /// Represents an Exception that is raised when Kafka Produce was not successful
     /// </summary>
     /// <typeparam name="T">The object type of the producer</typeparam>
-    public class KafkaProduceException<T> : Exception {}
+    public class KafkaProduceException<T> : Exception
+    {
+        /// <summary>
+        /// Creates a new instance of <see cref="KafkaProduceException{T}"/>
+        /// </summary>
+        /// <param name="message">The error message of the exception</param>
+        public KafkaProduceException(string message) : base(message) {}
+    }
     
     /// <summary>
     /// Represents A Kafka Api compatible producer class
