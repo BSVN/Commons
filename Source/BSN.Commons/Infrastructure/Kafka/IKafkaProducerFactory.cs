@@ -9,7 +9,8 @@
         /// <summary>
         /// Creates a IKafkaProducer
         /// </summary>
-        /// <param name="topic">Represents the topic which the producer will produce on</param>
+        /// <param name="topic">Represents the topic which the producer will produce on,
+        /// Read https://dattell.com/data-architecture-blog/what-is-a-kafka-topic/ for further info.</param>
         /// <returns>An IKafkaProducer instance</returns>
         IKafkaProducer<T> Create(string topic);
     }

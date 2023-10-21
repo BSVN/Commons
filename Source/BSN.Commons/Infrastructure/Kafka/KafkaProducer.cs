@@ -1,26 +1,32 @@
-﻿using System.Threading.Tasks;
-using Confluent.Kafka;
+﻿using Confluent.Kafka;
 
 namespace BSN.Commons.Infrastructure.Kafka
 {
+    /// <inheritdoc />
     public class KafkaProducer<T> : IKafkaProducer<T>
     {
+        /// <param name="producer">the producer engine provided by creator for example factory class</param>
+        /// <param name="topic">Represents the topic which the producer will produce on,
+        /// Read https://dattell.com/data-architecture-blog/what-is-a-kafka-topic/ for further info.</param>
         public KafkaProducer(IProducer<Null, T> producer, string topic)
         {
             _producer = producer;
             _topic = topic;
         }
 
-        public Task<bool> ProduceAsync(T message)
+        /// <inheritdoc />
+        public async void ProduceAsync(T message)
         {
             var messageObject = new Message<Null, T> { Value = message };
 
-            return Task.Run(async () =>
+            try
             {
-                DeliveryResult<Null, T> deliveryResult = await _producer.ProduceAsync(_topic, messageObject);
-
-                return deliveryResult.Status == PersistenceStatus.Persisted;
-            });
+                await _producer.ProduceAsync(_topic, messageObject);
+            }
+            catch (ProduceException<Null, T>)
+            {
+                throw new KafkaProduceException<T>();
+            }
         }
 
         private readonly string _topic;

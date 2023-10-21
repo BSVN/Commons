@@ -10,6 +10,9 @@ namespace BSN.Commons.Infrastructure.Kafka
         /// </summary>
         string BootstrapServers { get; }
         
+        /// <summary>
+        /// Represents the Size that a Receiving message can have in Bytes
+        /// </summary>
         string ReceiveMessageMaxBytes { get; }
     }
 }

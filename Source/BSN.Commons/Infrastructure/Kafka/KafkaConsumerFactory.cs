@@ -2,8 +2,11 @@
 
 namespace BSN.Commons.Infrastructure.Kafka
 {
+    /// <inheritdoc />
     public class KafkaConsumerFactory<T> : IKafkaConsumerFactory<T>
     {
+        /// TODO: Ebrahim: Use Lazy Pattern
+        /// <param name="options">Default Options for KafkaConsumers</param>
         public KafkaConsumerFactory(IKafkaConsumerOptions options)
         {
             _defaultConsumerConfig = new ConsumerConfig
@@ -17,6 +20,7 @@ namespace BSN.Commons.Infrastructure.Kafka
             _defaultConsumerConfig.Set("receive.message.max.bytes", options.ReceiveMessageMaxBytes);
         }
 
+        /// <inheritdoc />
         public IKafkaConsumer<T> Create(string topic, string groupId)
         {
             lock (this)

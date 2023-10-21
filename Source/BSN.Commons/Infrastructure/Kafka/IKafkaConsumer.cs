@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace BSN.Commons.Infrastructure.Kafka
 {
@@ -12,6 +13,6 @@ namespace BSN.Commons.Infrastructure.Kafka
         /// Consumes the Kafka api 
         /// </summary>
         /// <returns>a task which will return the consumed message after its ready</returns>
-        Task<T> ConsumeAsync();
+        Task<T> ConsumeAsync(CancellationToken ct = default);
     }
 }

@@ -2,8 +2,11 @@
 
 namespace BSN.Commons.Infrastructure.Kafka
 {
+    /// <inheritdoc />
     public class KafkaProducerFactory<T> : IKafkaProducerFactory<T>
     {
+        /// TODO: Ebrahim: Use Lazy Pattern
+        /// <param name="options">Default Options for KafkaProducers</param>
         public KafkaProducerFactory(IKafkaProducerOptions options)
         {
             var producerConfig = new ProducerConfig
@@ -18,6 +21,7 @@ namespace BSN.Commons.Infrastructure.Kafka
             _sharedProducer = new ProducerBuilder<Null, T>(producerConfig).Build();
         }
 
+        /// <inheritdoc />
         public IKafkaProducer<T> Create(string topic)
         {
             return new KafkaProducer<T>(_sharedProducer, topic);
