@@ -25,5 +25,11 @@ namespace BSN.Commons.Infrastructure.Kafka
         }
         
         private readonly IConsumer<Null, T> _consumer;
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            _consumer?.Dispose();
+        }
     }
 }

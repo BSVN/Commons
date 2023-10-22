@@ -34,5 +34,11 @@ namespace BSN.Commons.Infrastructure.Kafka
         }
 
         private readonly ConsumerConfig _defaultConsumerConfig;
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            // TODO release managed resources here
+        }
     }
 }

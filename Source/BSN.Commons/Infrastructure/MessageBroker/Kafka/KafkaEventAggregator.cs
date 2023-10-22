@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using Confluent.Kafka;
 using System.Threading.Tasks;
+using BSN.Commons.Infrastructure.Kafka;
 using BSN.Commons.Infrastructure.MessageBroker.EventAggregator;
 using BSN.Commons.Infrastructure.MessageBroker.EventContracts.EventAggregator;
 using BSN.Commons.Infrastructure.MessageBroker.EventContracts.EventAggregator.Contracts;
@@ -33,48 +33,75 @@ namespace BSN.Commons.Infrastructure.MessageBroker.Kafka
             )
         {
             _logger = logger;
-            _producerConfig = new ProducerConfig
-            {
-                BootstrapServers = connectionOptions.BootstrapServers
-            };
-            _consumerConfig = new ConsumerConfig
-            {
-                BootstrapServers = connectionOptions.BootstrapServers,
-                GroupId = connectionOptions.ConsumerGroupId,
-                AutoOffsetReset = AutoOffsetReset.Earliest
-            };
+            _kafkaConnectionOptions = connectionOptions;
             _subscriptionManager = subscriptionManager ?? new InMemoryEventAggregatorSubscriptionManager();
-            _consumers = new Dictionary<string, IConsumer<Null, string>>();
+            _consumers = new Dictionary<string, IKafkaConsumer<string>>();
+            _consumersCancellationTokenSources = new Dictionary<string, CancellationTokenSource>();
+            
+            _producerFactory = new KafkaProducerFactory<string>(
+                new KafkaProducerOptions
+                {
+                    BootstrapServers = _kafkaConnectionOptions.BootstrapServers
+                });
+                
+            _consumerFactory = new KafkaConsumerFactory<string>(
+                new KafkaConsumerOptions
+                {
+                    BootstrapServers = _kafkaConnectionOptions.BootstrapServers,
+                    ReceiveMessageMaxBytes = _kafkaConnectionOptions.ReceiveMessageMaxBytes,
+                });
+        }
+        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KafkaEventAggregator"/> class.
+        /// </summary>
+        /// <param name="producerFactory">the factory for creating Kafka producers.</param>
+        /// <param name="consumerFactory">the factory for creating Kafka consumers.</param>
+        /// <param name="connectionOptions">The Kafka connection options.</param>
+        /// <param name="subscriptionManager">The subscription manager that manages event subscriptions.</param>
+        /// <param name="logger">The logger.</param>
+        public KafkaEventAggregator(
+            IKafkaProducerFactory<string> producerFactory, 
+            IKafkaConsumerFactory<string> consumerFactory,
+            KafkaConnectionOptions connectionOptions,
+            IEventAggregatorSubscriptionManager subscriptionManager, 
+            ILogger logger
+            )
+        {
+            _logger = logger;
+            _kafkaConnectionOptions = connectionOptions;
+            _subscriptionManager = subscriptionManager ?? new InMemoryEventAggregatorSubscriptionManager();
+            
+            _producerFactory = producerFactory;
+            _producers = new Dictionary<string, IKafkaProducer<string>>();
+            
+            _consumerFactory = consumerFactory;
+            _consumers = new Dictionary<string, IKafkaConsumer<string>>();
             _consumersCancellationTokenSources = new Dictionary<string, CancellationTokenSource>();
         }
 
         /// <inheritdoc />
-        public async void Publish<TEventModel>(IEvent<TEventModel> @event) where TEventModel : IEventDataModel
+        public void Publish<TEventModel>(IEvent<TEventModel> @event) where TEventModel : IEventDataModel
         {
-            await PublishAsync(@event);
+            string eventName = @event.GetType().FullName;
+            
+            IKafkaProducer<string> producer = FetchProducer(eventName);
+            
+            string message = JsonConvert.SerializeObject(@event);
+
+            producer.Produce(message);
         }
 
         /// <inheritdoc />
         public Task PublishAsync<TEventModel>(IEvent<TEventModel> @event) where TEventModel : IEventDataModel
         {
-            // we did not do this in the constructor because we do not want to create a producer if we do not need it.
-            // right now for our use case, we only need to publish events or subscribe to them.
-            // we do not need both at the same time.
-            if (_producer == null)
-            {
-                _producer = new ProducerBuilder<Null, string>(_producerConfig).Build();
-            }
-            
             string eventName = @event.GetType().FullName;
             
-            string messageString = JsonConvert.SerializeObject(@event);
-
-            var message = new Message<Null, string>
-            {
-                Value = messageString
-            };
+            IKafkaProducer<string> producer = FetchProducer(eventName);
             
-            return _producer.ProduceAsync(eventName, message);
+            string message = JsonConvert.SerializeObject(@event);
+
+            return producer.ProduceAsync(message);
         }
 
         /// <inheritdoc />
@@ -125,7 +152,10 @@ namespace BSN.Commons.Infrastructure.MessageBroker.Kafka
         /// <inheritdoc />
         public void Dispose()
         {
-            _producer?.Dispose();
+            foreach (var producer in _producers)
+            {   
+                producer.Value.Dispose();
+            }
             
             foreach (var consumer in _consumers)
             {
@@ -133,6 +163,37 @@ namespace BSN.Commons.Infrastructure.MessageBroker.Kafka
                 
                 consumer.Value.Dispose();
             }
+            
+            _producers.Clear();
+            
+            _consumers.Clear();
+            
+            _consumersCancellationTokenSources.Clear();
+            
+            _subscriptionManager.Clear();
+            
+            _producerFactory.Dispose();
+            
+            _consumerFactory.Dispose();
+            
+            _logger.LogInformation("Event aggregator disposed.");
+        }
+        
+        private IKafkaProducer<string> FetchProducer(string eventName)
+        {
+            // we did not do this in the constructor because we do not want to create a producer if we do not need it.
+            // right now for our use case, we only need to publish events or subscribe to them.
+            // we do not need both at the same time.
+            if (_producers.TryGetValue(eventName, out var fetchProducer))
+            {
+                return fetchProducer;
+            }
+            
+            var producer = _producerFactory.Create(eventName);
+            
+            _producers.Add(eventName, producer);
+            
+            return producer;
         }
         
         private void CreateConsumerForEvent<TEvent, TEventDataModel>(IEventReceiver eventReceiver)
@@ -146,47 +207,47 @@ namespace BSN.Commons.Infrastructure.MessageBroker.Kafka
                 return;
             }
 
-            var consumer = new ConsumerBuilder<Null, string>(_consumerConfig).Build();
-
-            consumer.Subscribe(eventName);
-
+            var consumer = _consumerFactory.Create(eventName, _kafkaConnectionOptions.ConsumerGroupId);
+            
             _consumers.Add(eventName, consumer);
 
             var cancellationTokenSource = new CancellationTokenSource();
 
             _consumersCancellationTokenSources.Add(eventName, cancellationTokenSource);
 
-            Task.Run(
-                () => StartConsume<TEvent, TEventDataModel>(eventReceiver, consumer, cancellationTokenSource), 
-                cancellationTokenSource.Token
-                );
+            StartConsume<TEvent, TEventDataModel>(eventReceiver, consumer, cancellationTokenSource);
         }
 
-        private void StartConsume<TEvent, TEventDataModel>(IEventReceiver eventReceiver, IConsumer<Null, string> consumer, CancellationTokenSource cancellationTokenSource) where TEvent : IEvent<TEventDataModel> where TEventDataModel : IEventDataModel
+        private async Task StartConsume<TEvent, TEventDataModel>(
+            IEventReceiver eventReceiver, 
+            IKafkaConsumer<string> consumer, 
+            CancellationTokenSource cancellationTokenSource
+            ) where TEvent : IEvent<TEventDataModel> where TEventDataModel : IEventDataModel
         {
             while (!cancellationTokenSource.IsCancellationRequested)
             {
-                var consumeResult = consumer.Consume();
+                var result = await consumer.ConsumeAsync(cancellationTokenSource.Token);
                 
-                if (consumeResult == null)
+                if (result == null)
                 {
                     continue;
                 }
                 
-                var message = consumeResult.Message.Value;
-                
-                var eventModel = JsonConvert.DeserializeObject<TEvent>(message);
+                var eventModel = JsonConvert.DeserializeObject<TEvent>(result);
                 
                 eventReceiver.Handle(eventModel);
             }
         }
         
-        private IProducer<Null, string> _producer;
-        private readonly IEventAggregatorSubscriptionManager _subscriptionManager;
-        private readonly Dictionary<string, IConsumer<Null, string>> _consumers;
+        private readonly IKafkaProducerFactory<string> _producerFactory;
+        private readonly Dictionary<string,IKafkaProducer<string>> _producers;
+        
+        private readonly IKafkaConsumerFactory<string> _consumerFactory;
+        private readonly Dictionary<string, IKafkaConsumer<string>> _consumers;
         private readonly Dictionary<string, CancellationTokenSource> _consumersCancellationTokenSources;
-        private readonly ProducerConfig _producerConfig;
-        private readonly ConsumerConfig _consumerConfig;
+
+        private readonly IEventAggregatorSubscriptionManager _subscriptionManager;
+        private readonly KafkaConnectionOptions _kafkaConnectionOptions;
         private readonly ILogger _logger;
     }
 }

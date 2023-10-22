@@ -14,19 +14,21 @@ namespace BSN.Commons.Infrastructure.Kafka
                 BootstrapServers = options.BootstrapServers,
             };
             
-            // Here we did this because the ReceiveMessageMaxBytes in ProducerConfig type
-            // is int and can not accept high values that we expect
-            producerConfig.Set("receive.message.max.bytes", options.ReceiveMessageMaxBytes);
-            
             _sharedProducer = new ProducerBuilder<Null, T>(producerConfig).Build();
         }
 
         /// <inheritdoc />
         public IKafkaProducer<T> Create(string topic)
         {
-            return new KafkaProducer<T>(_sharedProducer, topic);
+            return new KafkaProducer<T>(_sharedProducer, topic, isProducerChannelShared: true);
         }
 
         private readonly IProducer<Null, T> _sharedProducer;
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            _sharedProducer?.Dispose();
+        }
     }
 }

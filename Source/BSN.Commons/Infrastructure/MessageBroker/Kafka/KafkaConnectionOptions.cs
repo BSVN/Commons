@@ -8,6 +8,7 @@
         /// <summary>
         /// these servers are used to bootstrap the initial connection to the Kafka cluster.
         /// it is a list of host/port pairs separated by commas.
+        /// for example, "broker1:9092,broker2:9092".
         /// </summary>
         public string BootstrapServers { get; set; }
         
@@ -17,5 +18,10 @@
         /// it is useful for parallelism, fault tolerance, and scalability.
         /// </summary>
         public string ConsumerGroupId { get; set; }
+
+        /// <summary>
+        /// the maximum number of bytes in a message batch.
+        /// </summary>
+        public string ReceiveMessageMaxBytes { get; set; }
     }
 }
