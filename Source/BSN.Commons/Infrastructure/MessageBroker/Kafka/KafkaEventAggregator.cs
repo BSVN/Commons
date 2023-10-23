@@ -43,13 +43,10 @@ namespace BSN.Commons.Infrastructure.MessageBroker.Kafka
                 {
                     BootstrapServers = _kafkaConnectionOptions.BootstrapServers
                 });
-                
+
             _consumerFactory = new KafkaConsumerFactory<string>(
-                new KafkaConsumerOptions
-                {
-                    BootstrapServers = _kafkaConnectionOptions.BootstrapServers,
-                    ReceiveMessageMaxBytes = _kafkaConnectionOptions.ReceiveMessageMaxBytes,
-                });
+                    new KafkaConsumerOptions(bootstrapServers: _kafkaConnectionOptions.BootstrapServers, receiveMessageMaxBytes: _kafkaConnectionOptions.ReceiveMessageMaxBytes)
+                );
         }
         
         /// <summary>
@@ -151,26 +148,11 @@ namespace BSN.Commons.Infrastructure.MessageBroker.Kafka
 
         /// <inheritdoc />
         public void Dispose()
-        {
-            foreach (var producer in _producers)
-            {   
-                producer.Value.Dispose();
-            }
-            
-            foreach (var consumer in _consumers)
+        {   
+            foreach (var ct in _consumersCancellationTokenSources)
             {
-                _consumersCancellationTokenSources[consumer.Key].Cancel();
-                
-                consumer.Value.Dispose();
+                ct.Value.Cancel();
             }
-            
-            _producers.Clear();
-            
-            _consumers.Clear();
-            
-            _consumersCancellationTokenSources.Clear();
-            
-            _subscriptionManager.Clear();
             
             _producerFactory.Dispose();
             

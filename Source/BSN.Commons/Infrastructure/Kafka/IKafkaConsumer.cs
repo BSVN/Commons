@@ -8,7 +8,7 @@ namespace BSN.Commons.Infrastructure.Kafka
     /// Represents A Kafka Api compatible consumer class
     /// </summary>
     /// <typeparam name="T">The object type that is being consumed</typeparam>
-    public interface IKafkaConsumer<T> : IDisposable
+    public interface IKafkaConsumer<T>
     {
         /// <summary>
         /// Consumes the Kafka api 

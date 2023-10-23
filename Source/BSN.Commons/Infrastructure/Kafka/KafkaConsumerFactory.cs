@@ -1,4 +1,6 @@
 ﻿using Confluent.Kafka;
+using Microsoft.Extensions.Options;
+using System.Collections.Generic;
 
 namespace BSN.Commons.Infrastructure.Kafka
 {
@@ -9,36 +11,48 @@ namespace BSN.Commons.Infrastructure.Kafka
         /// <param name="options">Default Options for KafkaConsumers</param>
         public KafkaConsumerFactory(IKafkaConsumerOptions options)
         {
-            _defaultConsumerConfig = new ConsumerConfig
-            {
-                BootstrapServers = options.BootstrapServers,
-                AutoOffsetReset = AutoOffsetReset.Earliest
-            };
-            
-            // Here we did this because the ReceiveMessageMaxBytes in ProducerConfig type
-            // is int and can not accept high values that we expect
-            _defaultConsumerConfig.Set("receive.message.max.bytes", options.ReceiveMessageMaxBytes);
+            _defaultConsumerOptions = options;
         }
 
         /// <inheritdoc />
         public IKafkaConsumer<T> Create(string topic, string groupId)
         {
-            lock (this)
+            var consumerKey = topic + ":" + groupId;
+
+            if (_consumers.ContainsKey(consumerKey))
             {
-                var config = new ConsumerConfig(_defaultConsumerConfig) { GroupId = groupId };
-                var consumer = new ConsumerBuilder<Null, T>(config).Build();
-                consumer.Subscribe(topic);
-                
-                return new KafkaConsumer<T>(consumer);
+                return new KafkaConsumer<T>(_consumers[consumerKey]);
             }
+
+            var config = new ConsumerConfig() 
+            {
+                BootstrapServers = _defaultConsumerOptions.BootstrapServers,
+                AutoOffsetReset = AutoOffsetReset.Earliest,
+            };
+
+
+            // Here we did this because the ReceiveMessageMaxBytes in ProducerConfig type
+            // is int and can not accept high values that we expect
+            config.Set("receive.message.max.bytes", _defaultConsumerOptions.ReceiveMessageMaxBytes);
+
+            var consumer = new ConsumerBuilder<Null, T>(config).Build();
+            consumer.Subscribe(topic);
+
+            _consumers.Add(consumerKey, consumer);
+                
+            return new KafkaConsumer<T>(consumer);
         }
 
-        private readonly ConsumerConfig _defaultConsumerConfig;
+        private readonly Dictionary<string, IConsumer<Null, T>> _consumers;
+        private IKafkaConsumerOptions _defaultConsumerOptions;
 
         /// <inheritdoc />
         public void Dispose()
         {
-            // TODO release managed resources here
+            foreach (var consumer in _consumers)
+            {
+                consumer.Value.Dispose();
+            }
         }
     }
 }

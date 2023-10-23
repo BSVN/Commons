@@ -20,7 +20,7 @@ namespace BSN.Commons.Infrastructure.Kafka
     /// Represents A Kafka Api compatible producer class
     /// </summary>
     /// <typeparam name="T">The object type that is being produced</typeparam>
-    public interface IKafkaProducer<T> : IDisposable
+    public interface IKafkaProducer<T>
     {
         /// <summary>
         /// Produces the Kafka api, raises exceptions for errors
