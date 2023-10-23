@@ -51,6 +51,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Apache.NMS" Version="1.8.0" />
+    <PackageReference Include="Apache.NMS.ActiveMQ" Version="1.7.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.32" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.32" />
     <PackageReference Include="Confluent.Kafka" Version="2.2.0" />
