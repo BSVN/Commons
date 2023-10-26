@@ -25,7 +25,7 @@ namespace BSN.Commons.Infrastructure.Kafka
         /// <returns></returns>
         public IKafkaConsumer<T> Create(string topic, string groupId)
         {
-            var consumerKey = topic + ":" + groupId;
+            string consumerKey = topic + ":" + groupId;
 
             if (_consumers.ContainsKey(consumerKey))
             {
@@ -37,12 +37,13 @@ namespace BSN.Commons.Infrastructure.Kafka
                 BootstrapServers = _defaultConsumerOptions.BootstrapServers,
                 AutoOffsetReset = AutoOffsetReset.Earliest,
             };
-
-
+            
             // Here we did this because the ReceiveMessageMaxBytes in ProducerConfig type
             // is int and can not accept high values that we expect
             config.Set("receive.message.max.bytes", _defaultConsumerOptions.ReceiveMessageMaxBytes);
 
+            // Here Null means that the key in kafka message is null
+            // it helps equal distribution of messages in the kafka cluster
             var consumerEngine = new ConsumerBuilder<Null, T>(config).Build();
             consumerEngine.Subscribe(topic);
 

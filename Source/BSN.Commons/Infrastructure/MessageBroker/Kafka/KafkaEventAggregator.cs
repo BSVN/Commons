@@ -39,10 +39,7 @@ namespace BSN.Commons.Infrastructure.MessageBroker.Kafka
             _consumersCancellationTokenSources = new Dictionary<string, CancellationTokenSource>();
             
             _producerFactory = new KafkaProducerFactory<string>(
-                new KafkaProducerOptions
-                {
-                    BootstrapServers = _kafkaConnectionOptions.BootstrapServers
-                });
+                new KafkaProducerOptions(bootstrapServers: _kafkaConnectionOptions.BootstrapServers));
 
             _consumerFactory = new KafkaConsumerFactory<string>(
                     new KafkaConsumerOptions(bootstrapServers: _kafkaConnectionOptions.BootstrapServers, receiveMessageMaxBytes: _kafkaConnectionOptions.ReceiveMessageMaxBytes)
