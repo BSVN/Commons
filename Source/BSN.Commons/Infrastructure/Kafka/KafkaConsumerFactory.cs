@@ -12,6 +12,7 @@ namespace BSN.Commons.Infrastructure.Kafka
         public KafkaConsumerFactory(IKafkaConsumerOptions options)
         {
             _defaultConsumerOptions = options;
+            _consumers = new Dictionary<string, IConsumer<Null, T>>();
         }
 
         /// <inheritdoc />
@@ -42,10 +43,7 @@ namespace BSN.Commons.Infrastructure.Kafka
                 
             return new KafkaConsumer<T>(consumer);
         }
-
-        private readonly Dictionary<string, IConsumer<Null, T>> _consumers;
-        private IKafkaConsumerOptions _defaultConsumerOptions;
-
+        
         /// <inheritdoc />
         public void Dispose()
         {
@@ -54,5 +52,8 @@ namespace BSN.Commons.Infrastructure.Kafka
                 consumer.Value.Dispose();
             }
         }
+        
+        private readonly Dictionary<string, IConsumer<Null, T>> _consumers;
+        private readonly IKafkaConsumerOptions _defaultConsumerOptions;
     }
 }
