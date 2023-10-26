@@ -12,17 +12,24 @@ namespace BSN.Commons.Infrastructure.Kafka
         public KafkaConsumerFactory(IKafkaConsumerOptions options)
         {
             _defaultConsumerOptions = options;
-            _consumers = new Dictionary<string, IConsumer<Null, T>>();
+            _consumers = new Dictionary<string, KafkaConsumer<T>>();
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Creates a new Kafka consumer with the specified topic and group id.
+        /// this returns a thread safe consumer and can be used in multi-threaded environments.
+        /// for multiple calls with the same topic and group id, the same consumer will be returned.
+        /// </summary>
+        /// <param name="topic"></param>
+        /// <param name="groupId"></param>
+        /// <returns></returns>
         public IKafkaConsumer<T> Create(string topic, string groupId)
         {
             var consumerKey = topic + ":" + groupId;
 
             if (_consumers.ContainsKey(consumerKey))
             {
-                return new KafkaConsumer<T>(_consumers[consumerKey]);
+                return _consumers[consumerKey];
             }
 
             var config = new ConsumerConfig() 
@@ -36,12 +43,14 @@ namespace BSN.Commons.Infrastructure.Kafka
             // is int and can not accept high values that we expect
             config.Set("receive.message.max.bytes", _defaultConsumerOptions.ReceiveMessageMaxBytes);
 
-            var consumer = new ConsumerBuilder<Null, T>(config).Build();
-            consumer.Subscribe(topic);
+            var consumerEngine = new ConsumerBuilder<Null, T>(config).Build();
+            consumerEngine.Subscribe(topic);
 
-            _consumers.Add(consumerKey, consumer);
+            var consumer = new KafkaConsumer<T>(consumerEngine);
                 
-            return new KafkaConsumer<T>(consumer);
+            _consumers.Add(consumerKey, consumer);
+
+            return consumer;
         }
         
         /// <inheritdoc />
@@ -53,7 +62,7 @@ namespace BSN.Commons.Infrastructure.Kafka
             }
         }
         
-        private readonly Dictionary<string, IConsumer<Null, T>> _consumers;
+        private readonly Dictionary<string, KafkaConsumer<T>> _consumers;
         private readonly IKafkaConsumerOptions _defaultConsumerOptions;
     }
 }

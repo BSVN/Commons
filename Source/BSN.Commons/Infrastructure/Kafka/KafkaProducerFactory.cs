@@ -20,15 +20,15 @@ namespace BSN.Commons.Infrastructure.Kafka
         /// <inheritdoc />
         public IKafkaProducer<T> Create(string topic)
         {
-            return new KafkaProducer<T>(_sharedProducer, topic, isProducerChannelShared: true);
+            return new KafkaProducer<T>(_sharedProducer, topic);
         }
-
-        private readonly IProducer<Null, T> _sharedProducer;
 
         /// <inheritdoc />
         public void Dispose()
         {
             _sharedProducer?.Dispose();
         }
+
+        private readonly IProducer<Null, T> _sharedProducer;
     }
 }
