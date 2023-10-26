@@ -1,10 +1,12 @@
-﻿namespace BSN.Commons.Infrastructure.Kafka
+﻿using System;
+
+namespace BSN.Commons.Infrastructure.Kafka
 {
     /// <summary>
     /// Represents a factory class for IKafkaProducer classes
     /// </summary>
     /// <typeparam name="T">the type which the created producer classes are based on</typeparam>
-    public interface IKafkaProducerFactory<T>
+    public interface IKafkaProducerFactory<T> : IDisposable
     {
         /// <summary>
         /// Creates a IKafkaProducer
