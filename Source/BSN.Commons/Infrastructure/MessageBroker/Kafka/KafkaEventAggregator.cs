@@ -31,19 +31,15 @@ namespace BSN.Commons.Infrastructure.MessageBroker.Kafka
             IEventAggregatorSubscriptionManager subscriptionManager, 
             ILogger logger
             )
+            : this(
+                  producerFactory: new KafkaProducerFactory<string>(new KafkaProducerOptions(
+                      bootstrapServers: connectionOptions.BootstrapServers)),
+                  consumerFactory: new KafkaConsumerFactory<string>(new KafkaConsumerOptions(
+                      bootstrapServers: connectionOptions.BootstrapServers, receiveMessageMaxBytes: connectionOptions.ReceiveMessageMaxBytes)),
+                  connectionOptions: connectionOptions,
+                  subscriptionManager: subscriptionManager,
+                  logger: logger)
         {
-            _logger = logger;
-            _kafkaConnectionOptions = connectionOptions;
-            _subscriptionManager = subscriptionManager ?? new InMemoryEventAggregatorSubscriptionManager();
-            _consumers = new Dictionary<string, IKafkaConsumer<string>>();
-            _consumersCancellationTokenSources = new Dictionary<string, CancellationTokenSource>();
-            
-            _producerFactory = new KafkaProducerFactory<string>(
-                new KafkaProducerOptions(bootstrapServers: _kafkaConnectionOptions.BootstrapServers));
-
-            _consumerFactory = new KafkaConsumerFactory<string>(
-                    new KafkaConsumerOptions(bootstrapServers: _kafkaConnectionOptions.BootstrapServers, receiveMessageMaxBytes: _kafkaConnectionOptions.ReceiveMessageMaxBytes)
-                );
         }
         
         /// <summary>
