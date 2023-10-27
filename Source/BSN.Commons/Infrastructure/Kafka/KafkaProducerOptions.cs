@@ -3,18 +3,16 @@
     /// <inheritdoc />
     public class KafkaProducerOptions : IKafkaProducerOptions
     {
-        /// <param name="bootstrapServers"><see cref="BootstrapServers"/></param>
-        /// <param name="receiveMessageMaxBytes"><see cref="ReceiveMessageMaxBytes"/></param>
-        public KafkaProducerOptions(string bootstrapServers, string receiveMessageMaxBytes)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KafkaProducerOptions"/> class.
+        /// </summary>
+        /// <param name="bootstrapServers"></param>
+        public KafkaProducerOptions(string bootstrapServers)
         {
             BootstrapServers = bootstrapServers;
-            ReceiveMessageMaxBytes = receiveMessageMaxBytes;
         }
 
         /// <inheritdoc />
         public string BootstrapServers { get; }
-
-        /// <inheritdoc />
-        public string ReceiveMessageMaxBytes { get; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace BSN.Commons.Infrastructure.Kafka
 {
@@ -26,7 +27,13 @@ namespace BSN.Commons.Infrastructure.Kafka
         /// </summary>
         /// <param name="message">The message that is being produced</param>
         /// <exception cref="KafkaProduceException{T}"></exception>
-        /// <returns>Whether the produce operation was successful or not</returns>
-        void ProduceAsync(T message);
+        Task ProduceAsync(T message);
+        
+        /// <summary>
+        /// Produces the Kafka api, raises exceptions for errors
+        /// </summary>
+        /// <param name="message">The message that is being produced</param>
+        /// <exception cref="KafkaProduceException{T}"></exception>
+        void Produce(T message);
     }
 }
