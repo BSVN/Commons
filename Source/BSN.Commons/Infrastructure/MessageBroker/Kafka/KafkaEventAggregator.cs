@@ -65,6 +65,7 @@ namespace BSN.Commons.Infrastructure.MessageBroker.Kafka
             _kafkaConnectionOptions = connectionOptions;
             _subscriptionManager = subscriptionManager ?? new InMemoryEventAggregatorSubscriptionManager();
             _producerFactory = producerFactory;
+            
             _consumerFactory = consumerFactory;
             _consumersCancellationTokenSources = new Dictionary<string, CancellationTokenSource>();
         }
