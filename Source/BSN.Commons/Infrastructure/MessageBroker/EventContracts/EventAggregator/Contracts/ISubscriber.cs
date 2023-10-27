@@ -22,7 +22,7 @@ namespace BSN.Commons.Infrastructure.MessageBroker.EventContracts.EventAggregato
         /// <typeparam name="TEvent">The type of event to subscribe to.</typeparam>
         /// <typeparam name="TEventDataModel">The type of data model associated with the event.</typeparam>
         /// <param name="eventReceiver">The event receiver to subscribe.</param>
-        void Subscribe<TEvent, TEventDataModel>(IEventReceiver eventReceiver) where TEvent : IEvent<TEventDataModel>, new() where TEventDataModel : IEventDataModel;
+        void Subscribe<TEvent, TEventDataModel>(IEventReceiver eventReceiver) where TEvent : IEvent<TEventDataModel> where TEventDataModel : IEventDataModel;
 
         /// <summary>
         /// Unsubscribes an event receiver from handling events of a specific type with associated data model.

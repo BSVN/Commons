@@ -22,7 +22,7 @@ namespace BSN.Commons.Infrastructure.MessageBroker.EventContracts.EventAggregato
         /// information, allowing events to convey specific details or context. By including data models in events, 
         /// components can make use of this information for various purposes, such as processing, logging, or decision-making.
         /// </summary>
-        T DataModel { get; set; }
+        T DataModel { get; }
     }
 
     /// <summary>

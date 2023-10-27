@@ -60,7 +60,7 @@ namespace BSN.Commons.Infrastructure.MessageBroker.Jms
         }
 
         /// <inheritdoc />
-        public void Subscribe<TEvent, TEventDataModel>(IEventReceiver eventReceiver) where TEvent : IEvent<TEventDataModel>, new() where TEventDataModel : IEventDataModel
+        public void Subscribe<TEvent, TEventDataModel>(IEventReceiver eventReceiver) where TEvent : IEvent<TEventDataModel> where TEventDataModel : IEventDataModel
         {
             string eventName = typeof(TEvent).Name;
             
@@ -74,12 +74,7 @@ namespace BSN.Commons.Infrastructure.MessageBroker.Jms
                 {
                     string serializedEvent = textMessage.Text;
                     
-                    TEventDataModel eventDataModel = JsonConvert.DeserializeObject<TEventDataModel>(serializedEvent);
-                    
-                    TEvent @event = new TEvent
-                    {
-                        DataModel = eventDataModel
-                    };
+                    TEvent @event = JsonConvert.DeserializeObject<TEvent>(serializedEvent);
                     
                     eventReceiver.Handle(@event);
                 }

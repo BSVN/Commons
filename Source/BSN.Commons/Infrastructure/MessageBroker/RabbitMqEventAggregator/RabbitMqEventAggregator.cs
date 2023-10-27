@@ -50,7 +50,7 @@ namespace BSN.Commons.Infrastructure.MessageBroker.RabbitMqEventAggregator
         }
 
         /// <inheritdoc />
-        public void Subscribe<TEvent, TEventDataModel>(IEventReceiver eventReceiver) where TEvent : IEvent<TEventDataModel>, new() where TEventDataModel : IEventDataModel
+        public void Subscribe<TEvent, TEventDataModel>(IEventReceiver eventReceiver) where TEvent : IEvent<TEventDataModel> where TEventDataModel : IEventDataModel
         {
             string eventName = _subscriptionsManager.GetEventKey<TEvent>();
 
