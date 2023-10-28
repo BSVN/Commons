@@ -18,7 +18,7 @@ namespace BSN.Commons.Infrastructure.MessageBroker.EventContracts.EventAggregato
     public interface IEvent<T> : IEvent where T : IEventDataModel
     {
         /// <summary>
-        /// Gets or sets the data model associated with the event. The data model serves as a container for structured 
+        /// Gets the data model associated with the event. The data model serves as a container for structured 
         /// information, allowing events to convey specific details or context. By including data models in events, 
         /// components can make use of this information for various purposes, such as processing, logging, or decision-making.
         /// </summary>

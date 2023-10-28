@@ -33,18 +33,27 @@ namespace BSN.Commons.Infrastructure.MessageBroker.Jms
             _session = _connection.CreateSession();
             _destination = SessionUtil.GetDestination(_session, jmsConnectionOptions.QueueName);
             
-            _producer = _session.CreateProducer(_destination);
+            _producers = new Dictionary<string, IMessageProducer>();
             _consumers = new Dictionary<string, IMessageConsumer>();
         }
         
         /// <inheritdoc />
         public void Publish<TEventModel>(IEvent<TEventModel> @event) where TEventModel : IEventDataModel
         {
-            string serializedEvent = JsonConvert.SerializeObject(@event.DataModel);
+            string eventName = typeof(TEventModel).Name;
             
+            if (!_producers.ContainsKey(eventName))
+            {
+                _producers.Add(eventName, _session.CreateProducer(_destination));
+            }
+            
+            var producer = _producers[eventName];
+            
+            string serializedEvent = JsonConvert.SerializeObject(@event.DataModel);
+
             ITextMessage message = _session.CreateTextMessage(serializedEvent);
             
-            _producer.Send(message);
+            producer.Send(message);
         }
 
         /// <inheritdoc />
@@ -66,7 +75,12 @@ namespace BSN.Commons.Infrastructure.MessageBroker.Jms
             
             _subscriptionManager.AddSubscription<TEvent>(eventReceiver);
             
-            var consumer = _session.CreateConsumer(_destination);
+            if (!_consumers.ContainsKey(eventName))
+            {
+                _consumers.Add(eventName, _session.CreateConsumer(_destination));
+            }
+            
+            var consumer = _consumers[eventName];
             
             consumer.Listener += message =>
             {
@@ -79,8 +93,6 @@ namespace BSN.Commons.Infrastructure.MessageBroker.Jms
                     eventReceiver.Handle(@event);
                 }
             };
-            
-            _consumers.Add(eventName, consumer);
         }
 
         /// <inheritdoc />
@@ -100,8 +112,11 @@ namespace BSN.Commons.Infrastructure.MessageBroker.Jms
         /// <inheritdoc />
         public void Dispose()
         {
-            _producer?.Dispose();
-
+            foreach (var producer in _producers)
+            {
+                producer.Value.Dispose();
+            }
+            
             foreach (var consumer in _consumers)
             {
                 consumer.Value.Dispose();
@@ -116,7 +131,7 @@ namespace BSN.Commons.Infrastructure.MessageBroker.Jms
         private readonly IConnection _connection;
         private readonly ISession _session;
         private readonly IDestination _destination;
-        private readonly IMessageProducer _producer;
         private readonly Dictionary<string, IMessageConsumer> _consumers;
+        private readonly Dictionary<string, IMessageProducer> _producers;
     }
 }
