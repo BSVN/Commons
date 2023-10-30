@@ -39,8 +39,7 @@ namespace BSN.Commons.Infrastructure.MessageBroker.Kafka
                   connectionOptions: connectionOptions,
                   subscriptionManager: subscriptionManager,
                   logger: logger)
-        {
-        }
+        {}
         
         /// <summary>
         /// Initializes a new instance of the <see cref="KafkaEventAggregator"/> class.
@@ -61,12 +60,9 @@ namespace BSN.Commons.Infrastructure.MessageBroker.Kafka
             _logger = logger;
             _kafkaConnectionOptions = connectionOptions;
             _subscriptionManager = subscriptionManager ?? new InMemoryEventAggregatorSubscriptionManager();
-            
             _producerFactory = producerFactory;
-            _producers = new Dictionary<string, IKafkaProducer<string>>();
             
             _consumerFactory = consumerFactory;
-            _consumers = new Dictionary<string, IKafkaConsumer<string>>();
             _consumersCancellationTokenSources = new Dictionary<string, CancellationTokenSource>();
         }
 
@@ -75,7 +71,7 @@ namespace BSN.Commons.Infrastructure.MessageBroker.Kafka
         {
             string eventName = @event.GetType().FullName;
             
-            IKafkaProducer<string> producer = FetchProducer(eventName);
+            IKafkaProducer<string> producer = _producerFactory.Create(eventName);
             
             string message = JsonConvert.SerializeObject(@event);
 
@@ -87,7 +83,7 @@ namespace BSN.Commons.Infrastructure.MessageBroker.Kafka
         {
             string eventName = @event.GetType().FullName;
             
-            IKafkaProducer<string> producer = FetchProducer(eventName);
+            IKafkaProducer<string> producer = _producerFactory.Create(eventName);
             
             string message = JsonConvert.SerializeObject(@event);
 
@@ -124,15 +120,13 @@ namespace BSN.Commons.Infrastructure.MessageBroker.Kafka
         {
             string eventName = typeof(TEvent).Name;
             
-            if (!_consumers.ContainsKey(eventName))
+            if (!_consumersCancellationTokenSources.ContainsKey(eventName))
             {
                 _logger.LogWarning($"Consumer for event {eventName} does not exist.");
                 return;
             }
             
             _consumersCancellationTokenSources[eventName].Cancel();
-            
-            _consumers.Remove(eventName);
             
             _consumersCancellationTokenSources.Remove(eventName);
             
@@ -153,39 +147,20 @@ namespace BSN.Commons.Infrastructure.MessageBroker.Kafka
             
             _logger.LogInformation("Event aggregator disposed.");
         }
-        
-        private IKafkaProducer<string> FetchProducer(string eventName)
-        {
-            // we did not do this in the constructor because we do not want to create a producer if we do not need it.
-            // right now for our use case, we only need to publish events or subscribe to them.
-            // we do not need both at the same time.
-            if (_producers.TryGetValue(eventName, out var fetchProducer))
-            {
-                return fetchProducer;
-            }
-            
-            var producer = _producerFactory.Create(eventName);
-            
-            _producers.Add(eventName, producer);
-            
-            return producer;
-        }
-        
+
         private void CreateConsumerForEvent<TEvent, TEventDataModel>(IEventReceiver eventReceiver)
             where TEvent : IEvent<TEventDataModel> where TEventDataModel : IEventDataModel
         {
             string eventName = typeof(TEvent).Name;
 
-            if (_consumers.ContainsKey(eventName))
+            if (_consumersCancellationTokenSources.ContainsKey(eventName))
             {
-                _logger.LogWarning($"Consumer for event {eventName} already exists.");
+                _logger.LogWarning($"Consumer for event {eventName} already exists. Skipping creation.");
                 return;
             }
 
             var consumer = _consumerFactory.Create(eventName, _kafkaConnectionOptions.ConsumerGroupId);
             
-            _consumers.Add(eventName, consumer);
-
             var cancellationTokenSource = new CancellationTokenSource();
 
             _consumersCancellationTokenSources.Add(eventName, cancellationTokenSource);
@@ -215,12 +190,8 @@ namespace BSN.Commons.Infrastructure.MessageBroker.Kafka
         }
         
         private readonly IKafkaProducerFactory<string> _producerFactory;
-        private readonly Dictionary<string,IKafkaProducer<string>> _producers;
-        
         private readonly IKafkaConsumerFactory<string> _consumerFactory;
-        private readonly Dictionary<string, IKafkaConsumer<string>> _consumers;
         private readonly Dictionary<string, CancellationTokenSource> _consumersCancellationTokenSources;
-
         private readonly IEventAggregatorSubscriptionManager _subscriptionManager;
         private readonly KafkaConnectionOptions _kafkaConnectionOptions;
         private readonly ILogger _logger;
