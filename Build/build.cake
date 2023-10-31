@@ -1,22 +1,19 @@
-#tool "nuget:?package=coveralls.io&version=1.4.2"
-#tool "nuget:?package=GitVersion.CommandLine&version=5.1.3"
+#tool "nuget:?package=GitVersion.CommandLine&version=5.12.0"
 #tool "nuget:?package=gitlink&version=3.1.0"
 #tool "nuget:?package=GitReleaseNotes&version=0.7.1"
-#tool "nuget:?package=NUnit.ConsoleRunner&version=3.11.1"
+#tool dotnet:?package=dotnet-reportgenerator-globaltool&version=5.1.19
 
-#addin "nuget:?package=Cake.Git&version=0.21.0"
-#addin "nuget:?package=Nuget.Core&version=2.14.0"
-#addin "nuget:?package=Cake.Coveralls&version=0.10.1"
-#addin "nuget:?package=Cake.Coverlet&version=2.3.4"
-
-using NuGet;
+#addin "nuget:?package=Cake.Coveralls&version=1.1.0"
+#addin "nuget:?package=Cake.Coverlet&version=3.0.4"
+#addin "nuget:?package=Cake.Git&version=3.0.0"
+#addin "nuget:?package=Cake.FileHelpers&version=6.1.3"
 
 var target = Argument("target", "Default");
 var artifactsDir = "./artifacts/";
 var solutionPath = "../BSN.Commons.sln";
 var projectName = "BSN.Commons";
 var projectFolder = "../Source/";
-var solutionVersion = "1.10.3";
+var solutionVersion = "1.11.0";
 var projects = new List<(string path, string name, string version)>
 {
     ("BSN.Commons/", "BSN.Commons.csproj", solutionVersion),
@@ -59,7 +56,7 @@ Task("Clean")
             );
         }
         CreateDirectory(artifactsDir);
-        DotNetCoreClean(solutionPath);
+        DotNetClean(solutionPath);
 });
 
 
@@ -90,9 +87,9 @@ Task("Build")
     .IsDependentOn("Restore")
     .IsDependentOn("Clean")
     .Does(() => {
-        DotNetCoreBuild(
+        DotNetBuild(
             solutionPath,
-            new DotNetCoreBuildSettings 
+            new DotNetBuildSettings 
             {
                 Configuration = configuration
             }
@@ -107,7 +104,7 @@ Task("Test")
             var specificCoverageResultsFileName = testProject.name + coverageResultsFileName;
             var specificTestResultsFileName = testProject.name + testResultsFileName;
 
-            var settings = new DotNetCoreTestSettings {
+            var settings = new DotNetTestSettings {
                 VSTestReportPath = new FilePath(artifactsDir + specificTestResultsFileName)
             };
 
@@ -118,7 +115,7 @@ Task("Test")
                 CoverletOutputName = specificCoverageResultsFileName
             };
     
-            DotNetCoreTest(testFolder + testProject.path + testProject.name, settings, coverletSettings);
+            DotNetTest(testFolder + testProject.path + testProject.name, settings, coverletSettings);
 
 
             if (AppVeyor.IsRunningOnAppVeyor)
@@ -139,7 +136,7 @@ Task("UploadCoverage")
 Task("Package")
     .IsDependentOn("Version")
     .Does(() => {
-        var settings = new DotNetCorePackSettings
+        var settings = new DotNetPackSettings
         {
             OutputDirectory = artifactsDir,
             NoBuild = true,
@@ -172,7 +169,7 @@ Task("Package")
 
                 continue;
             }
-            DotNetCorePack(projectFolder + project.path + project.name, settings);
+            DotNetPack(projectFolder + project.path + project.name, settings);
         }
 
         if (AppVeyor.IsRunningOnAppVeyor)
@@ -185,7 +182,7 @@ Task("Package")
 Task("Publish")
     .IsDependentOn("Package")
     .Does(() => {
-        var pushSettings = new DotNetCoreNuGetPushSettings 
+        var pushSettings = new DotNetNuGetPushSettings 
         {
             Source = nugetSource,
             ApiKey = nugetApiKey
@@ -197,7 +194,7 @@ Task("Publish")
             if(!IsNuGetPublished(pkg)) 
             {
                 Information($"Publishing \"{pkg}\".");
-                DotNetCoreNuGetPush(pkg.FullPath, pushSettings);
+                DotNetNuGetPush(pkg.FullPath, pushSettings);
             }
             else {
                 Information($"Bypassing publishing \"{pkg}\" as it is already published.");
