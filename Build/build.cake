@@ -6,7 +6,9 @@
 #addin "nuget:?package=Cake.Coveralls&version=1.1.0"
 #addin "nuget:?package=Cake.Coverlet&version=3.0.4"
 #addin "nuget:?package=Cake.Git&version=3.0.0"
-#addin "nuget:?package=Cake.FileHelpers&version=6.1.3"
+#addin "nuget:?package=NuGet.Packaging&version=6.6.1"
+
+using NuGet.Packaging;
 
 var target = Argument("target", "Default");
 var artifactsDir = "./artifacts/";
@@ -204,17 +206,17 @@ Task("Publish")
 });
 
 private bool IsNuGetPublished(FilePath packagePath) {
-    var package = new ZipPackage(packagePath.FullPath);
+    using var package = new PackageArchiveReader(new FileStream(packagePath.FullPath, FileMode.Open));
 
     var latestPublishedVersions = NuGetList(
-        package.Id,
+        package.NuspecReader.GetId(),
         new NuGetListSettings 
         {
             Prerelease = true
         }
     );
 
-    return latestPublishedVersions.Any(p => package.Version.Equals(new SemanticVersion(p.Version)));
+    return latestPublishedVersions.Any(p => package.NuspecReader.GetVersion().Equals(p.Version));
 }
 
 private void UpdateVersion(string projectPath, string version)
