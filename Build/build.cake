@@ -15,7 +15,7 @@ var artifactsDir = "./artifacts/";
 var solutionPath = "../BSN.Commons.sln";
 var projectName = "BSN.Commons";
 var projectFolder = "../Source/";
-var solutionVersion = "1.11.0";
+var solutionVersion = "1.12.0";
 var projects = new List<(string path, string name, string version)>
 {
     ("BSN.Commons/", "BSN.Commons.csproj", solutionVersion),
