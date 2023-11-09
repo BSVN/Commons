@@ -18,7 +18,7 @@ namespace BSN.Commons
         public bool IsDeleted => DeletedAt != DateTime.MinValue;
 
         /// <inheritdoc/>
-        public virtual void Delete()
+        public virtual void SoftDelete()
         {
             if (DeletedAt != DateTime.MinValue)
             {

@@ -12,6 +12,8 @@ namespace BSN.Commons
     {
         /// <summary>
         /// Shows the time of deletion.
+        ///
+        /// Time based on UTC.
         /// </summary>
         /// <remarks>
         /// If this object is not deleted, this property returns <see cref="DateTime.MinValue"/>.
@@ -32,6 +34,6 @@ namespace BSN.Commons
         /// <summary>
         /// Delete this object.
         /// </summary>
-        void Delete();
+        void SoftDelete();
     }
 }
