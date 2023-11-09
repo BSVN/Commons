@@ -22,6 +22,14 @@ namespace BSN.Commons
         }
 
         /// <summary>
+        /// Shows if this object is deleted or not.
+        /// </summary>
+        bool IsDeleted
+        {
+            get;
+        }
+
+        /// <summary>
         /// Delete this object.
         /// </summary>
         void Delete();
