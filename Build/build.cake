@@ -2,6 +2,7 @@
 #tool "nuget:?package=gitlink&version=3.1.0"
 #tool "nuget:?package=GitReleaseNotes&version=0.7.1"
 #tool dotnet:?package=dotnet-reportgenerator-globaltool&version=5.1.19
+#tool nuget:?package=NuGet.CommandLine&version=6.7.0
 
 #addin "nuget:?package=Cake.Coveralls&version=1.1.0"
 #addin "nuget:?package=Cake.Coverlet&version=3.0.4"
