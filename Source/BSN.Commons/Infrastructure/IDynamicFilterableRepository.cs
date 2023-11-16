@@ -10,7 +10,7 @@ namespace BSN.Commons.Infrastructure
 	public interface IDynamicFilterableRepository<T> : IRepository<T> where T : class
 	{
         /// <summary>
-        /// Get list of objects based on filters 
+        /// Get list of objects based on <paramref name="filters"/>
         /// </summary>
         /// <remarks>
         /// This method retrive all objects based on filters and apply pagination.
@@ -59,14 +59,15 @@ namespace BSN.Commons.Infrastructure
         PagedEntityCollection<T> GetMany(string filters, string sorts, uint pageNumber, uint pageSize);
 
         /// <summary>
-        /// 
+        /// Get list of objects based on <paramref name="filters"/> in scope of <paramref name="where"/> expression
+        /// <see cref="GetMany(string, string, uint, uint)"/>
         /// </summary>
-        /// <param name="where"></param>
-        /// <param name="filters"></param>
-        /// <param name="sorts"></param>
-        /// <param name="pageNumber"></param>
-        /// <param name="pageSize"></param>
-        /// <returns></returns>
+        /// <param name="where">A function to test each element for a condition.</param>
+        /// <param name="filters"><inheritdoc cref="GetMany(string, string, uint, uint)" path='/param[@name="filters"]'/></param>
+        /// <param name="sorts"><inheritdoc cref="GetMany(string, string, uint, uint)" path='/param[@name="sorts"]'/></param>
+        /// <param name="pageNumber"><inheritdoc cref="GetMany(string, string, uint, uint)" path='/param[@name="pageNumber"]'/></param>
+        /// <param name="pageSize"><inheritdoc cref="GetMany(string, string, uint, uint)" path='/param[@name="pageSize"]'/></param>
+        /// <returns>Paginated list of matched objects based on <paramref name="filters"/> in scope of <paramref name="where"/> expression</returns>
         PagedEntityCollection<T> GetMany(Expression<Func<T, bool>> where, string filters, string sorts, uint pageNumber, uint pageSize);
     }
 }
