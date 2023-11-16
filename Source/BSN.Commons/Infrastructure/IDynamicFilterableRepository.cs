@@ -13,8 +13,8 @@ namespace BSN.Commons.Infrastructure
         /// Get list of objects based on <paramref name="filters"/>
         /// </summary>
         /// <remarks>
-        /// This method retrive all objects based on filters and apply pagination.
-        /// So to retrive all objects that matched with filters, you need iterate all pages.
+        /// This method retrieve all objects based on filters and apply pagination.
+        /// So to retrieve all objects that matched with filters, you need iterate all pages.
         /// </remarks>
         /// <param name="filters">
         ///  is a comma-delimited list of <c>{Name}{Operator}{Value}</c> where
@@ -39,7 +39,7 @@ namespace BSN.Commons.Infrastructure
         ///  </item>
         ///  <item>
         ///      <description>
-        ///          <c>{Value}</c>` is the value to use for filtering
+        ///          <c>{Value}</c> is the value to use for filtering
         ///          <list type="bullet">
         ///              <item>
         ///                  <description>
