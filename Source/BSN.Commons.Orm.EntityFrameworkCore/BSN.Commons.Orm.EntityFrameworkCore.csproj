@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
-    <AssemblyVersion>1.12.0</AssemblyVersion>
-    <FileVersion>1.12.0</FileVersion>
+    <AssemblyVersion>1.13.0</AssemblyVersion>
+    <FileVersion>1.13.0</FileVersion>
     <Authors>BSN Developers</Authors>
     <Company>BSN Company</Company>
     <Description>ORM Helpers for using entity framework core in enterprise application</Description>
@@ -13,7 +13,7 @@
     <RepositoryUrl>https://github.com/BSVN/Commons.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageReleaseNotes>Please see CHANGELOG.md</PackageReleaseNotes>
-    <Version>1.12.0</Version>
+    <Version>1.13.0</Version>
     <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <Title>BSN.Commons.Orm.EntityFrameworkCore</Title>
@@ -22,6 +22,10 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PackageIcon>BSN.jpg</PackageIcon>
     <PackageTags>BSN;Commons;Onion;Enterprise;Infrastructure;DDD</PackageTags>
+    <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <!-- Optional: Embed source files that are not tracked by the source control manager in the PDB -->
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
@@ -63,7 +67,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
