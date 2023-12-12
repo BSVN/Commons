@@ -36,6 +36,7 @@ namespace BSN.Commons.Infrastructure.Kafka
             {
                 BootstrapServers = _defaultConsumerOptions.BootstrapServers,
                 AutoOffsetReset = AutoOffsetReset.Earliest,
+                GroupId = groupId
             };
             
             // Here we did this because the ReceiveMessageMaxBytes in ProducerConfig type

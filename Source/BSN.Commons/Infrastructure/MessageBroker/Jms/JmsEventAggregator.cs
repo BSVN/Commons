@@ -40,7 +40,7 @@ namespace BSN.Commons.Infrastructure.MessageBroker.Jms
         /// <inheritdoc />
         public void Publish<TEventModel>(IEvent<TEventModel> @event) where TEventModel : IEventDataModel
         {
-            string eventName = typeof(TEventModel).Name;
+            string eventName = @event.GetType().FullName;
             
             if (!_producers.ContainsKey(eventName))
             {
@@ -49,7 +49,7 @@ namespace BSN.Commons.Infrastructure.MessageBroker.Jms
             
             var producer = _producers[eventName];
             
-            string serializedEvent = JsonConvert.SerializeObject(@event.DataModel);
+            string serializedEvent = JsonConvert.SerializeObject(@event);
 
             ITextMessage message = _session.CreateTextMessage(serializedEvent);
             
@@ -71,7 +71,7 @@ namespace BSN.Commons.Infrastructure.MessageBroker.Jms
         /// <inheritdoc />
         public void Subscribe<TEvent, TEventDataModel>(IEventReceiver eventReceiver) where TEvent : IEvent<TEventDataModel> where TEventDataModel : IEventDataModel
         {
-            string eventName = typeof(TEvent).Name;
+            string eventName = typeof(TEvent).FullName;
             
             _subscriptionManager.AddSubscription<TEvent>(eventReceiver);
             
@@ -98,7 +98,7 @@ namespace BSN.Commons.Infrastructure.MessageBroker.Jms
         /// <inheritdoc />
         public void UnSubscribe<TEvent, TEventDataModel>(IEventReceiver eventReceiver) where TEvent : IEvent<TEventDataModel> where TEventDataModel : IEventDataModel
         {
-            string eventName = typeof(TEvent).Name;
+            string eventName = typeof(TEvent).FullName;
             
             _subscriptionManager.RemoveSubscription(eventName);
             
