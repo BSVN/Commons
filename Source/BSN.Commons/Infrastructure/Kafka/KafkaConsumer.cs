@@ -7,8 +7,8 @@ namespace BSN.Commons.Infrastructure.Kafka
     /// <inheritdoc />
     public class KafkaConsumer<T> : IKafkaConsumer<T>
     {
-        /// <param name="consumer">the consumer engine provided by creator for example factory class</param>
-        public KafkaConsumer(IConsumer<Null, T> consumer)
+        /// <param name="consumer">the consumer engine provided by factory class</param>
+        internal KafkaConsumer(IConsumer<Null, T> consumer)
         {
             _consumer = consumer;
         }
@@ -22,6 +22,11 @@ namespace BSN.Commons.Infrastructure.Kafka
 
                 return result.Message.Value;
             });
+        }
+
+        internal void Dispose()
+        {
+            _consumer.Dispose();
         }
         
         private readonly IConsumer<Null, T> _consumer;
