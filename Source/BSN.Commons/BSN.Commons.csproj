@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyVersion>1.13.0</AssemblyVersion>
-    <FileVersion>1.13.0</FileVersion>
+    <AssemblyVersion>1.13.1</AssemblyVersion>
+    <FileVersion>1.13.1</FileVersion>
     <Company>BSN Company</Company>
     <Authors>BSN Developers</Authors>
     <Copyright>BSN Co 2019-2023</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.13.0</Version>
+    <Version>1.13.1</Version>
     <PackageProjectUrl>https://github.com/BSVN/Commons</PackageProjectUrl>
     <PackageLicenseUrl></PackageLicenseUrl>
     <Description>Commons library for enterprise application</Description>
@@ -62,12 +62,9 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Polly" Version="8.0.0" />
     <PackageReference Include="RabbitMQ.Client" Version="6.6.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Polly" Version="8.0.0" />
-    <PackageReference Include="RabbitMQ.Client" Version="6.6.0" />
     <PackageReference Include="System.Text.Json" Version="6.0.6" />
   </ItemGroup>
 
