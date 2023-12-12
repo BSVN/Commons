@@ -15,14 +15,7 @@ namespace BSN.Commons.Infrastructure.Kafka
             _consumers = new Dictionary<string, KafkaConsumer<T>>();
         }
 
-        /// <summary>
-        /// Creates a new Kafka consumer with the specified topic and group id.
-        /// this returns a thread safe consumer and can be used in multi-threaded environments.
-        /// for multiple calls with the same topic and group id, the same consumer will be returned.
-        /// </summary>
-        /// <param name="topic"></param>
-        /// <param name="groupId"></param>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public IKafkaConsumer<T> Create(string topic, string groupId)
         {
             string consumerKey = topic + ":" + groupId;
@@ -36,6 +29,7 @@ namespace BSN.Commons.Infrastructure.Kafka
             {
                 BootstrapServers = _defaultConsumerOptions.BootstrapServers,
                 AutoOffsetReset = AutoOffsetReset.Earliest,
+                GroupId = groupId
             };
             
             // Here we did this because the ReceiveMessageMaxBytes in ProducerConfig type

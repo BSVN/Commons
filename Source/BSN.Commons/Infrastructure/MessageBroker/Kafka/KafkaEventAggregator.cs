@@ -118,7 +118,7 @@ namespace BSN.Commons.Infrastructure.MessageBroker.Kafka
         /// <inheritdoc />
         public void UnSubscribe<TEvent, TEventDataModel>(IEventReceiver eventReceiver) where TEvent : IEvent<TEventDataModel> where TEventDataModel : IEventDataModel
         {
-            string eventName = typeof(TEvent).Name;
+            string eventName = typeof(TEvent).FullName;
             
             if (!_consumersCancellationTokenSources.ContainsKey(eventName))
             {
@@ -151,7 +151,7 @@ namespace BSN.Commons.Infrastructure.MessageBroker.Kafka
         private void CreateConsumerForEvent<TEvent, TEventDataModel>(IEventReceiver eventReceiver)
             where TEvent : IEvent<TEventDataModel> where TEventDataModel : IEventDataModel
         {
-            string eventName = typeof(TEvent).Name;
+            string eventName = typeof(TEvent).FullName;
 
             if (_consumersCancellationTokenSources.ContainsKey(eventName))
             {
