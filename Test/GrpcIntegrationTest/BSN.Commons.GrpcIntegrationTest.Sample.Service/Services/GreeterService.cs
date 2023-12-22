@@ -7,7 +7,7 @@ namespace BSN.Commons.GrpcIntegrationTest.Sample.Service.Services
 {
     public class GreeterService : IGreeterService
     {
-        public IResponse<InvalidItem> SayHello(HelloRequest request, CallContext context = default)
+        public Response SayHello(HelloRequest request, CallContext context = default)
         {
             if (string.IsNullOrEmpty(request.Name))
                 return new ErrorResponse()

@@ -26,7 +26,7 @@ namespace BSN.Commons.GrpcIntegrationTest.Sample.AppService.Contract
     public interface IGreeterService
     {
         [OperationContract]
-        IResponse<InvalidItem> SayHello(HelloRequest request,
+        Response SayHello(HelloRequest request,
             CallContext context = default);
     }
 }
