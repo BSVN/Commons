@@ -25,14 +25,18 @@ namespace BSN.Commons.GrpcIntegrationTest.Sample.Service
 
             app.UseEndpoints(endpoints =>
             {
-                //GrpcPolymorphismActivator.Enable(typeof(Startup).Assembly);
+                GrpcPolymorphismActivator.Enable(typeof(Startup).Assembly, new (Type, Type)[]
+                {
+                    (typeof(Response), typeof(ErrorResponse)),
+                    (typeof(Response), typeof(Response<SayHelloViewModel>))
+                });
                 //GrpcPolymorphismActivator.Enable(typeof(Response).Assembly);
-                ProtoBuf.Meta.RuntimeTypeModel.Default.Add(typeof(Response), false)
-                    .Add(1, nameof(Response.StatusCode))
-                    .Add(2, nameof(Response.Message))
-                    .Add(3, nameof(Response.InvalidItems))
-                    .AddSubType(100, typeof(ErrorResponse))
-                    .AddSubType(101, typeof(Response<SayHelloViewModel>));
+                //ProtoBuf.Meta.RuntimeTypeModel.Default.Add(typeof(Response), false)
+                //    .Add(1, nameof(Response.StatusCode))
+                //    .Add(2, nameof(Response.Message))
+                //    .Add(3, nameof(Response.InvalidItems))
+                //    .AddSubType(100, typeof(ErrorResponse))
+                //    .AddSubType(101, typeof(Response<SayHelloViewModel>));
 
                 endpoints.MapGrpcService<GreeterService>();
                 endpoints.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. " +

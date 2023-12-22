@@ -17,8 +17,8 @@ namespace BSN.Commons.Responses
     /// namely the 'StatusCode' property of the 'ResponseBase' class which should keep it's default numeral value when being converted.
     /// </remark>
     [DataContract]
-    //[ProtoInclude(100, typeof(ErrorResponse))]
-    //[ProtoInclude(101, typeof(Response<>))]
+    // TODO: [ProtoInclude(100, typeof(ErrorResponse))]
+    // TODO: [ProtoInclude(101, typeof(Response<>))]
     public class Response: IResponse<InvalidItem>
     {
         /// <summary>
@@ -52,7 +52,7 @@ namespace BSN.Commons.Responses
     /// namely the 'StatusCode' property of the 'ResponseBase' class which should keep it's default numeral value when being converted.
     /// </remark>
     [DataContract]
-    [ProtoImplement(typeof(Response))]
+    // TODO: [ProtoImplement(typeof(Response))]
     public class Response<T> : Response where T : class
     {
         /// <summary>

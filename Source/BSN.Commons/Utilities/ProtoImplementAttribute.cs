@@ -39,8 +39,9 @@ namespace BSN.Commons.Utilities
         /// Enable polymorphism for protobuf-net code first approach on a specific assembly based on ProtoImplementAttribute.
         /// </summary>
         /// <param name="assembly"></param>
+        /// <param name="extraTypes"></param>
         /// <exception cref="Exception"></exception>
-        public static void Enable(Assembly assembly)
+        public static void Enable(Assembly assembly, (Type, Type)[] extraListOfDeriveds)
         {
             // TODO: Use C# source generator https://stackoverflow.com/q/64926889/1539100
 
@@ -64,6 +65,14 @@ namespace BSN.Commons.Utilities
                     listOfDerivedTypes.Add(protoImplementAttribute.BaseType, new List<Type>() { type });
             }
 
+            foreach ((Type @base, Type derived) in extraListOfDeriveds)
+            {
+                if (listOfDerivedTypes.TryGetValue(@base, out List<Type> derivedTypes))
+                    derivedTypes.Add(derived);
+                else
+                    listOfDerivedTypes.Add(@base, new List<Type>() { derived });
+            }
+
             foreach (var derivedType in listOfDerivedTypes)
             {
                 MetaType @base = ProtoBuf.Meta.RuntimeTypeModel.Default.Add(derivedType.Key, false);
@@ -73,12 +82,12 @@ namespace BSN.Commons.Utilities
                     DataMemberAttribute dataMemberAttribute = property.GetCustomAttribute<DataMemberAttribute>();
                     if (property.GetCustomAttribute<DataMemberAttribute>() == null)
                         continue;
-                    @base.Add(dataMemberAttribute.Order, dataMemberAttribute.Name ?? property.Name);
+                    @base = @base.Add(dataMemberAttribute.Order, dataMemberAttribute.Name ?? property.Name);
                     maxOrder = Math.Max(maxOrder, dataMemberAttribute.Order);
                 }
 
                 // Reserve some order for well-known derived types
-                maxOrder += 200;
+                maxOrder += 100;
 
                 foreach (var type in derivedType.Value)
                 {
