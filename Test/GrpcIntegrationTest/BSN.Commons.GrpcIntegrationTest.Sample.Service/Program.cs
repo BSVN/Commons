@@ -10,6 +10,7 @@ namespace BSN.Commons.GrpcIntegrationTest.Sample.Service
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
             builder.Services.AddCodeFirstGrpc();
 
             var app = builder.Build();

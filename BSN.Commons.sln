@@ -44,10 +44,18 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BSN.Commons.Users", "Source\BSN.Commons.Users\BSN.Commons.Users.csproj", "{213ABCEF-7E9A-4CE5-A3EF-289C9781344D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GrpcIntegrationTest", "GrpcIntegrationTest", "{54C74546-38B4-4618-AA40-334463F49C54}"
+	ProjectSection(SolutionItems) = preProject
+		Test\GrpcIntegrationTest\README.md = Test\GrpcIntegrationTest\README.md
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BSN.Commons.GrpcIntegrationTest.Sample.Service", "Test\GrpcIntegrationTest\BSN.Commons.GrpcIntegrationTest.Sample.Service\BSN.Commons.GrpcIntegrationTest.Sample.Service.csproj", "{08C7C14B-D2E9-4FA0-BD0C-7DDA9582DC6D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BSN.Commons.GrpcIntegrationTest.Sample.AppService.Contract", "Test\GrpcIntegrationTest\BSN.Commons.GrpcIntegrationTest.Sample.AppService.Contract\BSN.Commons.GrpcIntegrationTest.Sample.AppService.Contract.csproj", "{283F2163-BB83-4770-AA1A-F52FEFE8E1CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BSN.Commons.GrpcIntegrationTest.Sample.Console", "Test\GrpcIntegrationTest\BSN.Commons.GrpcIntegrationTest.Sample.Console\BSN.Commons.GrpcIntegrationTest.Sample.Console.csproj", "{7799FBC7-13EB-4382-83D7-FE9396039C77}"
+	ProjectSection(ProjectDependencies) = postProject
+		{08C7C14B-D2E9-4FA0-BD0C-7DDA9582DC6D} = {08C7C14B-D2E9-4FA0-BD0C-7DDA9582DC6D}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -95,6 +103,10 @@ Global
 		{283F2163-BB83-4770-AA1A-F52FEFE8E1CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{283F2163-BB83-4770-AA1A-F52FEFE8E1CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{283F2163-BB83-4770-AA1A-F52FEFE8E1CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7799FBC7-13EB-4382-83D7-FE9396039C77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7799FBC7-13EB-4382-83D7-FE9396039C77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7799FBC7-13EB-4382-83D7-FE9396039C77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7799FBC7-13EB-4382-83D7-FE9396039C77}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -111,6 +123,7 @@ Global
 		{54C74546-38B4-4618-AA40-334463F49C54} = {5C6BA7B5-832A-495A-AF5E-C2A74F6A1EF9}
 		{08C7C14B-D2E9-4FA0-BD0C-7DDA9582DC6D} = {54C74546-38B4-4618-AA40-334463F49C54}
 		{283F2163-BB83-4770-AA1A-F52FEFE8E1CF} = {54C74546-38B4-4618-AA40-334463F49C54}
+		{7799FBC7-13EB-4382-83D7-FE9396039C77} = {54C74546-38B4-4618-AA40-334463F49C54}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BCAF76D3-AA3C-4D0F-8D10-34065F8FED09}
