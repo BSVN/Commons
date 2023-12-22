@@ -17,6 +17,9 @@ namespace BSN.Commons.Responses
     [DataContract]
     public class Response: IResponse<InvalidItem>
     {
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public Response() { }
 
         /// <summary>
@@ -53,11 +56,9 @@ namespace BSN.Commons.Responses
     /// namely the 'StatusCode' property of the 'ResponseBase' class which should keep it's default numeral value when being converted.
     /// </remark>
     [DataContract]
-    public class Response<T> where T : class
+    public class Response<T> : IResponse<InvalidItem> where T : class
     {
-        /// <summary>
-        /// Corresponding HttpStatusCode.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember(Order = 1)]
         [JsonConverter(typeof(JsonForceDefaultConverter<ResponseStatusCode>))]
         public ResponseStatusCode StatusCode { get; set; }
@@ -68,21 +69,15 @@ namespace BSN.Commons.Responses
         [DataMember(Order = 2)]
         public T Data { get; set; }
 
-        /// <summary>
-        /// Human-readable message for the End-User.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember(Order = 3)]
         public string Message { get; set; }
 
-        /// <summary>
-        /// Invalid items of the request object.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember(Order = 4)]
         public IList<InvalidItem> InvalidItems { get; set; }
 
-        /// <summary>
-        /// Distinction between successful and unsuccessful result.
-        /// </summary>
+        /// <inheritdoc/>
         public bool IsSuccess => (int)StatusCode >= 200 && (int)StatusCode <= 299;
     }
 }
