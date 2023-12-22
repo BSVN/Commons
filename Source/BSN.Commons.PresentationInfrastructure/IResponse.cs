@@ -4,13 +4,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BSN.Commons.PresentationInfrastructure
 {
-    public interface IResponse<ValidationResultType>
+    /// <summary>
+    /// Represents a single response of a command/query service.
+    /// </summary>
+    public interface IResponse
     {
-        /// <summary>
-        /// Invalid items of the request object.
-        /// </summary>
-        IList<ValidationResultType> InvalidItems { get; set; }
-
         /// <summary>
         /// Distinction between successful and unsuccessful result.
         /// </summary>
@@ -25,5 +23,17 @@ namespace BSN.Commons.PresentationInfrastructure
         /// Corresponding HttpStatusCode.
         /// </summary>
         ResponseStatusCode StatusCode { get; set; }
+    }
+
+    /// <summary>
+    /// Represents a single response of a command/query service with additional informations about invalid items.
+    /// </summary>
+    /// <typeparam name="ValidationResultType"></typeparam>
+    public interface IResponse<ValidationResultType> : IResponse
+    {
+        /// <summary>
+        /// Invalid items of the request object.
+        /// </summary>
+        IList<ValidationResultType> InvalidItems { get; set; }
     }
 }

@@ -17,7 +17,7 @@ namespace BSN.Commons.GrpcIntegrationTest.Sample.Console
             using var channel = GrpcChannel.ForAddress("http://localhost:5279");
             var client = channel.CreateGrpcService<IGreeterService>();
 
-            var reply = await client.SayHelloAsync(
+            var reply = client.SayHello(
                 new HelloRequest { Name = "GreeterClient" });
 
             System.Console.WriteLine($"Greeting: {reply.Message}");

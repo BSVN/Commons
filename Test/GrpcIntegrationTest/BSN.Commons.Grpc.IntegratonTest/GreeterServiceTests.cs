@@ -25,7 +25,7 @@ namespace BSN.Commons.Grpc.IntegratonTest
             var client = Channel.CreateGrpcService<IGreeterService>();
 
             // Act
-            var reply = await client.SayHelloAsync(new HelloRequest { Name = "GreeterClient" });
+            var reply = client.SayHello(new HelloRequest { Name = "GreeterClient" });
 
             // Assert
             Assert.That(reply, Is.Not.Null);

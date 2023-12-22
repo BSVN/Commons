@@ -80,4 +80,26 @@ namespace BSN.Commons.Responses
         /// <inheritdoc/>
         public bool IsSuccess => (int)StatusCode >= 200 && (int)StatusCode <= 299;
     }
+
+    /// <summary>
+    /// Generic error response type for command/query services to return the error results.
+    /// </summary>
+    public class ErrorResponse : IResponse<InvalidItem>
+    {
+        /// <inheritdoc/>
+        [DataMember(Order = 1)]
+        [JsonConverter(typeof(JsonForceDefaultConverter<ResponseStatusCode>))]
+        public ResponseStatusCode StatusCode { get; set; }
+
+        /// <inheritdoc/>
+        [DataMember(Order = 2)]
+        public string Message { get; set; }
+
+        /// <inheritdoc/>
+        [DataMember(Order = 3)]
+        public IList<InvalidItem> InvalidItems { get; set; }
+
+        /// <inheritdoc/>
+        public bool IsSuccess => (int)StatusCode >= 200 && (int)StatusCode <= 299;
+    }
 }

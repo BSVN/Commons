@@ -1,4 +1,6 @@
-﻿using ProtoBuf.Grpc;
+﻿using BSN.Commons.PresentationInfrastructure;
+using BSN.Commons.Responses;
+using ProtoBuf.Grpc;
 using System;
 using System.Runtime.Serialization;
 using System.ServiceModel;
@@ -7,7 +9,7 @@ using System.Threading.Tasks;
 namespace BSN.Commons.GrpcIntegrationTest.Sample.AppService.Contract
 {
     [DataContract]
-    public class HelloReply
+    public class SayHelloViewModel
     {
         [DataMember(Order = 1)]
         public string Message { get; set; }
@@ -24,7 +26,7 @@ namespace BSN.Commons.GrpcIntegrationTest.Sample.AppService.Contract
     public interface IGreeterService
     {
         [OperationContract]
-        Task<HelloReply> SayHelloAsync(HelloRequest request,
+        IResponse<InvalidItem> SayHello(HelloRequest request,
             CallContext context = default);
     }
 }

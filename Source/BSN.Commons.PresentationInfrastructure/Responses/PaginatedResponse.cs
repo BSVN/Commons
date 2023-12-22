@@ -14,8 +14,11 @@ namespace BSN.Commons.Responses
     /// </remarks>
     /// <typeparam name="T">Data type.</typeparam>
     [DataContract]
-    public class PaginatedResponse<T>: IResponse<InvalidItem> where T : class 
+    public class PaginatedResponse<T> : IResponse<InvalidItem> where T : class
     {
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public PaginatedResponse() { }
 
         /// <summary>

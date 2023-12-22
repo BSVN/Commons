@@ -1,12 +1,15 @@
 ﻿namespace BSN.Commons.PresentationInfrastructure
 {
+    /// <summary>
+    /// Response status codes based on the HTTP status codes.
+    /// </summary>
     public enum ResponseStatusCode
     {
-        //
-        // Summary:
-        //     Equivalent to HTTP status 200. System.Net.HttpStatusCode.OK indicates that the
-        //     request succeeded and that the requested information is in the response. This
-        //     is the most common status code to receive.
+        /// <summary>
+        /// Equivalent to HTTP status 200. System.Net.HttpStatusCode.OK indicates that the
+        /// request succeeded and that the requested information is in the response. This
+        /// is the most common status code to receive.
+        /// </summary>
         OK = 200,
         //
         // Summary:
