@@ -8,6 +8,9 @@ namespace BSN.Commons.Responses
     [DataContract]
     public class PaginationMetadata
     {
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public PaginationMetadata() { }
 
         /// <summary>

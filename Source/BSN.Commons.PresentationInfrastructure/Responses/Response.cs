@@ -1,5 +1,7 @@
 ﻿using BSN.Commons.Converters;
 using BSN.Commons.PresentationInfrastructure;
+using BSN.Commons.Utilities;
+using ProtoBuf;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
@@ -15,32 +17,29 @@ namespace BSN.Commons.Responses
     /// namely the 'StatusCode' property of the 'ResponseBase' class which should keep it's default numeral value when being converted.
     /// </remark>
     [DataContract]
+    // TODO: [ProtoInclude(100, typeof(ErrorResponse))]
+    // TODO: [ProtoInclude(101, typeof(Response<>))]
     public class Response: IResponse<InvalidItem>
     {
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public Response() { }
 
-        /// <summary>
-        /// Corresponding HttpStatusCode.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember(Order = 1)]
         [JsonConverter(typeof(JsonForceDefaultConverter<ResponseStatusCode>))]
         public ResponseStatusCode StatusCode { get; set; }
 
-        /// <summary>
-        /// Human-readable message for the End-User.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember(Order = 2)]
         public string Message { get; set; }
 
-        /// <summary>
-        /// Invalid items of the request object.
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember(Order = 3)]
         public IList<InvalidItem> InvalidItems { get; set; }
 
-        /// <summary>
-        /// Distinction between successful and unsuccessful result.
-        /// </summary>
+        /// <inheritdoc/>
         public bool IsSuccess => (int)StatusCode >= 200 && (int)StatusCode <= 299;
     }
 
@@ -53,36 +52,21 @@ namespace BSN.Commons.Responses
     /// namely the 'StatusCode' property of the 'ResponseBase' class which should keep it's default numeral value when being converted.
     /// </remark>
     [DataContract]
-    public class Response<T> where T : class
+    // TODO: [ProtoImplement(typeof(Response))]
+    public class Response<T> : Response where T : class
     {
-        /// <summary>
-        /// Corresponding HttpStatusCode.
-        /// </summary>
-        [DataMember(Order = 1)]
-        [JsonConverter(typeof(JsonForceDefaultConverter<ResponseStatusCode>))]
-        public ResponseStatusCode StatusCode { get; set; }
-
         /// <summary>
         /// Data payload.
         /// </summary>
         [DataMember(Order = 2)]
         public T Data { get; set; }
+    }
 
-        /// <summary>
-        /// Human-readable message for the End-User.
-        /// </summary>
-        [DataMember(Order = 3)]
-        public string Message { get; set; }
-
-        /// <summary>
-        /// Invalid items of the request object.
-        /// </summary>
-        [DataMember(Order = 4)]
-        public IList<InvalidItem> InvalidItems { get; set; }
-
-        /// <summary>
-        /// Distinction between successful and unsuccessful result.
-        /// </summary>
-        public bool IsSuccess => (int)StatusCode >= 200 && (int)StatusCode <= 299;
+    /// <summary>
+    /// Generic error response type for command/query services to return the error results.
+    /// </summary>
+    [ProtoImplement(typeof(Response))]
+    public class ErrorResponse : Response
+    {
     }
 }
