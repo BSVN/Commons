@@ -91,7 +91,7 @@ namespace BSN.Commons.Utilities
 
                 foreach (var type in derivedType.Value)
                 {
-                    @base.AddSubType(maxOrder + 1, type);
+                    @base.AddSubType(++maxOrder, type);
                 }
             }
         }
