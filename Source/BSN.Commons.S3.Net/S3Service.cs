@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 
 namespace BSN.Commons.S3.Net
 {
+    /// <inheritdoc />
     public class S3Service : IS3Service
     {
         public S3Service(IOptions<S3ServiceOptions> s3ServiceOptions)
@@ -26,6 +27,7 @@ namespace BSN.Commons.S3.Net
                                            GetS3Config(_s3ServiceOptions.EndPoint));
         }
 
+        /// <inheritdoc />
         public Task<bool> CheckBucketExistanceAsync(string bucketName)
         {
             bucketName = bucketName.ToLower();
@@ -33,6 +35,7 @@ namespace BSN.Commons.S3.Net
             return AmazonS3Util.DoesS3BucketExistV2Async(_s3Client, bucketName);
         }
 
+        /// <inheritdoc />
         public bool CheckObjectExistance(string bucketName, string key)
         {
             bucketName = bucketName.ToLower();
@@ -50,6 +53,7 @@ namespace BSN.Commons.S3.Net
             return true;
         }
 
+        /// <inheritdoc />
         public S3Response CreateBucket(string bucketName)
         {
             try
@@ -96,6 +100,7 @@ namespace BSN.Commons.S3.Net
             }
         }
 
+        /// <inheritdoc />
         public S3Response DeleteObject(string bucketName, string key)
         {
             bucketName = bucketName.ToLower();
@@ -124,6 +129,7 @@ namespace BSN.Commons.S3.Net
             }
         }
 
+        /// <inheritdoc />
         public CredentialModel RequestTempReadToken(string bucket)
         {
             bucket = bucket.ToLower();
@@ -170,6 +176,7 @@ namespace BSN.Commons.S3.Net
                                        bucket);
         }
 
+        /// <inheritdoc />
         public CredentialModel RequestTempReadToken(string bucket, string key = null)
         {
             var ResourceName = bucket = bucket.ToLower();
@@ -223,6 +230,7 @@ namespace BSN.Commons.S3.Net
                                        key);
         }
 
+        /// <inheritdoc />
         [Obsolete]
         public BulkCredentialModel RequestTempReadToken(string bucket, IEnumerable<string> kies)
         {
@@ -275,6 +283,7 @@ namespace BSN.Commons.S3.Net
                                            kies.ToList());
         }
 
+        /// <inheritdoc />
         public CredentialModel RequestTempWriteToken(string bucket, string key = null)
         {
             var ResourceName = bucket = bucket.ToLower();
@@ -322,6 +331,7 @@ namespace BSN.Commons.S3.Net
                                        key);
         }
 
+        /// <inheritdoc />
         [Obsolete]
         public BulkCredentialModel RequestTempWriteToken(string bucket, IEnumerable<string> kies)
         {
@@ -376,21 +386,25 @@ namespace BSN.Commons.S3.Net
                                            kies.ToList());
         }
 
+        /// <inheritdoc />
         public Task<S3Response> CreateBucketAsync(string bucketName)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc />
         public S3Response DeleteBucket(string bucketName)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc />
         public Task<S3Response> DeleteBucketAsync(string bucketName)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc />
         public async Task<S3Response> PutObjectAsync(string bucket, string key, byte[] @object, string contentType)
         {
             PutObjectRequest request = new PutObjectRequest
@@ -425,6 +439,7 @@ namespace BSN.Commons.S3.Net
             };
         }
 
+        /// <inheritdoc />
         public async Task<S3Response> PutObjectAsync(string bucket, string key, Stream @object, string contentType)
         {
             PutObjectRequest request = new PutObjectRequest
@@ -445,16 +460,19 @@ namespace BSN.Commons.S3.Net
             };
         }
 
+        /// <inheritdoc />
         public Task<S3Response> DeleteObjectAsync(string bucket, string key)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc />
         public Task<MemoryStream> GetObjectAsync(string bucket, string key)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc />
         public string GetPreSignedUrl(string bucket, string key)
         {
             var request = new GetPreSignedUrlRequest()
@@ -468,6 +486,7 @@ namespace BSN.Commons.S3.Net
             return _s3Client.GetPreSignedURL(request);
         }
 
+        /// <inheritdoc />
         public S3Response CreatePath(IEnumerable<string> pathParts)
         {
             throw new NotImplementedException();

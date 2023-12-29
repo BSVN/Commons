@@ -12,8 +12,10 @@ using BSN.Commons.Extensions;
 
 namespace BSN.Commons.S3.Core
 {
+    /// <inheritdoc />
     public class S3Service : IS3Service
     {
+        /// <inheritdoc />
         public S3Service(IOptions<S3ServiceOptions> s3ServiceOptions)
         {
             _s3ServiceOptions = s3ServiceOptions.Value;
@@ -23,6 +25,7 @@ namespace BSN.Commons.S3.Core
                                          BuildS3Config(_s3ServiceOptions.EndPoint));
         }
 
+        /// <inheritdoc />
         public async Task<S3Response> CreateBucketAsync(string bucketName)
         {
             bucketName = NormalizeBucketName(bucketName);
@@ -72,16 +75,19 @@ namespace BSN.Commons.S3.Core
             }
         }
 
+        /// <inheritdoc />
         public Task<S3Response> DeleteBucketAsync(string bucketName)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc />
         public Task<S3Response> DeleteObjectAsync(string bucket, string key)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc />
         public async Task<MemoryStream> GetObjectAsync(string bucket, string key)
         {
             GetObjectRequest request = new GetObjectRequest
@@ -95,6 +101,7 @@ namespace BSN.Commons.S3.Core
             return response.ResponseStream.ToMemoryStream();
         }
 
+        /// <inheritdoc />
         public async Task<S3Response> PutObjectAsync(string bucket, string key, Stream @object, string contentType)
         {
             try
@@ -134,6 +141,7 @@ namespace BSN.Commons.S3.Core
             }
         }
 
+        /// <inheritdoc />
         public async Task<S3Response> PutObjectAsync(string bucket, string key, byte[] @object, string contentType)
         {
             try
@@ -175,6 +183,7 @@ namespace BSN.Commons.S3.Core
             }
         }
 
+        /// <inheritdoc />
         public async Task<bool> CheckBucketExistanceAsync(string bucketName)
         {
             try
@@ -195,51 +204,63 @@ namespace BSN.Commons.S3.Core
             }
         }
 
+        /// <inheritdoc />
         public bool CheckObjectExistance(string bucketName, string key)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc />
         public S3Response CreateBucket(string bucketName)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc />
         public S3Response CreatePath(IEnumerable<string> path)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc />
         public S3Response DeleteBucket(string bucketName)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc />
         public S3Response DeleteObject(string bucketName, string key)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc />
         public CredentialModel RequestTempReadToken(string bucket)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc />
         public CredentialModel RequestTempReadToken(string bucket, string key)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc />
+        [Obsolete]
         public BulkCredentialModel RequestTempReadToken(string bucket, IEnumerable<string> kies)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc />
         public CredentialModel RequestTempWriteToken(string bucket, string key)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc />
+        [Obsolete]
         public BulkCredentialModel RequestTempWriteToken(string bucket, IEnumerable<string> key)
         {
             throw new NotImplementedException();
