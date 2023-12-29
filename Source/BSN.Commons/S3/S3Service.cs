@@ -2,20 +2,21 @@
 using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Util;
-using BSN.Commons.S3.Abstraction;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using BSN.Commons.Extensions;
 
-namespace BSN.Commons.S3.Core
+namespace BSN.Commons.S3
 {
     /// <inheritdoc />
     public class S3Service : IS3Service
     {
-        /// <inheritdoc />
+        /// <summary>
+        /// An interface for all S3 compatible object storages.
+        /// </summary>
+        /// <param name="s3ServiceOptions">S3 service configuration.</param>
         public S3Service(IOptions<S3ServiceOptions> s3ServiceOptions)
         {
             _s3ServiceOptions = s3ServiceOptions.Value;
@@ -98,7 +99,11 @@ namespace BSN.Commons.S3.Core
 
             GetObjectResponse response = await _client.GetObjectAsync(request);
 
-            return response.ResponseStream.ToMemoryStream();
+            MemoryStream stream = new MemoryStream();
+
+            response.ResponseStream.CopyTo(stream);
+                        
+            return stream;
         }
 
         /// <inheritdoc />
@@ -198,7 +203,7 @@ namespace BSN.Commons.S3.Core
             {
                 return false;
             }
-            catch (Exception Ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -235,33 +240,19 @@ namespace BSN.Commons.S3.Core
         }
 
         /// <inheritdoc />
-        public CredentialModel RequestTempReadToken(string bucket)
+        public GenerateTempTokenResponse GenerateTempReadToken(string bucket)
         {
             throw new NotImplementedException();
         }
 
         /// <inheritdoc />
-        public CredentialModel RequestTempReadToken(string bucket, string key)
+        public GenerateTempTokenResponse GenerateTempReadToken(string bucket, string key)
         {
             throw new NotImplementedException();
         }
 
         /// <inheritdoc />
-        [Obsolete]
-        public BulkCredentialModel RequestTempReadToken(string bucket, IEnumerable<string> kies)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <inheritdoc />
-        public CredentialModel RequestTempWriteToken(string bucket, string key)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <inheritdoc />
-        [Obsolete]
-        public BulkCredentialModel RequestTempWriteToken(string bucket, IEnumerable<string> key)
+        public GenerateTempTokenResponse RequestTempWriteToken(string bucket, string key)
         {
             throw new NotImplementedException();
         }
@@ -284,6 +275,18 @@ namespace BSN.Commons.S3.Core
                 bucketName = bucketName + "/";
 
             return bucketName;
+        }
+
+        // Todo [R.Noei]: We should gather naming AmazonS3 naming policies here and using in all above methods.
+        private bool ValidateBucketName(string bucketName)
+        {
+            throw new NotImplementedException();
+        }
+
+        // Todo [R.Noei]: We should gather naming AmazonS3 naming policies here and using in all above methods.
+        private bool ValidateKeyName(string keyName)
+        {
+            throw new NotImplementedException();
         }
 
 

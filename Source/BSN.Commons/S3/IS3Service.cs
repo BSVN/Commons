@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 
-namespace BSN.Commons.S3.Abstraction
+namespace BSN.Commons.S3
 {
     /// <summary>
     /// S3 Service interface for communicating with AmazonS3 compatible object-storages.
@@ -94,17 +92,10 @@ namespace BSN.Commons.S3.Abstraction
         /// <summary>
         /// Delete an exsisting bucket from s3 server.
         /// </summary>
-        /// <param name="bucketName">Bucket name.</param>
+        /// <param name="bucket">Bucket name.</param>
         /// <param name="key">Object key.</param>
         /// <returns>Http status code should have a 200-299 value for successful call.</returns>
         Task<S3Response> DeleteObjectAsync(string bucket, string key);
-
-        /// <summary>
-        /// Create a path using a collection of bucket names.
-        /// </summary>
-        /// <param name="pathParts">Path parts.</param>
-        /// <returns>Http status code should have a 200-299 value for successful call.</returns>
-        S3Response CreatePath(IEnumerable<string> pathParts);
 
         /// <summary>
         /// Get an exsiting object.
@@ -119,7 +110,7 @@ namespace BSN.Commons.S3.Abstraction
         /// </summary>
         /// <param name="bucket">Bucket name.</param>
         /// <returns>S3 Service credential model.</returns>
-        CredentialModel RequestTempReadToken(string bucket);
+        GenerateTempTokenResponse GenerateTempReadToken(string bucket);
 
         /// <summary>
         /// Request a temp token for reading an specific object for external s3 user.
@@ -127,32 +118,14 @@ namespace BSN.Commons.S3.Abstraction
         /// <param name="bucket">Bucket name.</param>
         /// <param name="key">Object key.</param>
         /// <returns>S3 Service credential model.</returns>
-        CredentialModel RequestTempReadToken(string bucket, string key);
-
-        /// <summary>
-        /// Request a temp token for reading several objects for external s3 user.
-        /// </summary>
-        /// <param name="bucket">Bucket name.</param>
-        /// <param name="kies">Object kies.</param>
-        /// <returns>S3 Service credential model.</returns>
-        [Obsolete("[R.Noei] I'm not sure if we need this feature anymore.")]
-        BulkCredentialModel RequestTempReadToken(string bucket, IEnumerable<string> kies);
+        GenerateTempTokenResponse GenerateTempReadToken(string bucket, string key);
 
         /// <summary>
         /// Request a temp token for writing an specific object for external s3 user.
         /// </summary>
         /// <param name="bucket">Bucket name.</param>
-        /// <param name="kies">Object key.</param>
+        /// <param name="key">Object key.</param>
         /// <returns>S3 Service credential model.</returns>
-        CredentialModel RequestTempWriteToken(string bucket, string key);
-
-        /// <summary>
-        /// Request a temp token for writing several objects for external s3 user.
-        /// </summary>
-        /// <param name="bucket">Bucket name.</param>
-        /// <param name="kies">Object kies.</param>
-        /// <returns>S3 Service credential model.</returns>
-        [Obsolete("[R.Noei] I'm not sure if we need this feature anymore.")]
-        BulkCredentialModel RequestTempWriteToken(string bucket, IEnumerable<string> kies);
+        GenerateTempTokenResponse RequestTempWriteToken(string bucket, string key);
     }
 }

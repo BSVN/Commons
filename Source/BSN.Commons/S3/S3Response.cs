@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace BSN.Commons.S3.Abstraction
+namespace BSN.Commons.S3
 {
     /// <summary>
     /// Amazon s3 response model.

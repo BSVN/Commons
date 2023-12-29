@@ -1,24 +1,40 @@
 ﻿using System;
 
-namespace BSN.Commons.S3.Abstraction
+namespace BSN.Commons.S3
 {
     /// <summary>
-    /// Dedicated credential model for specific object.
+    /// Dedicated credential for specific object/bucket.
     /// </summary>
-    public class CredentialModel
+    public class GenerateTempTokenResponse
     {
-        public CredentialModel(string endPoint,
+        /// <summary>
+        /// Credential model used for generating temporary tokens.
+        /// </summary>
+        /// <remarks>
+        /// Temporary credential contains three main part: 
+        ///     AccessKey
+        ///     SecretKey
+        ///     SessionToken
+        /// </remarks>
+        /// <param name="endPoint">S3 service endpoint.</param>
+        /// <param name="accessKey">Provided access key.</param>
+        /// <param name="secretKey">Provided secret key.</param>
+        /// <param name="sessionToken">Session token.</param>
+        /// <param name="notValidAfter">Indicates expiration time of temporary credential.</param>
+        /// <param name="bucket">Issued bucket.</param>
+        /// <param name="key">Issued key.</param>
+        public GenerateTempTokenResponse(string endPoint,
                                string accessKey,
                                string secretKey,
                                string sessionToken,
-                               DateTime expiration,
+                               DateTime notValidAfter,
                                string bucket,
                                string key = null)
         {
             AccessKey = accessKey;
             SecretKey = secretKey;
             SessionToken = sessionToken;
-            Expiration = expiration;
+            NotValidAfter = notValidAfter;
             Bucket = bucket;
             Key = key;
             EndPoint = endPoint;
@@ -37,7 +53,7 @@ namespace BSN.Commons.S3.Abstraction
         /// <summary>
         /// Credential expiration time.
         /// </summary>
-        public DateTime Expiration { get; set; }
+        public DateTime NotValidAfter { get; set; }
 
         /// <summary>
         /// Indicates whether this credential is generated for an object or not.
@@ -63,7 +79,7 @@ namespace BSN.Commons.S3.Abstraction
         public string SecretKey { get; set; }
 
         /// <summary>
-        /// Provided temporary token.
+        /// Provided session token.
         /// </summary>
         public string SessionToken { get; set; }
     }
