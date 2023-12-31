@@ -29,21 +29,52 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
         /// <see cref="EntityTypeBuilder{TEntity}.Ignore(Expression{Func{TEntity, object?}})"/> method,
         /// to ignore some get-only properties.
         /// </remarks>
-        /// <typeparam name="T">The entity type being configured.</typeparam>
+        /// <typeparam name="TEntity">The entity type being configured.</typeparam>
         /// <param name="builder">The builder for the entity type being configured.</param>
-        public static void MapAllReadonlyProperty<T>(this EntityTypeBuilder<T> builder) where T : class
+        public static void MapAllReadonlyProperties<TEntity>(this EntityTypeBuilder<TEntity> builder) where TEntity : class
         {
-            var ignores = builder.Metadata.GetIgnoredMembers();
-            var navigattions = builder.Metadata.GetNavigations().Select(n => n.Name);
+            MapAllReadonlyProperties<TEntity>(builder.Metadata, builder);
+        }
+
+        /// <summary>
+        /// Entity Framework Core does not support mapping get-only properties to columns for dependent entity by default.
+        /// So if you want to map get-only properties of dependent entity to columns, you need to use this extension method.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// modelBuilder.Entity{Foo}().OwnsOne(F => F.Bar).MapAllReadonlyProperty();
+        /// modelBuilder.Entity{Foo}().OwnsOne(F => F.Bar).Ignore(B => B.SomeGetOnlyProperty); // Ignore get-only property
+        /// </code>
+        /// </example>
+        /// <remarks>
+        /// After calling this method, you can use
+        /// <see cref="OwnedNavigationBuilder{TOwnerEntity, TDependentEntity}.Ignore(Expression{Func{TDependentEntity, object?}})"/> method,
+        /// to ignore some get-only properties.
+        /// </remarks>
+        /// <typeparam name="TOwnerEntity">The entity type that of owner entity</typeparam>
+        /// <typeparam name="TDependentEntity">The entity type that this relationship target</typeparam>
+        /// <param name="builder">The builder for the entity type being configured.</param>
+        public static void MapAllReadonlyProperties<TOwnerEntity, TDependentEntity>(this OwnedNavigationBuilder<TOwnerEntity, TDependentEntity> builder)
+            where TOwnerEntity : class where TDependentEntity : class
+        {
+            MapAllReadonlyProperties<TDependentEntity>(builder.Metadata.DeclaringEntityType, builder);
+        }
+
+
+        private static void MapAllReadonlyProperties<T>(Microsoft.EntityFrameworkCore.Metadata.IMutableEntityType entityType,
+            Microsoft.EntityFrameworkCore.Infrastructure.IInfrastructure<IConventionEntityTypeBuilder> builder)
+        {
+            var ignores = entityType.GetIgnoredMembers();
+            var navigations = entityType.GetNavigations().Select(n => n.Name);
             IEnumerable<PropertyInfo> properties = from property in typeof(T).GetProperties()
                                                    where property.CanWrite == false
                                                    && property.GetCustomAttribute<NotMappedAttribute>() == null
                                                    && !ignores.Any(ignoreProperty => ignoreProperty == property.Name)
-                                                   && !navigattions.Contains(property.Name)
+                                                   && !navigations.Contains(property.Name)
                                                    select property;
             foreach (var property in properties)
             {
-                builder.Property(property.Name);
+                builder.Instance.Property(property.PropertyType, property.Name);
             }
         }
     }
