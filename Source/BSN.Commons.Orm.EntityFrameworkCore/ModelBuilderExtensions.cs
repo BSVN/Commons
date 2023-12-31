@@ -34,10 +34,12 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
         public static void MapAllReadonlyProperty<T>(this EntityTypeBuilder<T> builder) where T : class
         {
             var ignores = builder.Metadata.GetIgnoredMembers();
+            var navigattions = builder.Metadata.GetNavigations().Select(n => n.Name);
             IEnumerable<PropertyInfo> properties = from property in typeof(T).GetProperties()
                                                    where property.CanWrite == false
                                                    && property.GetCustomAttribute<NotMappedAttribute>() == null
                                                    && !ignores.Any(ignoreProperty => ignoreProperty == property.Name)
+                                                   && !navigattions.Contains(property.Name)
                                                    select property;
             foreach (var property in properties)
             {
