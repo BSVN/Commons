@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace BSN.Commons.Orm.EntityFrameworkCore
@@ -69,6 +70,7 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
             IEnumerable<PropertyInfo> properties = from property in typeof(T).GetProperties()
                                                    where property.CanWrite == false
                                                    && property.GetCustomAttribute<NotMappedAttribute>() == null
+                                                   && property.GetMethod.GetCustomAttribute<CompilerGeneratedAttribute>() != null
                                                    && !ignores.Any(ignoreProperty => ignoreProperty == property.Name)
                                                    && !navigations.Contains(property.Name)
                                                    select property;
