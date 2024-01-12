@@ -25,10 +25,10 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
         /// <inheritdoc />
         public PagedEntityCollection<T> GetMany(Expression<Func<T, bool>> where, string filters, string sorts, uint pageNumber, uint pageSize)
         {
-            if (pageNumber == 0)
+            if (pageNumber <= 0)
                 throw new ArgumentException("Must be greater than zero.", nameof(pageNumber));
 
-            if (pageSize == 0)
+            if (pageSize <= 0)
                 throw new ArgumentException("Must be greater than zero.", nameof(pageSize));
 
             IQueryable<T> query = dbSet.Where(where);
