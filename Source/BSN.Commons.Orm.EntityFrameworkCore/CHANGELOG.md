@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.14.0] - 2024-01-13
+
+### Added
+
+- MapAllReadonlyProperty extension for entity framework core.
+- Support for .NET 8
+
+### Fixed
+
+- Negative value for PageNumber and PageSize is forbidden.
+
+
 ## [1.10.4] - 2023-12-13
 
 ## Added
