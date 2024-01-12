@@ -16,10 +16,10 @@ namespace BSN.Commons.Extensions
         /// </summary>
         public static PagedEntityCollection<T> Paginate<T>(this IQueryable<T> query, uint pageNumber, uint pageSize)
         {
-            if (pageNumber == 0)
+            if (pageNumber <= 0)
                 throw new ArgumentException("Must be greater than zero.", nameof(pageNumber));
 
-            if (pageSize == 0)
+            if (pageSize <= 0)
                 throw new ArgumentException("Must be greater than zero.", nameof(pageSize));
 
             var result = new PagedEntityCollection<T>
@@ -41,10 +41,10 @@ namespace BSN.Commons.Extensions
         /// </summary>
         public static async Task<PagedEntityCollection<T>> PaginateAsync<T>(this IQueryable<T> query, uint pageNumber, uint pageSize)
         {
-            if (pageNumber == 0)
+            if (pageNumber <= 0)
                 throw new ArgumentException("Must be greater than zero.", nameof(pageNumber));
 
-            if (pageSize == 0)
+            if (pageSize <= 0)
                 throw new ArgumentException("Must be greater than zero.", nameof(pageSize));
 
             var result = new PagedEntityCollection<T>
