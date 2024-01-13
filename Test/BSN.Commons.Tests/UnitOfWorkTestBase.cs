@@ -20,6 +20,12 @@ namespace BSN.Commons.Tests
             _userRepository = abstractFactory.CreateUserRepository(_databaseFactory);
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            _databaseFactory.Dispose();
+        }
+
         [Test]
         public void AddUserToDataBaseAndNullQueue_CorrectInput_UsereShouldBeCorectlyAddedToDatabase()
         {
@@ -36,7 +42,7 @@ namespace BSN.Commons.Tests
             _userRepository.Add(User);
             unitOfWork.Commit();
 
-            Assert.IsNotEmpty(_userRepository.GetMany(x => x.FirstName == "Reza"));
+            Assert.That(_userRepository.GetMany(x => x.FirstName == "Reza"), Is.Not.Empty);
         }
 
         [Test]
@@ -62,8 +68,8 @@ namespace BSN.Commons.Tests
             unitOfWork.AddToQueue(secondEnlistTask);
             unitOfWork.Commit();
 
-            Assert.AreEqual(Names.Where(P => P == "Gholi").FirstOrDefault(), "Gholi");
-            Assert.AreEqual(Names.Where(P => P == "Qamar").FirstOrDefault(), "Qamar");
+            Assert.That(Names.Where(P => P == "Gholi").FirstOrDefault(), Is.EqualTo("Gholi"));
+            Assert.That(Names.Where(P => P == "Qamar").FirstOrDefault(), Is.EqualTo("Qamar"));
         }
 
         [Test]
@@ -93,12 +99,12 @@ namespace BSN.Commons.Tests
             try
             {
                 unitOfWork.Commit();
-                Assert.NotNull(null);
+                Assert.Fail();
             }
             catch
             {
-                Assert.IsNull(Names.Where(P => P == "Gholi").FirstOrDefault());
-                Assert.IsNull(Names.Where(P => P == "Qamar").FirstOrDefault());
+                Assert.That(Names.Where(P => P == "Gholi").FirstOrDefault(), Is.Null);
+                Assert.That(Names.Where(P => P == "Qamar").FirstOrDefault(), Is.Null);
             }
         }
 
@@ -136,12 +142,12 @@ namespace BSN.Commons.Tests
             try
             {
                 unitOfWork.Commit();
-                Assert.NotNull(null);
+                Assert.Fail();
             }
             catch
             {
-                Assert.IsEmpty(_userRepository.GetMany(x => x.FirstName == "Reza"));
-                Assert.IsNull(Names.Where(P => P == "Gholi").FirstOrDefault());
+                Assert.That(_userRepository.GetMany(x => x.FirstName == "Reza"), Is.Empty);
+                Assert.That(Names.Where(P => P == "Gholi").FirstOrDefault(), Is.Null);
             }
         }
 
@@ -186,11 +192,12 @@ namespace BSN.Commons.Tests
             try
             {
                 unitOfWork.Commit();
+                Assert.Fail();
             }
             catch
             {
-                Assert.IsNull(Names.Where(P => P == "Gholi").FirstOrDefault());
-                Assert.IsEmpty(_userRepository.GetMany(x => x.FirstName == "Reza"));
+                Assert.That(Names.Where(P => P == "Gholi").FirstOrDefault(), Is.Null);
+                Assert.That(_userRepository.GetMany(x => x.FirstName == "Reza"), Is.Empty);
             }
         }
 
@@ -218,14 +225,16 @@ namespace BSN.Commons.Tests
 
             unitOfWork.AddToQueue(enlistTask);
 
+            // TODO: Fix this test
+
             try
             {
                 unitOfWork.Commit();
             }
             catch 
             {
-                Assert.IsNull(Names.Where(P => P == "Gholi").FirstOrDefault());
-                Assert.IsEmpty(_userRepository.GetMany(x => x.FirstName == "AliiReza"));
+                Assert.That(Names.Where(P => P == "Gholi").FirstOrDefault(), Is.Null);
+                Assert.That(_userRepository.GetMany(x => x.FirstName == "AliiReza"), Is.Empty);
             }
         }
 
@@ -248,7 +257,7 @@ namespace BSN.Commons.Tests
             }
             catch 
             {
-                Assert.IsEmpty(_userRepository.GetMany(x => x.FirstName == "hamidReza"));
+                Assert.That(_userRepository.GetMany(x => x.FirstName == "hamidReza"), Is.Empty);
             }
         }
 
@@ -265,9 +274,9 @@ namespace BSN.Commons.Tests
             }
             catch 
             {
-                Assert.IsFalse(false);
+                Assert.Fail();
             }
-            Assert.IsEmpty(Names);
+            Assert.That(Names, Is.Empty);
         }
 
         protected IRepository<User> _userRepository;

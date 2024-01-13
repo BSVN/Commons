@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyVersion>1.13.1</AssemblyVersion>
-    <FileVersion>1.13.1</FileVersion>
+    <AssemblyVersion>1.14.0</AssemblyVersion>
+    <FileVersion>1.14.0</FileVersion>
     <Company>BSN Company</Company>
     <Authors>BSN Developers</Authors>
     <Copyright>BSN Co 2019-2023</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.13.1</Version>
+    <Version>1.14.0</Version>
     <PackageProjectUrl>https://github.com/BSVN/Commons</PackageProjectUrl>
     <PackageLicenseUrl></PackageLicenseUrl>
     <Description>Commons library for enterprise application</Description>
