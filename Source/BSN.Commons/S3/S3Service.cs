@@ -199,7 +199,7 @@ namespace BSN.Commons.S3
 
                 return true;
             }
-            catch (AmazonS3Exception S3Ex)
+            catch (AmazonS3Exception)
             {
                 return false;
             }

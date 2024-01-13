@@ -7,7 +7,7 @@
     <Authors>BSN Developers</Authors>
     <Company>BSN Company</Company>
     <Description>ORM Helpers for using entity framework core in enterprise application</Description>
-    <Copyright>BSN Co 2019-2023</Copyright>
+    <Copyright>BSN Co 2019-2024</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/BSVN/Commons</PackageProjectUrl>
     <RepositoryUrl>https://github.com/BSVN/Commons.git</RepositoryUrl>

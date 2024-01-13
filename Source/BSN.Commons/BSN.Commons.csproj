@@ -6,7 +6,7 @@
     <FileVersion>1.14.0</FileVersion>
     <Company>BSN Company</Company>
     <Authors>BSN Developers</Authors>
-    <Copyright>BSN Co 2019-2023</Copyright>
+    <Copyright>BSN Co 2019-2024</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>1.14.0</Version>
     <PackageProjectUrl>https://github.com/BSVN/Commons</PackageProjectUrl>

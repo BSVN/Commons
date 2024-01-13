@@ -14,7 +14,7 @@ using System;
 [assembly: AssemblyVersion("1.14.0")]
 [assembly: AssemblyFileVersion("1.14.0")]
 [assembly: AssemblyInformationalVersion("1.14.0")]
-[assembly: AssemblyCopyright("Copyright © 2020-2023 BSN Co.")]
+[assembly: AssemblyCopyright("Copyright © 2020-2024 BSN Co.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: Guid("20ebda57-83dc-4557-bbd2-535cf3c6751b")]

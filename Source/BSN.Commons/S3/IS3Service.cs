@@ -28,7 +28,7 @@ namespace BSN.Commons.S3
         /// <remarks>
         /// There are a lots of rule on naming buckets, 
         /// please visit below link to keep your codes from possible miss-functioning.
-        /// <see cref="https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html"/>
+        /// <see href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html"/>
         /// </remarks>
         /// </summary>
         /// <param name="bucketName">Bucket name.</param>
@@ -40,7 +40,7 @@ namespace BSN.Commons.S3
         /// <remarks>
         /// There are a lots of rule on naming buckets, 
         /// please visit below link to keep your codes from possible miss-functioning.
-        /// <see cref="https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html"/>
+        /// <see href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html"/>
         /// </remarks>
         /// </summary>
         /// <param name="bucketName">Bucket name.</param>

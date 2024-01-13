@@ -13,7 +13,7 @@
     <releaseNotes>
         Please see CHANGELOG.md
 	</releaseNotes>
-    <copyright>BSN Co 2019-2023</copyright>
+    <copyright>BSN Co 2019-2024</copyright>
     <tags>Commons Users Enterprise</tags>
 	<dependencies>
 		<dependency id="BSN.Commons" version="1.12.0" />
