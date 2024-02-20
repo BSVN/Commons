@@ -66,6 +66,7 @@
     <PackageReference Include="Polly" Version="8.0.0" />
     <PackageReference Include="RabbitMQ.Client" Version="6.6.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Redis.OM" Version="0.6.1" />
     <PackageReference Include="System.Text.Json" Version="6.0.6" />
   </ItemGroup>
 
