@@ -35,6 +35,7 @@ namespace BSN.Commons.Orm.Redis.Tests
 
             string userId = _userRepository.Insert(User);
             Assert.That(_userRepository.FindById(userId), Is.Not.Null);
+            Assert.That(_userRepository.GetMany(x => x.FirstName == "Reza" && x.LastName == "Alizadeh"), Is.Not.Empty);
         }
 
         public IRedisDatabaseFactory CreateDatabaseFactory()
