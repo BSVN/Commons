@@ -30,6 +30,7 @@ namespace BSN.Commons.Orm.Redis
         {
             DatabaseFactory = databaseFactory;
             _redisCollection = (RedisCollection<T>)Provider.RedisCollection<T>();
+            Provider.Connection.CreateIndex(typeof(T));
         }
 
         /// <inheritdoc />
