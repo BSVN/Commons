@@ -1,7 +1,11 @@
-﻿using System;
+﻿using Redis.OM.Modeling;
+using Redis.OM;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace BSN.Commons.Infrastructure
 {
@@ -11,86 +15,50 @@ namespace BSN.Commons.Infrastructure
     /// <typeparam name="T"></typeparam>
     public interface IRedisRepository<T> where T : class
     {
-        /// <summary>
-        /// Add new object to repository.
-        /// </summary>
-        /// <param name="entity">New Object</param>
-		//void Add(T entity);
-
-        /// <summary>
-        /// Add a range of objects to the repository.
-        /// </summary>
-        /// <param name="entities">New Objects</param>
-		//void AddRange(IEnumerable<T> entities);
-
-        /// <summary>
-        /// Submit the update of an existing object in the repository.
-        /// </summary>
-        /// <param name="entity">Updated Object</param>
-        //void Update(T entity);
-
-        /// <summary>
-        /// Submit the update of an existing object in the repository using specific Configuration.
-        /// </summary>
-        /// <param name="entity">Updated Object</param>
-        /// <param name="configurer">Configuration Object</param>
-        //void Update(T entity, Action<IUpdateConfig<T>> configurer);
-
-        /// <summary>
-        /// Submit the update of a range of existing objects in the repository.
-        /// </summary>
-        /// <param name="entities"></param>
-        //void UpdateRange(IEnumerable<T> entities);
-
-        /// <summary>
-        /// Submit the update of a range of existing objects in the repository using specific Configuration.
-        /// </summary>
-        /// <param name="entities">Updated Objects</param>
-        /// <param name="configurer">Configuration Object</param>
-		//void UpdateRange(IEnumerable<T> entities, Action<IUpdateConfig<T>> configurer);
-
-        /// <summary>
-        /// Delete an existing object.
-        /// </summary>
-        /// <param name="entity">Object to Delete</param>
-        //void Delete(T entity);
-
-        /// <summary>
-        /// Delete an existing object using Expression.
-        /// </summary>
-        //void Delete(Expression<Func<T, bool>> where);
-
-        /// <summary>
-        /// Delete a range of existing objects.
-        /// </summary>
-        /// <param name="entities">Objects to Delete</param>
-        //void DeleteRange(IEnumerable<T> entities);
-
-        /// <summary>
-        /// Get Object by id.
-        /// </summary>
-        /// <param name="id">Object Id</param>
-        /// <returns>Retrived Object or null</returns>
-        //T GetById<KeyType>(KeyType id);
-
-        /// <summary>
-        /// Get Object by Expression.
-        /// </summary>
-        /// <param name="where">Expression</param>
-        /// <returns>Retrived Object or null</returns>
-        //T Get(Expression<Func<T, bool>> where);
-
-        /// <summary>
-        /// Get all Objects in the current repository.
-        /// </summary>
-        /// <returns>List of all Objects</returns>
-        //IEnumerable<T> GetAll();
-
-        /// <summary>
-        /// Get List of existing objects using Expression.
-        /// </summary>
-        /// <param name="where">Expression</param>
-        /// <returns>List of Objects</returns>
-		//IEnumerable<T> GetMany(Expression<Func<T, bool>> where);
+        bool Any();
+        bool Any(Expression<Func<T, bool>> expression);
+        void Update(T item);
+        Task UpdateAsync(T item);
+        ValueTask UpdateAsync(IEnumerable<T> items);
+        Task<IList<T>> ToListAsync();
+        Task<bool> AnyAsync();
+        Task<bool> AnyAsync(Expression<Func<T, bool>> expression);
+        Task<T> FirstAsync();
+        Task<T> FirstAsync(Expression<Func<T, bool>> expression);
+        Task<T> FirstOrDefaultAsync();
+        Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> expression);
+        Task<T> SingleAsync();
+        Task<T> SingleAsync(Expression<Func<T, bool>> expression);
+        Task<T> SingleOrDefaultAsync();
+        Task<T> SingleOrDefaultAsync(Expression<Func<T, bool>> expression);
+        Task<IDictionary<string, T>> FindByIdsAsync(IEnumerable<string> ids);
+        IEnumerator<T> GetEnumerator();
+        IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = default(CancellationToken));
+        int Count(Expression<Func<T, bool>> expression);
+        Task<int> CountAsync();
+        Task<int> CountAsync(Expression<Func<T, bool>> expression);
+        void Save();
+        ValueTask SaveAsync();
+        string Insert(T item);
+        string Insert(T item, TimeSpan timeSpan);
+        string Insert(T item, WhenKey when, TimeSpan? timeSpan = null);
+        Task<string> InsertAsync(T item);
+        Task<string> InsertAsync(T item, TimeSpan timeSpan);
+        Task<string> InsertAsync(T item, WhenKey when, TimeSpan? timeSpan = null);
+        T FindById(string id);
+        Task<T> FindByIdAsync(string id);
+        IEnumerable<T> GetMany(Expression<Func<T, bool>> expression);
+        IEnumerable<TR> Select<TR>(Expression<Func<T, TR>> expression);
+        IEnumerable<T> Skip(int count);
+        IEnumerable<T> Take(int count);
+        IEnumerable<T> OrderBy<TField>(Expression<Func<T, TField>> expression);
+        IEnumerable<T> OrderByDescending<TField>(Expression<Func<T, TField>> expression);
+        IEnumerable<T> GeoFilter(Expression<Func<T, GeoLoc?>> expression, double lon, double lat, double radius, GeoLocDistanceUnit unit);
+        void DeleteById(string id);
+        void Delete(T item);
+        void Delete(IEnumerable<T> items);
+        Task DeleteAsync(T item);
+        Task DeleteAsync(IEnumerable<T> items);
+        string Execute(string command, string[] args);
     }
 }
