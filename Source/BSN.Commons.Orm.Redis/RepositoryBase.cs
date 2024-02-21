@@ -30,6 +30,7 @@ namespace BSN.Commons.Orm.Redis
         {
             DatabaseFactory = databaseFactory;
             _redisCollection = (RedisCollection<T>)Provider.RedisCollection<T>();
+            // TODO: Check that IndexCreationService is necessary or not.
             Provider.Connection.CreateIndex(typeof(T));
         }
 
