@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BSN.Commons.Orm.Redis.Tests.Infrastructure;
 using BSN.Commons.Orm.Redis.Tests.Mock;
 using BSN.Commons.Orm.Redis.Tests.Dto;
 using BSN.Commons.Infrastructure;
+using BSN.Commons.Infrastructure.Redis;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
 
@@ -25,7 +25,7 @@ namespace BSN.Commons.Orm.Redis.Tests
         [Test]
         public void AddUserToDataBaseAndNullQueue_CorrectInput_UsereShouldBeCorectlyAddedToDatabase()
         {
-            User User = new User()
+            User user = new User()
             {
                 FirstName = "Reza",
                 LastName = "Alizadeh",
@@ -33,22 +33,36 @@ namespace BSN.Commons.Orm.Redis.Tests
                 Document = new Document() { Title = "Test" }
             };
 
-            string userId = _userRepository.Insert(User);
-            Assert.That(_userRepository.FindById(userId), Is.Not.Null);
+            _userRepository.Add(user);
+
+            Assert.That(_userRepository.GetById<string>(user.Id.ToString()), Is.Not.Null);
             Assert.That(_userRepository.GetMany(x => x.FirstName == "Reza" && x.LastName == "Alizadeh"), Is.Not.Empty);
         }
 
-        public IRedisDatabaseFactory CreateDatabaseFactory()
+        [TearDown]
+        public void TearDown()
         {
-            var redisConnectionOptions = new RedisConnectionOptions("redis://localhost:6379");
-            return new DatabaseFactory(Options.Create(redisConnectionOptions));
+            _databaseFactory.Dispose();
         }
 
-        public IRedisRepository<User> CreateUserRepository(IRedisDatabaseFactory databaseFactory)
+        public IDatabaseFactory CreateDatabaseFactory()
+        {
+            var redisConnectionOptions = new RedisConnectionOptions
+            {
+                ConnectionString = "redis://localhost:6379"
+            };
+
+            var dbContext = new RedisDbContext(Options.Create(redisConnectionOptions));
+
+            return new RedisDatabaseFactory(dbContext);
+        }
+
+        public IRepository<User> CreateUserRepository(IDatabaseFactory databaseFactory)
         {
             return new UserRepository(databaseFactory);
         }
-        protected IRedisRepository<User> _userRepository;
-        protected IRedisDatabaseFactory _databaseFactory;
+
+        protected IRepository<User> _userRepository;
+        protected IDatabaseFactory _databaseFactory;
     }
 }
