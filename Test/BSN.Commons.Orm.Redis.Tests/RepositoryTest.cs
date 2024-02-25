@@ -9,6 +9,7 @@ using BSN.Commons.Infrastructure;
 using BSN.Commons.Infrastructure.Redis;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
+using BSN.Commons.Test.Infrastructure;
 
 namespace BSN.Commons.Orm.Redis.Tests
 {
@@ -47,14 +48,7 @@ namespace BSN.Commons.Orm.Redis.Tests
 
         public IDatabaseFactory CreateDatabaseFactory()
         {
-            var redisConnectionOptions = new RedisConnectionOptions
-            {
-                ConnectionString = "redis://localhost:6379"
-            };
-
-            var dbContext = new RedisDbContext(Options.Create(redisConnectionOptions));
-
-            return new RedisDatabaseFactory(dbContext);
+            return new InMemoryDatabaseFactory();
         }
 
         public IRepository<User> CreateUserRepository(IDatabaseFactory databaseFactory)
