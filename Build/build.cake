@@ -16,14 +16,15 @@ var artifactsDir = "./artifacts/";
 var solutionPath = "../BSN.Commons.sln";
 var projectName = "BSN.Commons";
 var projectFolder = "../Source/";
-var solutionVersion = "1.14.0";
+var solutionVersion = "1.15.0";
 var projects = new List<(string path, string name, string version)>
 {
 	("BSN.Commons/", "BSN.Commons.csproj", solutionVersion),
 	("BSN.Commons.Users/", "BSN.Commons.Users.csproj", solutionVersion),
 	("BSN.Commons.PresentationInfrastructure/", "BSN.Commons.PresentationInfrastructure.csproj", solutionVersion),
 	("BSN.Commons.Orm.EntityFramework/", "BSN.Commons.Orm.EntityFramework.csproj", solutionVersion),
-	("BSN.Commons.Orm.EntityFrameworkCore/", "BSN.Commons.Orm.EntityFrameworkCore.csproj", solutionVersion)
+	("BSN.Commons.Orm.EntityFrameworkCore/", "BSN.Commons.Orm.EntityFrameworkCore.csproj", solutionVersion),
+	("BSN.Commons.Orm.Redis/", "BSN.Commons.Orm.Redis.csproj", solutionVersion)
 };
 
 var mainProject = "../Source/BSN.Commons/BSN.Commons.csproj";
@@ -33,7 +34,8 @@ var testProjects = new List<(string path, string name, string dll)>
 {
 	("BSN.Commons.Tests/", "BSN.Commons.Tests.csproj", "bin/Release/net472/BSN.Commons.Tests.dll"),
 	("BSN.Commons.Orm.EntityFramework.Tests/", "BSN.Commons.Orm.EntityFramework.Tests.csproj", "bin/Release/net48/BSN.Commons.Orm.EntityFramework.Tests.dll"),
-	("BSN.Commons.Orm.EntityFrameworkCore.Tests/", "BSN.Commons.Orm.EntityFrameworkCore.Tests.csproj", "bin/Release/netcoreapp3.1/BSN.Commons.Orm.EntityFrameworkCore.Tests.dll")
+	("BSN.Commons.Orm.EntityFrameworkCore.Tests/", "BSN.Commons.Orm.EntityFrameworkCore.Tests.csproj", "bin/Release/netcoreapp3.1/BSN.Commons.Orm.EntityFrameworkCore.Tests.dll"),
+	("BSN.Commons.Orm.Redis.Tests/", "BSN.Commons.Orm.Redis.Tests.csproj", "bin/Release/net8.0/BSN.Commons.Orm.Redis.Tests.dll")
 };
 var coverageResultsFileName = "coverage.xml";
 var testResultsFileName = "nunitResults.xml";
@@ -51,7 +53,7 @@ Task("Clean")
 		if (DirectoryExists(artifactsDir))
 		{
 			DeleteDirectory(
-				artifactsDir, 
+				artifactsDir,
 				new DeleteDirectorySettings {
 					Recursive = true,
 					Force = true
@@ -92,7 +94,7 @@ Task("Build")
 	.Does(() => {
 		DotNetBuild(
 			solutionPath,
-			new DotNetBuildSettings 
+			new DotNetBuildSettings
 			{
 				Configuration = configuration
 			}
@@ -117,7 +119,7 @@ Task("Test")
 				CoverletOutputDirectory = Directory(artifactsDir),
 				CoverletOutputName = specificCoverageResultsFileName
 			};
-	
+
 			DotNetTest(testFolder + testProject.path + testProject.name, settings, coverletSettings);
 
 
@@ -152,7 +154,7 @@ Task("Package")
 			{
 				string pureName = project.name.Remove(project.name.IndexOf(".csproj"));
 				var nuGetPackSettings = new NuGetPackSettings
-				{   
+				{
 					BasePath = projectFolder + project.path + "bin/" + Directory(configuration),
 					OutputDirectory = artifactsDir,
 					ArgumentCustomization = args => args.Append("-Prop Configuration=" + configuration),
@@ -185,16 +187,16 @@ Task("Package")
 Task("Publish")
 	.IsDependentOn("Package")
 	.Does(() => {
-		var pushSettings = new DotNetNuGetPushSettings 
+		var pushSettings = new DotNetNuGetPushSettings
 		{
 			Source = nugetSource,
 			ApiKey = nugetApiKey
 		};
 
 		var pkgs = GetFiles(artifactsDir + "*.nupkg");
-		foreach(var pkg in pkgs) 
+		foreach(var pkg in pkgs)
 		{
-			if(!IsNuGetPublished(pkg)) 
+			if(!IsNuGetPublished(pkg))
 			{
 				Information($"Publishing \"{pkg}\".");
 				DotNetNuGetPush(pkg.FullPath, pushSettings);
@@ -202,7 +204,6 @@ Task("Publish")
 			else {
 				Information($"Bypassing publishing \"{pkg}\" as it is already published.");
 			}
-			
 		}
 });
 
@@ -211,7 +212,7 @@ private bool IsNuGetPublished(FilePath packagePath) {
 
 	var latestPublishedVersions = NuGetList(
 		package.NuspecReader.GetId(),
-		new NuGetListSettings 
+		new NuGetListSettings
 		{
 			Prerelease = true
 		}

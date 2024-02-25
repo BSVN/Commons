@@ -69,12 +69,12 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
             var navigations = entityType.GetNavigations().Select(n => n.Name);
             IEnumerable<PropertyInfo> properties = from property in typeof(T).GetProperties()
                                                    where property.CanWrite == false
-                                                   && property.GetCustomAttribute<NotMappedAttribute>() == null                                                   
-                                                   && property.GetMethod.GetCustomAttribute<CompilerGeneratedAttribute>() != null 
+                                                   && property.GetCustomAttribute<NotMappedAttribute>() == null
+                                                   && property.GetMethod.GetCustomAttribute<CompilerGeneratedAttribute>() != null
                                                    && !ignores.Any(ignoreProperty => ignoreProperty == property.Name)
                                                    && !navigations.Contains(property.Name)
                                                    select property;
-            
+
             // about following condition in above code:
             //      && property.GetMethod.GetCustomAttribute<CompilerGeneratedAttribute>() != null
             // getter-only properties and expression-bodied properties are looking so much similar in C#
@@ -82,7 +82,7 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
             //      2. public string FirstName { get; }
             // in example #1 there will be no backing-field in compilation process.
             // but in the next example (#2) we have a compiler generated backing-field.
-            // By default EF marks a property as column if it be able to write on it. 
+            // By default EF marks a property as column if it be able to write on it.
             // So when we add read-only things to it, we should care about such a case.
             // to identify expression-bodied properties we can use this attribute check on GetMethod.
 
