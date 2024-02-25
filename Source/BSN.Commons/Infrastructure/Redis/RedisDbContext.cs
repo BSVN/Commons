@@ -21,7 +21,7 @@ namespace BSN.Commons.Infrastructure.Redis
         }
 
         /// <inheritdoc/>
-        public int SaveChanges()
+        public virtual int SaveChanges()
         {
             throw new System.NotImplementedException("We don't have a way to save changes on redis om yet.");
         }
