@@ -1,24 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq.Expressions;
 using Redis.OM.Searching;
 using Redis.OM;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Security.Cryptography;
 using BSN.Commons.Infrastructure;
-using Apache.NMS.ActiveMQ.Util.Synchronization;
-using static Amazon.S3.Util.S3EventNotification;
-using StackExchange.Redis;
 using Redis.OM.Contracts;
-using Redis.OM.Aggregation;
-using Redis.OM.Modeling;
-using Redis.OM.Searching.Query;
 using BSN.Commons.Infrastructure.Redis;
 
 namespace BSN.Commons.Orm.Redis
@@ -36,7 +20,6 @@ namespace BSN.Commons.Orm.Redis
         protected RedisRepositoryBase(IDatabaseFactory databaseFactory)
         {
             DatabaseFactory = databaseFactory;
-            _redisCollection = (RedisCollection<T>)Provider.RedisCollection<T>();
             // TODO: Check that IndexCreationService is necessary or not.
             Provider.Connection.CreateIndex(typeof(T));
         }
@@ -44,7 +27,7 @@ namespace BSN.Commons.Orm.Redis
         /// <inheritdoc />
         public void Add(T entity)
         {
-            _redisCollection.Insert(entity);
+            Collection.Insert(entity);
         }
 
         /// <inheritdoc />
@@ -59,7 +42,7 @@ namespace BSN.Commons.Orm.Redis
         /// <inheritdoc />
         public void Update(T entity)
         {
-            _redisCollection.Update(entity);
+            Collection.Update(entity);
         }
 
         /// <inheritdoc />
@@ -74,7 +57,7 @@ namespace BSN.Commons.Orm.Redis
             foreach (var entity in entities)
             {
                 Update(entity);
-            } 
+            }
         }
 
         /// <inheritdoc />
@@ -86,19 +69,19 @@ namespace BSN.Commons.Orm.Redis
         /// <inheritdoc />
         public void Delete(T entity)
         {
-            _redisCollection.Delete(entity);
+            Collection.Delete(entity);
         }
 
         /// <inheritdoc />
         public void Delete(Expression<Func<T, bool>> where)
         {
-            DeleteRange(_redisCollection.Where(where));
+            DeleteRange(Collection.Where(where));
         }
 
         /// <inheritdoc />
         public void DeleteRange(IEnumerable<T> entities)
         {
-            _redisCollection.Delete(entities);
+            Collection.Delete(entities);
         }
 
         /// <inheritdoc />
@@ -106,7 +89,7 @@ namespace BSN.Commons.Orm.Redis
         {
             if (id is string str_id)
             {
-                T? entity = _redisCollection.FindById(str_id);
+                T? entity = Collection.FindById(str_id);
                 if (entity == null)
                 {
                     throw new KeyNotFoundException($"entity with key of {id} was not found.");
@@ -121,25 +104,43 @@ namespace BSN.Commons.Orm.Redis
         /// <inheritdoc />
         public T Get(Expression<Func<T, bool>> where)
         {
-            return _redisCollection.Where(where).FirstOrDefault();
+            return Collection.Where(where).FirstOrDefault();
         }
 
         /// <inheritdoc />
         public IEnumerable<T> GetAll()
         {
-            return _redisCollection.Where(entity => true);
+            return Collection.Where(entity => true);
         }
 
         /// <inheritdoc />
         public IEnumerable<T> GetMany(Expression<Func<T, bool>> where)
         {
-            return _redisCollection.Where(where);
+            return Collection.Where(where);
         }
-        
+
         /// <summary>
         /// Redis Collection accosiated with the type of T
         /// </summary>
-        protected readonly RedisCollection<T> _redisCollection;
+        public IRedisCollection<T> Collection
+        {
+            get
+            {
+                if (_redisCollection == null)
+                {
+                    if (DatabaseFactory.Get() is IRedisDbContext dbContext)
+                    {
+                        _redisCollection = Provider.RedisCollection<T>();
+                    }
+                    else
+                    {
+                        throw new InvalidCastException("The database factory for redis must return an IRedisDbContext");
+                    }
+                }
+
+                return _redisCollection;
+            }
+        }
 
         /// <summary>
         /// Redis Connection Provider to access collections
@@ -164,11 +165,8 @@ namespace BSN.Commons.Orm.Redis
             }
         }
 
-        /// <summary>
-        /// Redis Database Factory
-        /// </summary>
         protected IDatabaseFactory DatabaseFactory { get; private set; }
-
         protected IRedisConnectionProvider? _provider;
+        protected IRedisCollection<T>? _redisCollection;
     }
 }

@@ -22,8 +22,14 @@ namespace BSN.Commons.Orm.Redis.Tests
             _userRepository = CreateUserRepository(_databaseFactory);
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            _databaseFactory.Dispose();
+        }
+
         [Test]
-        public void AddUserToDataBaseAndNullQueue_CorrectInput_UsereShouldBeCorectlyAddedToDatabase()
+        public void AddUserToDataBase_UserShouldBeCorrectlyAddedToDatabase()
         {
             User user = new User()
             {
@@ -37,12 +43,6 @@ namespace BSN.Commons.Orm.Redis.Tests
 
             Assert.That(_userRepository.GetById<string>(user.Id.ToString()), Is.Not.Null);
             Assert.That(_userRepository.GetMany(x => x.FirstName == "Reza" && x.LastName == "Alizadeh"), Is.Not.Empty);
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            _databaseFactory.Dispose();
         }
 
         public IDatabaseFactory CreateDatabaseFactory()
