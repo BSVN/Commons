@@ -6,10 +6,14 @@ using System.Collections.Generic;
 using Redis.OM;
 using Redis.OM.Contracts;
 using Redis.OM.Searching;
+using RedisModeling = Redis.OM.Modeling;
 
 using BSN.Commons.Infrastructure;
 using BSN.Commons.Infrastructure.Redis;
 using System.Data.Common;
+using StackExchange.Redis;
+using System.Security.Principal;
+using System.Reflection;
 
 namespace BSN.Commons.Orm.Redis
 {
@@ -27,9 +31,16 @@ namespace BSN.Commons.Orm.Redis
         {
             DatabaseFactory = databaseFactory;
             dbCollection = DataContext.RedisCollection<T>();
-
-            // TODO: Check that IndexCreationService is necessary or not.
-            DataContext.Connection.CreateIndex(typeof(T));
+           
+            bool hasIndexedAttribute = typeof(T).GetProperties()
+                .Where(pi => pi.GetCustomAttribute<RedisModeling.IndexedAttribute>() != null)
+                .Any();
+            
+            if (hasIndexedAttribute)
+            {
+                DataContext.Connection.DropIndex(typeof(T));
+                DataContext.Connection.CreateIndex(typeof(T));
+            }
         }
 
         /// <inheritdoc />
