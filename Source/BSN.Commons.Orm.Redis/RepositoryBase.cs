@@ -14,6 +14,7 @@ using System.Data.Common;
 using StackExchange.Redis;
 using System.Security.Principal;
 using System.Reflection;
+using System.Text.Json;
 
 namespace BSN.Commons.Orm.Redis
 {
@@ -41,6 +42,27 @@ namespace BSN.Commons.Orm.Redis
                 DataContext.Connection.DropIndex(typeof(T));
                 DataContext.Connection.CreateIndex(typeof(T));
             }
+        }
+
+        // We can use IComparable pattern for T in IRepository but in that case all of our Domains are forced to implement Equals method.
+
+        /// <summary>
+        /// Checks if preoperties of two entities are equal.
+        /// </summary>
+        /// <param name="entity1"></param>
+        /// <param name="entity2"></param>
+        /// <returns></returns>
+        public bool Equals(T entity1, T entity2)
+        {
+            var properties = typeof(T).GetProperties();
+            foreach (var property in properties)
+            {
+                if (!Equals(property.GetValue(entity1), property.GetValue(entity2)))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         /// <inheritdoc />
@@ -109,7 +131,8 @@ namespace BSN.Commons.Orm.Redis
             if (id is string str_id)
             {
                 T? entity = dbCollection.FindById(str_id);
-                if (entity == null)
+                T DefaultEntity = JsonSerializer.Deserialize<T>("{}");
+                if (entity == null || Equals(DefaultEntity, entity))
                 {
                     throw new KeyNotFoundException($"entity with key of {id} was not found.");
                 }
@@ -129,7 +152,7 @@ namespace BSN.Commons.Orm.Redis
         /// <inheritdoc />
         public IEnumerable<T> GetAll()
         {
-            return dbCollection.Where(entity => true);
+            return dbCollection.ToList();
         }
 
         /// <inheritdoc />
