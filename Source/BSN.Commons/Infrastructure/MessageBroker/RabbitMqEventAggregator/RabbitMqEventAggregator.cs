@@ -112,7 +112,7 @@ namespace BSN.Commons.Infrastructure.MessageBroker.RabbitMqEventAggregator
             {
                 ExchangeOptions exchangeOptions = _options.Value.ExchangeOptions;
 
-                channel.ExchangeDeclare(exchangeOptions.BrokerName, exchangeOptions.ExchangeType.ToString(), exchangeOptions.Durable,
+                channel.ExchangeDeclare(exchangeOptions.BrokerName, exchangeOptions.ExchangeType.ToString().ToLower(), exchangeOptions.Durable,
                     exchangeOptions.AutoDelete, exchangeOptions.Arguments);
 
                 string message = JsonConvert.SerializeObject(@event);
