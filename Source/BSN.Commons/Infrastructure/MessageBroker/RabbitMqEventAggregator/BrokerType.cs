@@ -9,7 +9,7 @@
         /// Direct exchange type routes messages based on exact matching of routing keys.
         /// </summary>
         Direct,
-        
+
         /// <summary>
         /// Topic exchange type routes messages based on wildcard patterns in routing keys.
         /// </summary>
@@ -23,6 +23,6 @@
         /// <summary>
         /// Fan-out exchange type routes messages to all bound queues without considering routing keys.
         /// </summary>
-        FanOut
+        FanOut,
     }
 }
