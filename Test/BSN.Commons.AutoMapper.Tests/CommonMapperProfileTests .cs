@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
-using BSN.Commons.AutoMapper;
 using BSN.Commons.Responses;
 
-namespace BSN.Commons.Tests
+namespace BSN.Commons.AutoMapper.Tests
 {
     [TestFixture]
     public class CommonMapperProfileTests
@@ -46,6 +45,49 @@ namespace BSN.Commons.Tests
             // Assert
             Assert.IsNotNull(result);
             Assert.AreEqual(items.Count, result.Items.Count());
+        }
+
+        [Test]
+        public void CustomProfileConverter_ConvertsCorrectly()
+        {
+            // Arrange
+            var customProfile = new CustomMapperProfile();
+            var profile = new CommonMapperProfile();
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(profile);
+                cfg.AddProfile(customProfile);
+            });
+            var mapper = new Mapper(configuration);
+            var customEntity = new CustomEntity { Id = 1, Name = "Custom Entity" };
+
+            // Act
+            var result = mapper.Map<CustomViewModel>(customEntity);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(customEntity.Id, result.Id);
+            Assert.AreEqual(customEntity.Name, result.Name);
+        }
+
+        public class CustomMapperProfile : Profile
+        {
+            public CustomMapperProfile()
+            {
+                CreateMap<CustomEntity, CustomViewModel>();
+            }
+        }
+
+        public class CustomEntity
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+        }
+
+        public class CustomViewModel
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
         }
     }
 }
