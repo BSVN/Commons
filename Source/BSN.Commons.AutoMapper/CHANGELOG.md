@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [1.15.0] - 2024-06-29
-Fixed issue with mapping between domain and view models
+Fixed issue with mapping between domain and view models.
 
 ### Added
 - README.md and CHANGELOG.md
@@ -14,7 +14,7 @@ Fixed issue with mapping between domain and view models
 - Added predefined conversions for mapping `BSN.Commons.PresentationInfrastructure` Models.
 
 ### Fixed
-- Resolve some missing elements in nupkg
+- Resolve some missing elements in nupkg.
 
 ### Changed
-- Some documentaiton of files
+- Update documentation.
