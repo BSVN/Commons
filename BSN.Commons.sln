@@ -43,9 +43,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BSN.Commons.Orm.EntityFrame
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BSN.Commons.Users", "Source\BSN.Commons.Users\BSN.Commons.Users.csproj", "{213ABCEF-7E9A-4CE5-A3EF-289C9781344D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BSN.Commons.Orm.Redis", "Source\BSN.Commons.Orm.Redis\BSN.Commons.Orm.Redis.csproj", "{1A1586E8-46EB-43AC-91EC-F6EDCA5689A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BSN.Commons.Orm.Redis", "Source\BSN.Commons.Orm.Redis\BSN.Commons.Orm.Redis.csproj", "{1A1586E8-46EB-43AC-91EC-F6EDCA5689A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BSN.Commons.Orm.Redis.Tests", "Test\BSN.Commons.Orm.Redis.Tests\BSN.Commons.Orm.Redis.Tests.csproj", "{2D1DB295-5181-48D7-8EC0-1147ED2DAD4A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BSN.Commons.Orm.Redis.Tests", "Test\BSN.Commons.Orm.Redis.Tests\BSN.Commons.Orm.Redis.Tests.csproj", "{2D1DB295-5181-48D7-8EC0-1147ED2DAD4A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BSN.Commons.AutoMapper", "Source\BSN.Commons.AutoMapper\BSN.Commons.AutoMapper.csproj", "{279E7016-E2E9-430E-82A3-C9037FE0E08E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BSN.Commons.AutoMapper.Tests", "Test\BSN.Commons.AutoMapper.Tests\BSN.Commons.AutoMapper.Tests.csproj", "{E8077467-8559-4669-B9FA-22530F1411E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,6 +97,14 @@ Global
 		{2D1DB295-5181-48D7-8EC0-1147ED2DAD4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D1DB295-5181-48D7-8EC0-1147ED2DAD4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D1DB295-5181-48D7-8EC0-1147ED2DAD4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{279E7016-E2E9-430E-82A3-C9037FE0E08E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{279E7016-E2E9-430E-82A3-C9037FE0E08E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{279E7016-E2E9-430E-82A3-C9037FE0E08E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{279E7016-E2E9-430E-82A3-C9037FE0E08E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8077467-8559-4669-B9FA-22530F1411E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8077467-8559-4669-B9FA-22530F1411E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8077467-8559-4669-B9FA-22530F1411E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8077467-8559-4669-B9FA-22530F1411E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -108,6 +120,8 @@ Global
 		{213ABCEF-7E9A-4CE5-A3EF-289C9781344D} = {DC377ADC-CC9D-4785-81BE-726DBF5F3096}
 		{1A1586E8-46EB-43AC-91EC-F6EDCA5689A9} = {DC377ADC-CC9D-4785-81BE-726DBF5F3096}
 		{2D1DB295-5181-48D7-8EC0-1147ED2DAD4A} = {5C6BA7B5-832A-495A-AF5E-C2A74F6A1EF9}
+		{279E7016-E2E9-430E-82A3-C9037FE0E08E} = {DC377ADC-CC9D-4785-81BE-726DBF5F3096}
+		{E8077467-8559-4669-B9FA-22530F1411E1} = {5C6BA7B5-832A-495A-AF5E-C2A74F6A1EF9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BCAF76D3-AA3C-4D0F-8D10-34065F8FED09}

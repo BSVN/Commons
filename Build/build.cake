@@ -21,10 +21,11 @@ var projects = new List<(string path, string name, string version)>
 {
 	("BSN.Commons/", "BSN.Commons.csproj", solutionVersion),
 	("BSN.Commons.Users/", "BSN.Commons.Users.csproj", solutionVersion),
-	("BSN.Commons.PresentationInfrastructure/", "BSN.Commons.PresentationInfrastructure.csproj", solutionVersion),
+	("BSN.Commons.Orm.Redis/", "BSN.Commons.Orm.Redis.csproj", solutionVersion),
+	("BSN.Commons.AutoMapper/", "BSN.Commons.AutoMapper.csproj", solutionVersion),
 	("BSN.Commons.Orm.EntityFramework/", "BSN.Commons.Orm.EntityFramework.csproj", solutionVersion),
 	("BSN.Commons.Orm.EntityFrameworkCore/", "BSN.Commons.Orm.EntityFrameworkCore.csproj", solutionVersion),
-	("BSN.Commons.Orm.Redis/", "BSN.Commons.Orm.Redis.csproj", solutionVersion)
+	("BSN.Commons.PresentationInfrastructure/", "BSN.Commons.PresentationInfrastructure.csproj", solutionVersion)
 };
 
 var mainProject = "../Source/BSN.Commons/BSN.Commons.csproj";
@@ -35,7 +36,8 @@ var testProjects = new List<(string path, string name, string dll)>
 	("BSN.Commons.Tests/", "BSN.Commons.Tests.csproj", "bin/Release/net472/BSN.Commons.Tests.dll"),
 	("BSN.Commons.Orm.EntityFramework.Tests/", "BSN.Commons.Orm.EntityFramework.Tests.csproj", "bin/Release/net48/BSN.Commons.Orm.EntityFramework.Tests.dll"),
 	("BSN.Commons.Orm.EntityFrameworkCore.Tests/", "BSN.Commons.Orm.EntityFrameworkCore.Tests.csproj", "bin/Release/netcoreapp3.1/BSN.Commons.Orm.EntityFrameworkCore.Tests.dll"),
-	("BSN.Commons.Orm.Redis.Tests/", "BSN.Commons.Orm.Redis.Tests.csproj", "bin/Release/net8.0/BSN.Commons.Orm.Redis.Tests.dll")
+	("BSN.Commons.Orm.Redis.Tests/", "BSN.Commons.Orm.Redis.Tests.csproj", "bin/Release/net8.0/BSN.Commons.Orm.Redis.Tests.dll"),
+	("BSN.Commons.AutoMapper.Tests/", "BSN.Commons.AutoMapper.Tests.csproj", "bin/Release/net8.0/BSN.Commons.AutoMapper.Tests.dll")
 };
 var coverageResultsFileName = "coverage.xml";
 var testResultsFileName = "nunitResults.xml";
