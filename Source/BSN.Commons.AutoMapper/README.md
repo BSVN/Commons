@@ -14,7 +14,7 @@ Install-Package BSN.Commons.AutoMapper
 ```
 
 ### 2. Add Your required mapping profiles
-To use these predefined mapping profiles and injecting your prefered profiles you just need to add following line in the `ServiceCollection`:
+To use these predefined mapping profiles and injecting your preferred profiles you just need to add following line in the `ServiceCollection`:
 ```
 services.AddAutoMapper(config => config.AddProfile<YourMappingProfile>());
 ```
@@ -29,7 +29,7 @@ services.AddAutoMapper(config =>
 
 ### 3. Predefined mapping profile:
 
-Provided builtin mapping profile contains following mappings:
+Provided built in mapping profile contains following mappings:
 
 #### PagedEntityCollectionToMetaDataConverter:
 A default converter which converts `PagedEntityCollection<TDomain>` to `PaginationMetadata`.
