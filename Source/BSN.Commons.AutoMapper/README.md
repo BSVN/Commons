@@ -1,7 +1,5 @@
 # BSN.Commons.AutoMapper
 
-ITNOA
-
 This package contains some facilities for using AutoMapper in Enterprise Applications.
 
 AutoMapper is a popular library for mapping objects from one Model to Another. It simplifies the process of mapping complex objects and reduces the amount of code needed to perform these mappings stuffs.
