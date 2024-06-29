@@ -2,49 +2,49 @@
 
 ITNOA
 
-This package contains some facilities for using AutoMapper in Enterprise way
+This package contains some facilities for using AutoMapper in Enterprise Applications.
 
-AutoMapper is a popular library for mapping objects from one type to another. It simplifies the process of mapping complex objects and reduces the amount of code needed to perform these mappings.
+AutoMapper is a popular library for mapping objects from one Model to Another. It simplifies the process of mapping complex objects and reduces the amount of code needed to perform these mappings stuffs.
 
-### 1. Install required Package
-To use this package, you need to first add it in your client service. You can do this by running the following command:
-```
-- Install-Package BSN.Commons.AutoMapper
-```
+**BSN.Commons.Automapper** is a package that provides some predefined mappings for **BSN.Commons.PresentationInfrastructure** Models.
+This helps **BSN.Commons** users to skip writing required mapping to dealing with these Models.
 
-### 2. Add required services
-Once you've installed the package, you need to add the following code to your Startup.cs file:
+### 1. Installation
+To use this package, you need to first install it on your web api or presentation layer. You can do this by running the following command (in package manager console):
 ```
-- services.AddAutoMapper(config => config.AddProfile<AppServiceViewMapperProfile>());
+Install-Package BSN.Commons.AutoMapper
 ```
 
-### 3.How to use in your service?
-in your application code, execute the mappings:
+### 2. Add Your required mapping profiles
+To use these predefined mapping profiles and injecting your prefered profiles you just need to add following line in the `ServiceCollection`:
 ```
-var productDto = mapper.Map<ProductDto>(product);
-var orderDto = mapper.Map<OrderDto>(order);
+services.AddAutoMapper(config => config.AddProfile<YourMappingProfile>());
+```
+or 
+```
+services.AddAutoMapper(config => 
+{
+    config.AddProfile<YourFirstMappingProfile>();
+    config.AddProfile<YourSecondMappingProfile>();
+});
 ```
 
-### 4.Where CommonsMappingProfile for example is:
+### 3. Predefined mapping profile:
 
-The CommonMapperProfile class is a profile for AutoMapper that defines custom type conversions. It contains the following:
+Provided builtin mapping profile contains following mappings:
 
-- #### PagedEntityCollectionToMetaDataConverter:
-A custom type converter that converts PagedEntityCollection<TDomain> to PaginationMetadata.
-- #### GenericIEnumerableToCollectionViewModelConverter: 
-A generic custom type converter that converts IEnumerable<TDomain> to CollectionViewModel<TViewModel>
+#### PagedEntityCollectionToMetaDataConverter:
+A default converter which converts `PagedEntityCollection<TDomain>` to `PaginationMetadata`.
+#### GenericIEnumerableToCollectionViewModelConverter: 
+A generic default converter which converts `IEnumerable<TDomain>` to `CollectionViewModel<TViewModel>`
 
-The PagedEntityCollectionToMetaDataConverter is a custom type converter that converts PagedEntityCollection<TDomain> to PaginationMetadata. It has a generic type parameter TDomain that represents the type of the domain entities in the PagedEntityCollection
-Here's an example of how to use this custom type converter: 
+### 4. Example Usage
 
 #### PagedEntityCollectionToMetaDataConverter
 ```
 var pagedEntities = new PagedEntityCollection<Product>(products, 1, 10, 100);
 var paginationMetadata = mapper.Map<PaginationMetadata>(pagedEntities);
 ```
-
-The GenericIEnumerableToCollectionViewModelConverter is a generic custom type converter that converts IEnumerable<TDomain> to CollectionViewModel<TViewModel>. It has two generic type parameters: TDomain represents the type of the domain entities in the IEnumerable, and TViewModel represents the type of the view models that will be created from the domain entities.
-Here's an example of how to use this custom type converter: 
 
 #### GenericIEnumerableToCollectionViewModelConverter
 ```
@@ -58,6 +58,4 @@ var products = new List<Product>
 var collectionViewModel = mapper.Map<CollectionViewModel<ProductViewModel>>(products);
 ```
 
-These profiles cover some of the most common use cases for mapping objects in enterprise applications. However, if you need to add support for additional complex types, you can create your own profile and add it to the configuration in the Startup.cs file.
-
-BSN.Commons.AutoMapper is Copyright © 2024 Bsn and other contributors under the Bsn license.
+`BSN.Commons.AutoMapper` is Copyright © 2024 BSN and other contributors under the BSN license.
