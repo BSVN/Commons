@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>BSN.Commons.Orm.EntityFramework</id>
-    <version>1.15.0</version>
+    <version>1.16.0</version>
     <authors>Seyyed Soroosh Hosseinalipour</authors>
     <owners>sorosh_sabz, BSN</owners>
     <license type="expression">MIT</license>
@@ -16,7 +16,7 @@
     <copyright>BSN Co 2019-2024</copyright>
     <tags>Commons ORM Enterprise</tags>
 	<dependencies>
-		<dependency id="BSN.Commons" version="1.15.0" />
+		<dependency id="BSN.Commons" version="1.16.0" />
 		<dependency id="EntityFramework" version="6.4.0" />
 		<dependency id="Microsoft.AspNet.Identity.EntityFramework" version="2.2.3" />
 	</dependencies>
