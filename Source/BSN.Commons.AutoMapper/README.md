@@ -18,11 +18,11 @@ Install-Package BSN.Commons.AutoMapper
 ### 2. Add Your required mapping profiles
 To use these predefined mapping profiles and injecting your prefered profiles you just need to add following line in the `ServiceCollection`:
 ```
-services.AddAutoMapper(config => config.AddProfile<YourMappingProfile>());
+services.AddCommonsAutoMapper(config => config.AddProfile<YourMappingProfile>());
 ```
 or 
 ```
-services.AddAutoMapper(config => 
+services.AddCommonsAutoMapper(config => 
 {
     config.AddProfile<YourFirstMappingProfile>();
     config.AddProfile<YourSecondMappingProfile>();
