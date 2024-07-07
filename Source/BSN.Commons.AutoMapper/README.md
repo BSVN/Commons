@@ -1,7 +1,5 @@
 # BSN.Commons.AutoMapper
 
-ITNOA
-
 This package contains some facilities for using AutoMapper in Enterprise Applications.
 
 AutoMapper is a popular library for mapping objects from one Model to Another. It simplifies the process of mapping complex objects and reduces the amount of code needed to perform these mappings stuffs.
@@ -16,7 +14,7 @@ Install-Package BSN.Commons.AutoMapper
 ```
 
 ### 2. Add Your required mapping profiles
-To use these predefined mapping profiles and injecting your prefered profiles you just need to add following line in the `ServiceCollection`:
+To use these predefined mapping profiles and injecting your preferred profiles you just need to add following line in the `ServiceCollection`:
 ```
 services.AddCommonsAutoMapper(config => config.AddProfile<YourMappingProfile>());
 ```
@@ -31,7 +29,7 @@ services.AddCommonsAutoMapper(config =>
 
 ### 3. Predefined mapping profile:
 
-Provided builtin mapping profile contains following mappings:
+Provided built in mapping profile contains following mappings:
 
 #### PagedEntityCollectionToMetaDataConverter:
 A default converter which converts `PagedEntityCollection<TDomain>` to `PaginationMetadata`.

@@ -58,6 +58,7 @@ namespace BSN.Commons.AutoMapper.Tests
                 cfg.AddProfile(profile);
                 cfg.AddProfile(customProfile);
             });
+
             var mapper = new Mapper(configuration);
             var customEntity = new CustomEntity { Id = 1, Name = "Custom Entity" };
 
