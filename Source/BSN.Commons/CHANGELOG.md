@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.16.0] - 2024-07-03
+
+### Added
+
+- Added AutoMapper Extension
+  
+### Fixed
+
+- RabbitMq Bug fix
+
 ## [1.15.0] - 2024-02-25
 
 ### Added
