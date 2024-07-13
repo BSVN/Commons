@@ -5,7 +5,7 @@ namespace BSN.Commons.AutoMapper.Extensions
 {
     public static class IServiceCollectionExtensions
     {
-        public static IServiceCollection AddAutoMapper(this IServiceCollection services, Action<IMapperConfigurationExpression> configure)
+        public static IServiceCollection AddCommonsAutoMapper(this IServiceCollection services, Action<IMapperConfigurationExpression> configure)
         {
             var mappingConfig = new MapperConfiguration(config =>
             {
