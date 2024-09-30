@@ -19,7 +19,7 @@ namespace BSN.Commons.AutoMapper
                 return new PaginationMetadata()
                 {
                     Page = source.CurrentPage,
-                    PageCount = source.PageSize,
+                    PageCount = source.PageCount,
                     PageSize = source.PageSize,
                     RecordCount = source.RecordCount
                 };
