@@ -9,8 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.16.1] - 2024-07-03
+## [1.17.0] - 2024-10-14
+### Fixed
 
+- Edit PageCount in BSN-Commons-AutoMapper
+
+## [1.16.1] - 2024-07-13
+### Fixed 
+
+- Change Auto Mapper method name to prevent name resolution conflicting
+
+## [1.16.0] - 2024-07-03
 ### Added
 
 - Added AutoMapper Extension
