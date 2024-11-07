@@ -22,7 +22,7 @@ namespace BSN.Commons.Orm.Redis
         /// <param name="configuration">App configuration</param>
         public DatabaseFactory(IConfiguration configuration)
         {
-            redisConnectionOptions = Options.Create(configuration.GetSection("Redis").Get<RedisConnectionOptions>());
+            redisConnectionOptions = Options.Create(configuration.GetSection(Infrastructure.Redis.RedisConnectionOptions.ConfigurationSectionName).Get<RedisConnectionOptions>());
         }
 
         /// <summary>
