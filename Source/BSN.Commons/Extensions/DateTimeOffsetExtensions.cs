@@ -2,7 +2,6 @@ using System;
 
 namespace BSN.Commons.Extensions
 {
-    // TODO: [BSN-COMMONS] Replace with BSN.Commons nuget package when published to github.com/bsn/commons
     /// <summary>
     /// Provides extension methods for DateTimeOffset.
     /// </summary>
