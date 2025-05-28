@@ -13,11 +13,11 @@ namespace BSN.Commons.Extensions
         /// <remarks>
         /// This extension method provides a standardized way to convert DateTimeOffset to DateTime:
         /// - Maintains consistent null handling across the project
-        /// - Optimized for use in LINQ and lambda expressions
+        /// - Optimized for use in LINQ and Lambda expressions
         /// - Ensures type-safe conversions in query projections
         /// </remarks>
         /// <param name="dateTimeOffset">The DateTimeOffset value to convert.</param>
-        /// <returns>A nullable DateTime equivalent, or null if the input is null.</returns>
+        /// <returns>A nullable DateTime equivalent.</returns>
         public static DateTime? ToDateTimeOrDefault(this DateTimeOffset? dateTimeOffset)
         {
             if (dateTimeOffset.HasValue) {
