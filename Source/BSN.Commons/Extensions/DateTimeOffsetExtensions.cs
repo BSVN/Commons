@@ -8,9 +8,14 @@ namespace BSN.Commons.Extensions
     public static class DateTimeOffsetExtensions
     {
         /// <summary>
-        /// Centralizes DateTime conversion logic to maintain consistent default values
-        /// across the project, preventing inconsistencies in null/default datetime handling.
+        /// Provides consistent default DateTime values across the project through centralized conversion logic.
         /// </summary>
+        /// <remarks>
+        /// This extension method provides a standardized way to convert DateTimeOffset to DateTime:
+        /// - Maintains consistent null handling across the project
+        /// - Optimized for use in LINQ and lambda expressions
+        /// - Ensures type-safe conversions in query projections
+        /// </remarks>
         /// <param name="dateTimeOffset">The DateTimeOffset value to convert.</param>
         /// <returns>A nullable DateTime equivalent, or null if the input is null.</returns>
         public static DateTime? ToDateTimeOrDefault(this DateTimeOffset? dateTimeOffset)
