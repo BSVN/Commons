@@ -10,9 +10,15 @@ namespace BSN.Commons.Extensions
         /// <summary>
         /// Converts a nullable DateTimeOffset to a nullable DateTime.
         /// </summary>
-        public static DateTime? ToNullableDateTime(this DateTimeOffset? dateTimeOffset)
+        /// <param name="dateTimeOffset">The DateTimeOffset value to convert.</param>
+        /// <returns>A nullable DateTime equivalent, or null if the input is null.</returns>
+        public static DateTime? ToDateTimeOrDefault(this DateTimeOffset? dateTimeOffset)
         {
-            return dateTimeOffset?.DateTime;
+            if (dateTimeOffset.HasValue) {
+                return (DateTime?)dateTimeOffset.Value.DateTime;
+            }
+
+            return default(DateTime?);
         }
     }
 } 
