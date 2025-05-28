@@ -8,7 +8,8 @@ namespace BSN.Commons.Extensions
     public static class DateTimeOffsetExtensions
     {
         /// <summary>
-        /// Converts a nullable DateTimeOffset to a nullable DateTime.
+        /// Centralizes DateTime conversion logic to maintain consistent default values
+        /// across the project, preventing inconsistencies in null/default datetime handling.
         /// </summary>
         /// <param name="dateTimeOffset">The DateTimeOffset value to convert.</param>
         /// <returns>A nullable DateTime equivalent, or null if the input is null.</returns>
