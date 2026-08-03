@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Confluent.Kafka;
+﻿using Confluent.Kafka;
+using System.Collections.Concurrent;
 
 namespace BSN.Commons.Infrastructure.Kafka
 {
@@ -14,33 +14,25 @@ namespace BSN.Commons.Infrastructure.Kafka
             {
                 BootstrapServers = options.BootstrapServers,
             };
-            
+
             _sharedProducerEngine = new ProducerBuilder<Null, T>(producerConfig).Build();
-            _producers = new Dictionary<string, KafkaProducer<T>>();
+            _producers = new ConcurrentDictionary<string, KafkaProducer<T>>();
         }
 
         /// <inheritdoc />
         public IKafkaProducer<T> Create(string topic)
         {
-            if (_producers.ContainsKey(topic))
-            {
-                return _producers[topic];
-            }
-            
-            var producer = new KafkaProducer<T>(_sharedProducerEngine, topic);
-            
-            _producers.Add(topic, producer);
-            
-            return producer;
+            return _producers.GetOrAdd(topic, t => new KafkaProducer<T>(_sharedProducerEngine, t));
         }
 
         /// <inheritdoc />
-        public void Dispose()
+        public void Dispose() 
         {
             _sharedProducerEngine?.Dispose();
+            _producers.Clear();
         }
 
         private readonly IProducer<Null, T> _sharedProducerEngine;
-        private readonly Dictionary<string, KafkaProducer<T>> _producers;
+        private readonly ConcurrentDictionary<string, KafkaProducer<T>> _producers;
     }
 }
