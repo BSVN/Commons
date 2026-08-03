@@ -1,5 +1,4 @@
-﻿using BSN.Commons.Test.Data;
-using BSN.Commons.Infrastructure;
+﻿using BSN.Commons.Infrastructure;
 using BSN.Commons.Orm.EntityFramework;
 using BSN.Commons.Tests;
 

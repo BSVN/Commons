@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace BSN.Commons.Infrastructure
 {
@@ -76,20 +78,72 @@ namespace BSN.Commons.Infrastructure
         /// Get Object by Expression.
         /// </summary>
         /// <param name="where">Expression</param>
+        /// <param name="asNoTracking">No Tracking</param>
         /// <returns>Retrived Object or null</returns>
-        T Get(Expression<Func<T, bool>> where);
+        T Get(Expression<Func<T, bool>> where, bool asNoTracking = false);
 
         /// <summary>
         /// Get all Objects in the current repository.
         /// </summary>
+        /// <param name="asNoTracking">No Tracking</param>
         /// <returns>List of all Objects</returns>
-        IEnumerable<T> GetAll();
+        IEnumerable<T> GetAll(bool asNoTracking = false);
 
         /// <summary>
         /// Get List of existing objects using Expression.
         /// </summary>
         /// <param name="where">Expression</param>
+        /// <param name="asNoTracking">No Tracking</param>
         /// <returns>List of Objects</returns>
-		IEnumerable<T> GetMany(Expression<Func<T, bool>> where);
-	}
+		IEnumerable<T> GetMany(Expression<Func<T, bool>> where, bool asNoTracking = false);
+
+        /// <summary>
+        /// Add new object asynchronously.
+        /// </summary>
+        Task AddAsync(
+            T entity,
+            CancellationToken cancellationToken = default(CancellationToken));
+
+
+        /// <summary>
+        /// Add a range of objects asynchronously.
+        /// </summary>
+        Task AddRangeAsync(
+            IEnumerable<T> entities,
+            CancellationToken cancellationToken = default(CancellationToken));
+
+
+        /// <summary>
+        /// Get object by identifier asynchronously.
+        /// </summary>
+        Task<T> GetByIdAsync<KeyType>(
+            KeyType id,            
+            CancellationToken cancellationToken = default(CancellationToken));
+
+
+        /// <summary>
+        /// Get object using expression asynchronously.
+        /// </summary>
+        Task<T> GetAsync(
+            Expression<Func<T, bool>> where,
+            bool asNoTracking = false,
+            CancellationToken cancellationToken = default(CancellationToken));
+
+
+        /// <summary>
+        /// Get all objects asynchronously.
+        /// </summary>
+        Task<IEnumerable<T>> GetAllAsync(
+            bool asNoTracking = false,
+            CancellationToken cancellationToken = default(CancellationToken));
+
+
+        /// <summary>
+        /// Get objects using expression asynchronously.
+        /// </summary>
+        Task<IEnumerable<T>> GetManyAsync(
+            Expression<Func<T, bool>> where,
+            bool asNoTracking = false,
+            CancellationToken cancellationToken = default(CancellationToken));
+    }
 }

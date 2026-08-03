@@ -1,6 +1,7 @@
 ﻿using BSN.Commons.Infrastructure;
 using BSN.Commons.Tests;
 using System.Data.Entity;
+using System.Threading.Tasks;
 
 namespace BSN.Commons.Test.Data
 {
@@ -36,5 +37,15 @@ namespace BSN.Commons.Test.Data
 		{
             return base.SaveChanges();
 		}
-	}
+        public override Task<int> SaveChangesAsync()
+        {
+            return base.SaveChangesAsync();
+        }
+
+        public ValueTask DisposeAsync()
+        {
+            base.Dispose();
+            return new ValueTask();
+        }
+    }
 }

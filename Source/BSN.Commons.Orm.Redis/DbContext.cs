@@ -2,9 +2,8 @@
 using BSN.Commons.Infrastructure.Redis;
 using Microsoft.Extensions.Options;
 using Redis.OM;
-using Redis.OM.Contracts;
-using Redis.OM.Searching;
-using StackExchange.Redis;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace BSN.Commons.Orm.Redis
 {
@@ -39,9 +38,21 @@ namespace BSN.Commons.Orm.Redis
         }
 
         /// <inheritdoc/>
+        public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            throw new System.NotImplementedException("We don't have a way to save changes on redis om yet.");
+        }
+
+        /// <inheritdoc/>
         public void Dispose()
         {
             // TODO release managed resources here
+        }
+
+        public ValueTask DisposeAsync()
+        {
+            // TODO release managed resources here
+            return new ValueTask();
         }
     }
 }
