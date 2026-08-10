@@ -9,9 +9,11 @@ namespace BSN.Commons.Test.Infrastructure
 {
     internal class InMemoryDatabaseFactory : DatabaseFactory<UnitTestContext>
     {
-        public InMemoryDatabaseFactory() : base(Options.Create(new RedisConnectionOptions
+        public InMemoryDatabaseFactory(RedisContainer _redis) : base(Options.Create(new RedisConnectionOptions
         {
-            ConnectionString = "redis://localhost:6379"
+            ConnectionString = $"redis://{_redis.GetConnectionString()}"
+            //var multiplexer = await ConnectionMultiplexer.ConnectAsync(connectionString);
+            //ConnectionString = "redis://localhost:6379"
         }))
         {
 
