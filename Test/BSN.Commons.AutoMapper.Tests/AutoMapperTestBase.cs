@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace BSN.Commons.AutoMapper.Tests
 {
@@ -11,7 +12,7 @@ namespace BSN.Commons.AutoMapper.Tests
             var configuration = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<CommonMapperProfile>();
-            });
+            }, NullLoggerFactory.Instance);
 
             _mapper = configuration.CreateMapper();
         }
