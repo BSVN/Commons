@@ -4,6 +4,7 @@ using BSN.Commons.Orm.Redis;
 using BSN.Commons.Test.Data;
 using Microsoft.Extensions.Options;
 using Redis.OM;
+using Testcontainers.Redis;
 
 namespace BSN.Commons.Test.Infrastructure
 {
@@ -11,9 +12,7 @@ namespace BSN.Commons.Test.Infrastructure
     {
         public InMemoryDatabaseFactory(RedisContainer _redis) : base(Options.Create(new RedisConnectionOptions
         {
-            ConnectionString = $"redis://{_redis.GetConnectionString()}"
-            //var multiplexer = await ConnectionMultiplexer.ConnectAsync(connectionString);
-            //ConnectionString = "redis://localhost:6379"
+            ConnectionString = $"redis://{_redis.GetConnectionString()}"            
         }))
         {
 
