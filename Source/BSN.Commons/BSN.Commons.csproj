@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -54,10 +54,10 @@
 
   <ItemGroup>
     <PackageReference Include="Apache.NMS" Version="2.0.0" />
-    <PackageReference Include="Apache.NMS.ActiveMQ" Version="2.0.0" />
+    <PackageReference Include="Apache.NMS.ActiveMQ" Version="2.1.1" />
     <PackageReference Include="AWSSDK.S3" Version="3.7.305.2" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.32" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.32" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.3" />
     <PackageReference Include="Confluent.Kafka" Version="2.3.0" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
       <PrivateAssets>all</PrivateAssets>
@@ -66,8 +66,9 @@
     <PackageReference Include="Polly" Version="8.0.0" />
     <PackageReference Include="RabbitMQ.Client" Version="6.6.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Redis.OM" Version="0.6.1" />
+    <PackageReference Include="Redis.OM" Version="0.8.0" />
     <PackageReference Include="System.Text.Json" Version="8.0.5" />
+    
   </ItemGroup>
 
   <ItemGroup>
