@@ -271,32 +271,11 @@ namespace BSN.Commons.Orm.Redis
                 GetMany(where, asNoTracking));
         }
 
-
-
         protected readonly IRedisCollection<T> dbCollection;
 
+        protected IDatabaseFactory DatabaseFactory { get; private set; }
 
-        protected IDatabaseFactory DatabaseFactory
-        {
-            get;
-            private set;
-        }
-
-
-        protected IRedisConnectionProvider DataContext
-        {
-            get
-            {
-                if (_dataContext == null)
-                {
-                    _dataContext =
-                        (IRedisConnectionProvider)DatabaseFactory.Get();
-                }
-
-                return _dataContext;
-            }
-        }
-
+        protected IRedisConnectionProvider DataContext => _dataContext ?? (_dataContext = (IRedisConnectionProvider)DatabaseFactory.Get());
 
         private IRedisConnectionProvider _dataContext;
     }

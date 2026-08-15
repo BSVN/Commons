@@ -137,6 +137,12 @@ namespace BSN.Commons.Orm.EntityFramework
 
             configurer(updateConfig);
 
+            if (updateConfig.AutoDetectChangedPropertiesEnabled)
+            {
+                _dataContext.Configuration.AutoDetectChangesEnabled = true;
+                return;
+            }
+
             bool previousValue =
                 _dataContext.Configuration.AutoDetectChangesEnabled;
 
@@ -186,10 +192,7 @@ namespace BSN.Commons.Orm.EntityFramework
         {
             var objects = dbSet.Where(where);
 
-            foreach (T obj in objects)
-            {
-                dbSet.Remove(obj);
-            }
+            DeleteRange(objects);
         }
 
 
@@ -309,36 +312,20 @@ namespace BSN.Commons.Orm.EntityFramework
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
-
         /// <summary>
         /// Database Set
         /// </summary>
         protected readonly DbSet<T> dbSet;
 
-
         /// <summary>
         /// Database Context
         /// </summary>
-        protected DbContext DataContext
-        {
-            get
-            {
-                if (_dataContext == null)
-                {
-                    _dataContext =
-                        (DbContext)DatabaseFactory.Get();
-                }
-
-                return _dataContext;
-            }
-        }
-
+        protected DbContext DataContext => _dataContext ?? (_dataContext = (DbContext)DatabaseFactory.Get());
 
         /// <summary>
         /// Database Factory
         /// </summary>
         protected IDatabaseFactory DatabaseFactory { get; private set; }
-
 
         private DbContext _dataContext;
     }

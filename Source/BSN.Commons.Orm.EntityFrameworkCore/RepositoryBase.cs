@@ -13,11 +13,6 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
     public class RepositoryBase<T> : IRepository<T>
         where T : class
     {
-        protected readonly DbSet<T> dbSet;
-
-        protected DbContext _dataContext;
-
-
         protected RepositoryBase(IDatabaseFactory databaseFactory)
         {
             if (databaseFactory == null)
@@ -27,29 +22,14 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
             dbSet = DataContext.Set<T>();
         }
 
-
-        protected DbContext DataContext
-        {
-            get
-            {
-                if (_dataContext == null)
-                    _dataContext = (DbContext)DatabaseFactory.Get();
-
-                return _dataContext;
-            }
-        }
-
-
-        protected IDatabaseFactory DatabaseFactory { get; private set; }
-
-
-        public void Add(T entity)
+        /// <inheritdoc />
+        public virtual void Add(T entity)
         {
             dbSet.Add(entity);
         }
 
-
-        public async Task AddAsync(
+         /// <inheritdoc />
+        public virtual async Task AddAsync(
             T entity,
             CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -58,14 +38,14 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
                 .ConfigureAwait(false);
         }
 
-
-        public void AddRange(IEnumerable<T> entities)
+        /// <inheritdoc />
+        public virtual void AddRange(IEnumerable<T> entities)
         {
             dbSet.AddRange(entities);
         }
 
-
-        public Task AddRangeAsync(
+        /// <inheritdoc />
+        public virtual Task AddRangeAsync(
             IEnumerable<T> entities,
             CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -74,33 +54,33 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
                 cancellationToken);
         }
 
-
-        public void Delete(T entity)
+        /// <inheritdoc />
+        public virtual void Delete(T entity)
         {
             dbSet.Remove(entity);
         }
 
-
-        public void Delete(Expression<Func<T, bool>> where)
+        /// <inheritdoc />
+        public virtual void Delete(Expression<Func<T, bool>> where)
         {
-            dbSet.RemoveRange(
+            DeleteRange(
                 dbSet.Where(where));
         }
 
-
-        public void DeleteRange(IEnumerable<T> entities)
+        /// <inheritdoc />
+        public virtual void DeleteRange(IEnumerable<T> entities)
         {
             dbSet.RemoveRange(entities);
         }
 
-
+        /// <inheritdoc />
         public virtual T GetById<KeyType>(
             KeyType id)
         {
             return dbSet.Find(id);
         }
 
-
+        /// <inheritdoc />
         public virtual async Task<T> GetByIdAsync<KeyType>(
             KeyType id,
             CancellationToken cancellationToken = default(CancellationToken))
@@ -111,7 +91,7 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
                     .ConfigureAwait(false);
         }
 
-
+        /// <inheritdoc />
         public virtual IEnumerable<T> GetAll(
             bool asNoTracking = false)
         {
@@ -123,7 +103,7 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
             return query.ToList();
         }
 
-
+        /// <inheritdoc />
         public virtual async Task<IEnumerable<T>> GetAllAsync(
             bool asNoTracking = false,
             CancellationToken cancellationToken = default(CancellationToken))
@@ -138,7 +118,7 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
                 .ConfigureAwait(false);
         }
 
-
+        /// <inheritdoc />
         public virtual IEnumerable<T> GetMany(
             Expression<Func<T, bool>> where,
             bool asNoTracking = false)
@@ -151,7 +131,7 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
             return query;
         }
 
-
+        /// <inheritdoc />
         public virtual async Task<IEnumerable<T>> GetManyAsync(
             Expression<Func<T, bool>> where,
             bool asNoTracking = false,
@@ -167,8 +147,8 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
                 .ConfigureAwait(false);
         }
 
-
-        public T Get(
+        /// <inheritdoc />
+        public virtual T Get(
             Expression<Func<T, bool>> where,
             bool asNoTracking = false)
         {
@@ -180,8 +160,8 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
             return query.FirstOrDefault();
         }
 
-
-        public async Task<T> GetAsync(
+        /// <inheritdoc />
+        public virtual async Task<T> GetAsync(
             Expression<Func<T, bool>> where,
             bool asNoTracking = false,
             CancellationToken cancellationToken = default(CancellationToken))
@@ -196,14 +176,14 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
                 .ConfigureAwait(false);
         }
 
-
-        public void Update(T entity)
+        /// <inheritdoc />
+        public virtual void Update(T entity)
         {
             Update(entity, cfg => cfg.IncludeAllProperties());
         }
 
-
-        public void Update(
+        /// <inheritdoc />
+        public virtual void Update(
             T entity,
             Action<IUpdateConfig<T>> configurer)
         {
@@ -211,6 +191,7 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
 
             configurer(updateConfig);
 
+            // TODO: Why this behaviour exist?
             if (updateConfig.AutoDetectChangedPropertiesEnabled)
             {
                 _dataContext.ChangeTracker.AutoDetectChangesEnabled = true;
@@ -249,22 +230,28 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
             }
         }
 
-
-        public void UpdateRange(IEnumerable<T> entities)
+        /// <inheritdoc />
+        public virtual void UpdateRange(IEnumerable<T> entities)
         {
             UpdateRange(
                 entities,
                 cfg => cfg.IncludeAllProperties());
         }
 
-
-        public void UpdateRange(
+        /// <inheritdoc />
+        public virtual void UpdateRange(
             IEnumerable<T> entities,
             Action<IUpdateConfig<T>> configurer)
         {
             var updateConfig = new UpdateConfig<T>();
 
             configurer(updateConfig);
+
+            if (updateConfig.AutoDetectChangedPropertiesEnabled)
+            {
+                _dataContext.ChangeTracker.AutoDetectChangesEnabled = true;
+                return;
+            }
 
             bool previous =
                 _dataContext.ChangeTracker.AutoDetectChangesEnabled;
@@ -300,5 +287,22 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
                     previous;
             }
         }
+
+        /// <summary>
+        /// Database Set
+        /// </summary>
+        protected readonly DbSet<T> dbSet;
+
+        /// <summary>
+        /// Database Context
+        /// </summary>
+        protected DbContext DataContext => _dataContext ?? (_dataContext = (DbContext)DatabaseFactory.Get());
+
+        /// <summary>
+        /// Database Factory
+        /// </summary>
+        protected IDatabaseFactory DatabaseFactory { get; private set; }
+
+        private DbContext _dataContext;
     }
 }
