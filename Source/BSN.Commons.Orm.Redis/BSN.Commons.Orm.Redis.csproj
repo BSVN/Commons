@@ -74,7 +74,6 @@
 
   <ItemGroup>
     <PackageReference Include="Redis.OM" Version="0.8.0" />    
-    <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
