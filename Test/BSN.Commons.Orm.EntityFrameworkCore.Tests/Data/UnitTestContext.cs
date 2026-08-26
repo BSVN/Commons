@@ -1,17 +1,12 @@
 ﻿using BSN.Commons.Infrastructure;
 using BSN.Commons.Tests;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using System.Text;
 
 namespace BSN.Commons.Test.Data
 {
-    public class UnitTestContext : DbContext, IDbContext
+    public class UnitTestContext : DbContext, IDbContext, IAsyncDbContext
     {
-        public UnitTestContext(DbContextOptions options) : base(options) 
+        public UnitTestContext(DbContextOptions options) : base(options)
         {
 
         }
@@ -28,10 +23,5 @@ namespace BSN.Commons.Test.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<Document> Documents { get; set; }
-
-        public override int SaveChanges()
-		{
-            return base.SaveChanges();
-		}
-	}
+    }
 }

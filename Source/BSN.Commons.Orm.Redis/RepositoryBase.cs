@@ -15,7 +15,7 @@ namespace BSN.Commons.Orm.Redis
     /// Repository Base for Redis Implementation
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class RepositoryBase<T> : IRepository<T>
+    public class RepositoryBase<T> : IRepository<T>, IAsyncRepository<T>
         where T : class
     {
         /// <summary>
@@ -46,13 +46,13 @@ namespace BSN.Commons.Orm.Redis
         /// <inheritdoc />
         public virtual Task AddAsync(
             T entity,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
             cancellationToken.ThrowIfCancellationRequested();
 
-            Add(entity);
-
-            return Task.CompletedTask;
+            return dbCollection.InsertAsync(entity);
         }
 
 
@@ -73,13 +73,10 @@ namespace BSN.Commons.Orm.Redis
         /// <inheritdoc />
         public virtual Task AddRangeAsync(
             IEnumerable<T> entities,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-
-            AddRange(entities);
-
-            return Task.CompletedTask;
+            return dbCollection.InsertAsync(entities);
         }
 
 
@@ -189,16 +186,31 @@ namespace BSN.Commons.Orm.Redis
 
 
         /// <inheritdoc />
-        public virtual Task<T> GetByIdAsync<KeyType>(
+        public virtual async Task<T> GetByIdAsync<KeyType>(
             KeyType id,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
+            if (id == null)
+                throw new ArgumentNullException(nameof(id));
 
-            return Task.FromResult(
-                GetById(id));
+            if (id is string)
+            {
+                var entity = await dbCollection.FindByIdAsync(id.ToString());
+
+                if (entity == null)
+                {
+                    throw new KeyNotFoundException(
+                        $"Entity with key {id} was not found.");
+                }
+
+                return entity;
+            }
+
+            throw new NotSupportedException(
+                $"Redis repository does not support key type {typeof(KeyType)}.");
+
         }
-
 
         public virtual T Get(
             Expression<Func<T, bool>> where,
@@ -208,21 +220,22 @@ namespace BSN.Commons.Orm.Redis
                 throw new ArgumentNullException(nameof(where));
 
             return dbCollection
-                .Where(where)
-                .FirstOrDefault();
+                .FirstOrDefault(where);
         }
-
 
         /// <inheritdoc />
         public virtual Task<T> GetAsync(
             Expression<Func<T, bool>> where,
             bool asNoTracking = false,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            return Task.FromResult(
-                Get(where, asNoTracking));
+            if (where == null)
+                throw new ArgumentNullException(nameof(where));
+
+            return dbCollection
+                .FirstOrDefaultAsync(where);
         }
 
 
@@ -231,19 +244,23 @@ namespace BSN.Commons.Orm.Redis
             bool asNoTracking = false)
         {
             return dbCollection
-                .Where(x => true);
+                .Where(entity => true)
+                .AsEnumerable();
         }
 
 
         /// <inheritdoc />
-        public virtual Task<IEnumerable<T>> GetAllAsync(
+        public virtual async Task<IEnumerable<T>> GetAllAsync(
             bool asNoTracking = false,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            return Task.FromResult(
-                GetAll(asNoTracking));
+            var result = await dbCollection
+                 .Where(entity => true)
+                 .ToListAsync();
+
+            return result.AsEnumerable();
         }
 
 
@@ -260,15 +277,21 @@ namespace BSN.Commons.Orm.Redis
 
 
         /// <inheritdoc />
-        public virtual Task<IEnumerable<T>> GetManyAsync(
+        public virtual async Task<IEnumerable<T>> GetManyAsync(
             Expression<Func<T, bool>> where,
             bool asNoTracking = false,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            return Task.FromResult(
-                GetMany(where, asNoTracking));
+            if (where == null)
+                throw new ArgumentNullException(nameof(where));
+
+            var result = await dbCollection
+                .Where(where)
+                .ToListAsync();
+
+            return result.AsEnumerable();
         }
 
         protected readonly IRedisCollection<T> dbCollection;

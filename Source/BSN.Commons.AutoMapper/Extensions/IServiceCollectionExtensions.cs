@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging.Abstractions;
 
 namespace BSN.Commons.AutoMapper.Extensions
 {
@@ -16,7 +15,7 @@ namespace BSN.Commons.AutoMapper.Extensions
                 configure(config);
 
                 config.AddProfile(new CommonMapperProfile());
-            }, NullLoggerFactory.Instance);
+            });
 
             IMapper mapper = mappingConfig.CreateMapper();
 

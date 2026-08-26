@@ -12,5 +12,10 @@ namespace BSN.Commons.Infrastructure
         /// </summary>
         /// <returns></returns>
         IDbContext Get();
+        /// <summary>
+        /// Get the database context for asynchronous operations
+        /// </summary>
+        /// <returns></returns>
+        IAsyncDbContext GetAsyncContext();
     }
 }

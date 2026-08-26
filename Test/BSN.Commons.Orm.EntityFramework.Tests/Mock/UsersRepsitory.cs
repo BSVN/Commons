@@ -4,7 +4,7 @@ using BSN.Commons.Tests;
 
 namespace BSN.Commons.Test.Mock
 {
-    public sealed class UserRepository : RepositoryBase<User>, IRepository<User>
+    public sealed class UserRepository : RepositoryBase<User>, IRepository<User>, IAsyncRepository<User>
     {
         public UserRepository(IDatabaseFactory databaseFactory) : base(databaseFactory)
         { }

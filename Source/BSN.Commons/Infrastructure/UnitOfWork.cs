@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -7,205 +8,253 @@ using System.Transactions;
 
 namespace BSN.Commons.Infrastructure
 {
-    public class UnitOfWork : IUnitOfWork, IDisposable, IAsyncDisposable
+    /// <summary>
+    /// Represents a unit of work that coordinates database operations
+    /// and transaction-aware task units.
+    /// </summary>
+    public class UnitOfWork : Disposable, IUnitOfWork, IAsyncUnitOfWork
     {
-        private readonly Queue<ITaskUnit> _tasks;
+        private readonly ConcurrentQueue<ITaskUnit> _tasks;
         private readonly List<Exception> _exceptions;
 
+        private readonly SemaphoreSlim _operationLock;
+        private readonly object _exceptionsLock;
+
         private IDbContext _dataContext;
-        private bool _disposed;
+        private IAsyncDbContext _asyncDataContext;
 
-        public IDatabaseFactory DatabaseFactory { get; private set; }
-
-        public IReadOnlyCollection<Exception> Exceptions
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UnitOfWork"/> class.
+        /// </summary>
+        /// <param name="databaseFactory">
+        /// The database factory that owns the database context.
+        /// </param>
+        public UnitOfWork(IDatabaseFactory databaseFactory)
         {
-            get { return _exceptions.AsReadOnly(); }
+            DatabaseFactory = databaseFactory
+                ?? throw new ArgumentNullException(nameof(databaseFactory));
+
+            _tasks = new ConcurrentQueue<ITaskUnit>();
+            _exceptions = new List<Exception>();
+
+            _operationLock = new SemaphoreSlim(1, 1);
+            _exceptionsLock = new object();
         }
 
+        /// <summary>
+        /// Gets the database factory.
+        /// </summary>
+        public IDatabaseFactory DatabaseFactory { get; }
+
+        /// <summary>
+        /// Gets the exceptions raised by executed task units.
+        /// </summary>
+        public IReadOnlyCollection<Exception> Exceptions
+        {
+            get
+            {
+                lock (_exceptionsLock)
+                {
+                    return _exceptions.ToArray();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the database context.
+        /// </summary>
         protected IDbContext DataContext
         {
             get
             {
-                if (_dataContext == null)
-                {
-                    _dataContext = DatabaseFactory.Get();
-                }
+                ThrowIfDisposed();
 
-                return _dataContext;
+                return _dataContext = _dataContext ?? DatabaseFactory.Get();
             }
         }
 
-
-        public UnitOfWork(IDatabaseFactory databaseFactory)
+        /// <summary>
+        /// Gets the database context for asynchronous operations.
+        /// </summary>
+        protected IAsyncDbContext AsyncDataContext
         {
-            if (databaseFactory == null)
-                throw new ArgumentNullException(nameof(databaseFactory));
+            get
+            {
+                ThrowIfDisposed();
 
-            DatabaseFactory = databaseFactory;
-
-            _tasks = new Queue<ITaskUnit>();
-            _exceptions = new List<Exception>();
+                return _asyncDataContext = _asyncDataContext ?? DatabaseFactory.GetAsyncContext();
+            }
         }
 
-
+        /// <inheritdoc />
         public void AddToQueue(ITaskUnit task)
         {
-            if (task == null)
-                throw new ArgumentNullException(nameof(task));
+            if (task == null) throw new ArgumentNullException(nameof(task));
 
-            ThrowIfDisposed();
+            _operationLock.Wait();
 
-            _tasks.Enqueue(task);
+            try
+            {
+                ThrowIfDisposed();
+
+                _tasks.Enqueue(task);
+            }
+            finally
+            {
+                _operationLock.Release();
+            }
         }
 
-
+        /// <inheritdoc />
         public void Commit()
         {
-            ThrowIfDisposed();           
-
-            Queue<ITaskUnit> executedTasks =
-                new Queue<ITaskUnit>();
+            _operationLock.Wait();
 
             try
             {
-                using (var transaction = new TransactionScope())
+                ThrowIfDisposed();
+
+                IEnumerable<ITaskUnit> executedTasks = Enumerable.Empty<ITaskUnit>();
+
+                try
                 {
-                    while (_tasks.Count > 0)
+                    using (var transaction = new TransactionScope())
                     {
-                        ITaskUnit task = _tasks.Dequeue();
+                        executedTasks = DequeueTasks();
 
-                        executedTasks.Enqueue(task);
+                        DataContext.SaveChanges();
 
-                        Transaction.Current.EnlistVolatile(
-                            task,
-                            EnlistmentOptions.None);
+                        transaction.Complete();
                     }
-
-                    DataContext.SaveChanges();
-
-                    transaction.Complete();
                 }
-            }
-            catch
-            {
-                throw;
+                finally
+                {
+                    CollectExceptions(executedTasks);
+                }
             }
             finally
             {
-                CollectExceptions(executedTasks);
+                _operationLock.Release();
             }
         }
 
-
+        /// <inheritdoc />
         public async Task CommitAsync(
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
-            ThrowIfDisposed();
-
-          Queue<ITaskUnit> executedTasks =
-                new Queue<ITaskUnit>();
+            await _operationLock.WaitAsync(cancellationToken);
 
             try
             {
-                using (var transaction = new TransactionScope(
-                    TransactionScopeOption.Required,
-                    new TransactionOptions
-                    {
-                        IsolationLevel = IsolationLevel.ReadCommitted
-                    },
-                    TransactionScopeAsyncFlowOption.Enabled))
+                ThrowIfDisposed();
+
+                IEnumerable<ITaskUnit> executedTasks = Enumerable.Empty<ITaskUnit>();
+                try
                 {
-                    while (_tasks.Count > 0)
+                    using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                     {
-                        ITaskUnit task = _tasks.Dequeue();
+                        executedTasks = DequeueTasks();
 
-                        executedTasks.Enqueue(task);
+                        await AsyncDataContext.SaveChangesAsync(
+                            cancellationToken);
 
-                        Transaction.Current.EnlistVolatile(
-                            task,
-                            EnlistmentOptions.None);
+                        transaction.Complete();
                     }
-
-                    await DataContext.SaveChangesAsync(cancellationToken);
-
-                    transaction.Complete();
                 }
-            }
-            catch
-            {
-                throw;
+                finally
+                {
+                    CollectExceptions(executedTasks);
+                }
             }
             finally
             {
-                CollectExceptions(executedTasks);
+                _operationLock.Release();
             }
         }
 
 
+        /// <summary>
+        /// Dequeues all task units that belong to the current commit.
+        /// </summary>
+        private List<ITaskUnit> DequeueTasks()
+        {
+            var tasks = new List<ITaskUnit>();
+
+            while (_tasks.TryDequeue(out var task))
+            {
+                Transaction.Current.EnlistVolatile(
+                    task,
+                    EnlistmentOptions.None);
+                tasks.Add(task);
+            }
+
+            return tasks;
+        }
+
+        /// <summary>
+        /// Collects exceptions raised by executed task units.
+        /// </summary>
         private void CollectExceptions(
             IEnumerable<ITaskUnit> executedTasks)
         {
-            _exceptions.Clear();
-
-            foreach (ITaskUnit task in executedTasks)
+            lock (_exceptionsLock)
             {
-                if (task.Exception != null)
+                _exceptions.Clear();
+
+                foreach (var task in executedTasks)
                 {
-                    _exceptions.Add(task.Exception);
+                    if (task.Exception != null)
+                    {
+                        _exceptions.Add(task.Exception);
+                    }
                 }
             }
         }
 
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (_disposed)
-                return;
-
-            if (disposing)
-            {
-                if (_dataContext != null)
-                {
-                    _dataContext.Dispose();
-                    _dataContext = null;
-                }
-            }
-
-            _disposed = true;
-        }
-
-
-        public void Dispose()
-        {
-            Dispose(true);
-
-            GC.SuppressFinalize(this);
-        }
-
-
-        public async ValueTask DisposeAsync()
-        {
-            if (_disposed)
-                return;
-
-            if (_dataContext != null)
-            {
-                await _dataContext.DisposeAsync();
-                _dataContext = null;
-            }
-
-            _disposed = true;
-
-            GC.SuppressFinalize(this);
-        }
-
-
+        /// <summary>
+        /// Throws an exception if the unit of work has been disposed.
+        /// </summary>
         private void ThrowIfDisposed()
         {
-            if (_disposed)
+            if (IsDisposed)
             {
                 throw new ObjectDisposedException(
                     GetType().FullName);
+            }
+        }
+
+        /// <summary>
+        /// Releases resources used by the unit of work.
+        /// </summary>
+        protected override void DisposeCore()
+        {
+            /*
+             * DatabaseFactory owns the database context.
+             * UnitOfWork must never dispose it.
+             *
+             * Waiting here guarantees that DisposeCore does not release
+             * UnitOfWork resources while AddToQueue/Commit is executing.
+             */
+            _operationLock.Wait();
+
+            try
+            {
+                _dataContext = null;
+                _asyncDataContext = null;
+
+                while (_tasks.TryDequeue(out _))
+                {
+                }
+
+                lock (_exceptionsLock)
+                {
+                    _exceptions.Clear();
+                }
+            }
+            finally
+            {
+                _operationLock.Release();
+                _operationLock.Dispose();
             }
         }
     }

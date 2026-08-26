@@ -1,20 +1,14 @@
-﻿using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
-using BSN.Commons.Infrastructure;
+﻿using BSN.Commons.Infrastructure;
 using BSN.Commons.Infrastructure.Redis;
-using System.Diagnostics.CodeAnalysis;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace BSN.Commons.Orm.Redis
 {
     /// <summary>
     /// Database Factory for Redis
     /// </summary>
-    public class DatabaseFactory<TDbContext> : Disposable, IDatabaseFactory where TDbContext : Redis.DbContext, ICreatable<IOptions<RedisConnectionOptions>, TDbContext>
+    public class DatabaseFactory<TDbContext> : Disposable, IDatabaseFactory where TDbContext : DbContext, ICreatable<IOptions<RedisConnectionOptions>, TDbContext>
     {
         /// <summary>
         /// Constructor of Redis Database Factory
@@ -39,6 +33,11 @@ namespace BSN.Commons.Orm.Redis
         {
             return _redisDbContext ?? (_redisDbContext = TDbContext.Create(RedisConnectionOptions));
         }
+        /// <inheritdoc/>
+        public IAsyncDbContext GetAsyncContext()
+        {
+            return _asyncRedisDbContext ?? (_asyncRedisDbContext = TDbContext.Create(RedisConnectionOptions));
+        }
 
         /// <summary>
         /// Redis Connection Options
@@ -47,5 +46,6 @@ namespace BSN.Commons.Orm.Redis
 
         private readonly IOptions<RedisConnectionOptions> redisConnectionOptions;
         private IDbContext _redisDbContext;
+        private IAsyncDbContext _asyncRedisDbContext;
     }
 }

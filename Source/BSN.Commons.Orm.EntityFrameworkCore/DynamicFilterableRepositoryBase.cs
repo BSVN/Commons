@@ -1,20 +1,23 @@
 using BSN.Commons.Extensions;
 using BSN.Commons.Infrastructure;
 using BSN.Commons.Orm.EntityFrameworkCore.Extensions;
+using Microsoft.EntityFrameworkCore;
 using Sieve.Exceptions;
 using Sieve.Models;
 using Sieve.Services;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace BSN.Commons.Orm.EntityFrameworkCore
 {
     /// <summary>
-    /// Default implementation of <see cref="IDynamicFilterableRepository{T}"/>
+    /// Default implementation of <see cref="IDynamicFilterableRepository{T}, IDynamicFilterableAsyncRepository{T}"/>
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class DynamicFilterableRepositoryBase<T> : RepositoryBase<T>, IDynamicFilterableRepository<T> where T : class
+    public class DynamicFilterableRepositoryBase<T> : RepositoryBase<T>, IDynamicFilterableRepository<T>, IDynamicFilterableAsyncRepository<T> where T : class
     {
         /// <inheritdoc />
         protected DynamicFilterableRepositoryBase(IDatabaseFactory databaseFactory, ISieveProcessor sieveProcessor) : base(databaseFactory)
@@ -51,6 +54,72 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
             return GetMany((entity) => true, filters, sorts, pageNumber, pageSize);
         }
 
+        /// <inheritdoc />
+        public async Task<PagedEntityCollection<T>> GetManyAsync(
+            Expression<Func<T, bool>> where,
+            string filters,
+            string sorts,
+            uint pageNumber,
+            uint pageSize,
+            CancellationToken cancellationToken = default)
+        {
+            if (pageNumber == 0)
+                throw new ArgumentException(
+                    "Must be greater than zero.",
+                    nameof(pageNumber));
+
+            if (pageSize == 0)
+                throw new ArgumentException(
+                    "Must be greater than zero.",
+                    nameof(pageSize));
+
+            ArgumentNullException.ThrowIfNull(where);
+
+            IQueryable<T> query = dbSet.Where(where);
+
+            try
+            {
+                query = SieveProcessor.Apply(
+                    new SieveModel
+                    {
+                        Filters = filters,
+                        Sorts = sorts,
+                        PageSize = (int)pageSize,
+                        Page = (int)pageNumber
+                    },
+                    query,
+                    applyPagination: false);
+            }
+            catch (SieveException ex)
+            {
+                throw new InvalidOperationException(
+                    ex.ExtractMessage(),
+                    ex);
+            }
+
+            return await query.PaginateAsync(
+                pageNumber,
+                pageSize,
+                cancellationToken);
+        }
+
+        /// <inheritdoc />
+        public Task<PagedEntityCollection<T>> GetManyAsync(
+            string filters,
+            string sorts,
+            uint pageNumber,
+            uint pageSize,
+            CancellationToken cancellationToken = default)
+        {
+            return GetManyAsync(
+                entity => true,
+                filters,
+                sorts,
+                pageNumber,
+                pageSize,
+                cancellationToken);
+        }
+
         /// <summary>
         /// The engine of filtering 
         /// </summary>
@@ -58,5 +127,6 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
         /// So if you want to any extra filtering or changing behaviour of current filtering, you have to use this engine
         /// </remarks>
         protected ISieveProcessor SieveProcessor { get; }
+
     }
 }

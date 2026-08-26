@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace BSN.Commons.Test.Data
 {
-    public class UnitTestContext : DbContext, IDbContext
+    public class UnitTestContext : DbContext, IDbContext, IAsyncDbContext
     {
-        public UnitTestContext(System.Data.Common.DbConnection dbConnection) : base(dbConnection, false) 
+        public UnitTestContext(System.Data.Common.DbConnection dbConnection) : base(dbConnection, false)
         {
-            
+
         }
 
         public UnitTestContext()
@@ -31,15 +31,6 @@ namespace BSN.Commons.Test.Data
 
             modelBuilder.Entity<User>().HasOptional(P => P.Document).WithRequired(Q => Q.User);
             base.OnModelCreating(modelBuilder);
-        }
-
-		public override int SaveChanges()
-		{
-            return base.SaveChanges();
-		}
-        public override Task<int> SaveChangesAsync()
-        {
-            return base.SaveChangesAsync();
         }
 
         public ValueTask DisposeAsync()

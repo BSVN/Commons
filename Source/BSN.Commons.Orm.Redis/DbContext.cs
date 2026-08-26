@@ -10,7 +10,7 @@ namespace BSN.Commons.Orm.Redis
     /// <summary>
     /// Redis Database Context
     /// </summary>
-    public class DbContext : RedisConnectionProvider, IDbContext, ICreatable<IOptions<RedisConnectionOptions>, DbContext>
+    public class DbContext : RedisConnectionProvider, IDbContext, IAsyncDbContext, ICreatable<IOptions<RedisConnectionOptions>, DbContext>
     {
         /// <summary>
         /// Constructor of Redis Database Context

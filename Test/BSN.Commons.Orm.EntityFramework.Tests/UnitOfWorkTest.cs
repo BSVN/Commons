@@ -26,5 +26,10 @@ namespace BSN.Commons.Test
         {
             return new UserRepository(databaseFactory);
         }
+
+        public override IAsyncRepository<User> CreateAsyncUserRepository(IDatabaseFactory databaseFactory)
+        {
+            return new UserRepository(databaseFactory);
+        }
     }
 }

@@ -9,8 +9,9 @@ using System.Threading.Tasks;
 
 namespace BSN.Commons.Orm.EntityFrameworkCore
 {
+
     /// <inheritdoc />
-    public class RepositoryBase<T> : IRepository<T>
+    public class RepositoryBase<T> : IRepository<T>, IAsyncRepository<T>
         where T : class
     {
         protected RepositoryBase(IDatabaseFactory databaseFactory)
@@ -28,10 +29,10 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
             dbSet.Add(entity);
         }
 
-         /// <inheritdoc />
+        /// <inheritdoc />
         public virtual async Task AddAsync(
             T entity,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             await dbSet
                 .AddAsync(entity, cancellationToken)
@@ -47,7 +48,7 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
         /// <inheritdoc />
         public virtual Task AddRangeAsync(
             IEnumerable<T> entities,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             return dbSet.AddRangeAsync(
                 entities,
@@ -83,12 +84,12 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
         /// <inheritdoc />
         public virtual async Task<T> GetByIdAsync<KeyType>(
             KeyType id,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
-                return await dbSet
-                    .FindAsync(id ,
-                        cancellationToken)
-                    .ConfigureAwait(false);
+            return await dbSet
+                .FindAsync(id,
+                    cancellationToken)
+                .ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -106,7 +107,7 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
         /// <inheritdoc />
         public virtual async Task<IEnumerable<T>> GetAllAsync(
             bool asNoTracking = false,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             IQueryable<T> query = dbSet;
 
@@ -114,8 +115,7 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
                 query = query.AsNoTracking();
 
             return await query
-                .ToListAsync(cancellationToken)
-                .ConfigureAwait(false);
+                .ToListAsync(cancellationToken);
         }
 
         /// <inheritdoc />
@@ -135,7 +135,7 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
         public virtual async Task<IEnumerable<T>> GetManyAsync(
             Expression<Func<T, bool>> where,
             bool asNoTracking = false,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             IQueryable<T> query = dbSet.Where(where);
 
@@ -143,8 +143,7 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
                 query = query.AsNoTracking();
 
             return await query
-                .ToListAsync(cancellationToken)
-                .ConfigureAwait(false);
+                .ToListAsync(cancellationToken);
         }
 
         /// <inheritdoc />
@@ -164,7 +163,7 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
         public virtual async Task<T> GetAsync(
             Expression<Func<T, bool>> where,
             bool asNoTracking = false,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             IQueryable<T> query = dbSet.Where(where);
 
@@ -172,8 +171,7 @@ namespace BSN.Commons.Orm.EntityFrameworkCore
                 query = query.AsNoTracking();
 
             return await query
-                .FirstOrDefaultAsync(cancellationToken)
-                .ConfigureAwait(false);
+                .FirstOrDefaultAsync(cancellationToken);
         }
 
         /// <inheritdoc />

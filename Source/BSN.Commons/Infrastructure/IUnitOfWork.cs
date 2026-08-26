@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace BSN.Commons.Infrastructure
 {
-    public interface IUnitOfWork : IDisposable, IAsyncDisposable
+    public interface IUnitOfWork : IDisposable
     {
         IDatabaseFactory DatabaseFactory { get; }
 
@@ -14,8 +14,5 @@ namespace BSN.Commons.Infrastructure
         void AddToQueue(ITaskUnit task);
 
         void Commit();
-
-        Task CommitAsync(
-            CancellationToken cancellationToken = default);
     }
 }

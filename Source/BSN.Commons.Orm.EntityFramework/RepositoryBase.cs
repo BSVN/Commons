@@ -9,8 +9,9 @@ using System.Threading.Tasks;
 
 namespace BSN.Commons.Orm.EntityFramework
 {
+
     /// <inheritdoc />
-    public abstract partial class RepositoryBase<T> : IRepository<T>
+    public abstract partial class RepositoryBase<T> : IRepository<T>, IAsyncRepository<T>
         where T : class
     {
         /// <inheritdoc />
