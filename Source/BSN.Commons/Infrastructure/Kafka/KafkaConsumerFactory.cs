@@ -1,6 +1,6 @@
 ﻿using Confluent.Kafka;
-using Microsoft.Extensions.Options;
-using System.Collections.Generic;
+using System;
+using System.Collections.Concurrent;
 
 namespace BSN.Commons.Infrastructure.Kafka
 {
@@ -11,41 +11,45 @@ namespace BSN.Commons.Infrastructure.Kafka
         /// <param name="options">Default Options for KafkaConsumers</param>
         public KafkaConsumerFactory(IKafkaConsumerOptions options)
         {
-            _defaultConsumerOptions = options;
-            _consumers = new Dictionary<string, KafkaConsumer<T>>();
+            _defaultConsumerOptions = options ?? throw new ArgumentNullException(nameof(options));
+            _consumers = new ConcurrentDictionary<string, KafkaConsumer<T>>();
         }
 
         /// <inheritdoc/>
         public IKafkaConsumer<T> Create(string topic, string groupId)
         {
-            string consumerKey = topic + ":" + groupId;
+            if (string.IsNullOrWhiteSpace(topic))
+                throw new ArgumentException("Topic cannot be null or empty.", nameof(topic));
 
-            if (_consumers.ContainsKey(consumerKey))
+            if (string.IsNullOrWhiteSpace(groupId))
+                throw new ArgumentException("GroupId cannot be null or empty.", nameof(groupId));
+
+            var consumerKey = $"{topic}:{groupId}";
+
+            return _consumers.GetOrAdd(consumerKey, _ =>
             {
-                return _consumers[consumerKey];
-            }
+                var config = new ConsumerConfig
+                {
+                    BootstrapServers = _defaultConsumerOptions.BootstrapServers,
+                    AutoOffsetReset = AutoOffsetReset.Earliest,
+                    GroupId = groupId
+                };
 
-            var config = new ConsumerConfig() 
-            {
-                BootstrapServers = _defaultConsumerOptions.BootstrapServers,
-                AutoOffsetReset = AutoOffsetReset.Earliest,
-                GroupId = groupId
-            };
-            
-            // Here we did this because the ReceiveMessageMaxBytes in ProducerConfig type
-            // is int and can not accept high values that we expect
-            config.Set("receive.message.max.bytes", _defaultConsumerOptions.ReceiveMessageMaxBytes);
 
-            // Here Null means that the key in kafka message is null
-            // it helps equal distribution of messages in the kafka cluster
-            var consumerEngine = new ConsumerBuilder<Null, T>(config).Build();
-            consumerEngine.Subscribe(topic);
+                // Here we did this because the ReceiveMessageMaxBytes in ProducerConfig type
+                // is int and can not accept high values that we expect
+                config.Set(
+                    "receive.message.max.bytes",
+                    _defaultConsumerOptions.ReceiveMessageMaxBytes);
 
-            var consumer = new KafkaConsumer<T>(consumerEngine);
-                
-            _consumers.Add(consumerKey, consumer);
+                // Here Null means that the key in kafka message is null
+                // it helps equal distribution of messages in the kafka cluster
+                var consumerEngine = new ConsumerBuilder<Null, T>(config).Build();
 
-            return consumer;
+                consumerEngine.Subscribe(topic);
+
+                return new KafkaConsumer<T>(consumerEngine);
+            });
         }
         
         /// <inheritdoc />
@@ -55,9 +59,10 @@ namespace BSN.Commons.Infrastructure.Kafka
             {
                 consumer.Value.Dispose();
             }
+            _consumers.Clear();
         }
         
-        private readonly Dictionary<string, KafkaConsumer<T>> _consumers;
+        private readonly ConcurrentDictionary<string, KafkaConsumer<T>> _consumers;
         private readonly IKafkaConsumerOptions _defaultConsumerOptions;
     }
 }
