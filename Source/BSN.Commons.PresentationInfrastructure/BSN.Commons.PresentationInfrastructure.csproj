@@ -3,12 +3,12 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Description>Presentation infrastructure layer of BSN.Commons library for enterprise application.</Description>
-    <AssemblyVersion>1.18.0</AssemblyVersion>
-    <FileVersion>1.18.0</FileVersion>
-    <Version>1.18.0</Version>
+    <AssemblyVersion>1.18.1</AssemblyVersion>
+    <FileVersion>1.18.1</FileVersion>
+    <Version>1.18.1</Version>
     <Authors>BSN Developers</Authors>
     <Company>BSN Company</Company>
-    <Copyright>BSN Co 2019-2024</Copyright>
+    <Copyright>BSN Co 2019-2026</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/BSVN/Commons.git</RepositoryUrl>
     <PackageProjectUrl>https://github.com/BSVN/Commons</PackageProjectUrl>
