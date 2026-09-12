@@ -1,24 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BSN.Commons.Orm.Redis.Tests.Mock;
+﻿using BSN.Commons.Infrastructure;
 using BSN.Commons.Orm.Redis.Tests.Dto;
-using BSN.Commons.Infrastructure;
-using BSN.Commons.Infrastructure.Redis;
-using Microsoft.Extensions.Options;
-using NUnit.Framework;
+using BSN.Commons.Orm.Redis.Tests.Mock;
 using BSN.Commons.Test.Infrastructure;
+using NUnit.Framework;
+using Testcontainers.Redis;
 
 namespace BSN.Commons.Orm.Redis.Tests
 {
     [TestFixture]
     public class RepositoryTest
     {
+
+        [OneTimeSetUp]
+        public async Task OneTimeSetUp()
+        {
+            _redis = new RedisBuilder("redis/redis-stack-server:latest")
+                .Build();
+
+            await _redis.StartAsync();
+        }
+
+        [OneTimeTearDown]
+        public async Task OneTimeTearDown()
+        {
+            await _redis.DisposeAsync();
+        }
+
         [SetUp]
         public void SetUp()
-        {
+        {            
             _databaseFactory = CreateDatabaseFactory();
             _userRepository = CreateUserRepository(_databaseFactory);
         }
@@ -31,7 +41,7 @@ namespace BSN.Commons.Orm.Redis.Tests
 
         [Test]
         public void AddUserToDataBase_UserShouldBeCorrectlyAddedToDatabase()
-        {
+         {
             User user = new User()
             {
                 FirstName = "Reza",
@@ -48,7 +58,7 @@ namespace BSN.Commons.Orm.Redis.Tests
 
         public IDatabaseFactory CreateDatabaseFactory()
         {
-            return new InMemoryDatabaseFactory();
+            return new InMemoryDatabaseFactory(_redis);
         }
 
         public IRepository<User> CreateUserRepository(IDatabaseFactory databaseFactory)
@@ -56,6 +66,7 @@ namespace BSN.Commons.Orm.Redis.Tests
             return new UserRepository(databaseFactory);
         }
 
+        private RedisContainer _redis = null!;
         protected IRepository<User> _userRepository;
         protected IDatabaseFactory _databaseFactory;
     }

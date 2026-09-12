@@ -1,9 +1,7 @@
-﻿using BSN.Commons.Test.Data;
-using BSN.Commons.Infrastructure;
+﻿using BSN.Commons.Infrastructure;
+using BSN.Commons.Test.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BSN.Commons.Test.Infrastructure
 {
@@ -39,6 +37,20 @@ namespace BSN.Commons.Test.Infrastructure
             }
             else
                 return (IDbContext)_dataContext;
+        }
+
+        IAsyncDbContext IDatabaseFactory.GetAsyncContext()
+        {            
+            if (_dataContext == null)
+            {
+                _dataContext = new UnitTestContext(new DbContextOptionsBuilder()
+                                                       .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                                                       .Options);
+
+                return (IAsyncDbContext)_dataContext;
+            }
+            else
+                return (IAsyncDbContext)_dataContext;
         }
     }
 }

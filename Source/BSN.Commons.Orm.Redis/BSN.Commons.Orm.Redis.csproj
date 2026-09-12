@@ -73,7 +73,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Redis.OM" Version="0.8.0" />
+    <PackageReference Include="Redis.OM" Version="0.8.0" />    
   </ItemGroup>
 
   <ItemGroup>

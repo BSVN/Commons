@@ -4,70 +4,140 @@ using System.Transactions;
 
 namespace BSN.Commons.Infrastructure
 {
+
     public class EnlistTask : ITaskUnit
     {
-        private readonly Task _executTask;
+        private readonly Task _executeTask;
         private readonly Task _rollbackTask;
 
         public Exception Exception { get; set; }
 
-        public EnlistTask(Task execut, Task rollback)
+        public EnlistTask(Task execute, Task rollback)
         {
-            _executTask = execut;
-            _rollbackTask = rollback;
+            _executeTask = execute
+                ?? throw new ArgumentNullException(nameof(execute));
+
+            _rollbackTask = rollback
+                ?? throw new ArgumentNullException(nameof(rollback));
         }
 
         public Task Execute()
         {
-            _executTask.RunSynchronously();
+            try
+            {
+                _executeTask.RunSynchronously();
 
-            if (_executTask.Status == TaskStatus.Faulted)
-                Exception = _executTask.Exception ?? new Exception("Execute Faulted");
+                if (_executeTask.IsFaulted)
+                {
+                    Exception = _executeTask.Exception?.InnerException
+                        ?? new Exception("Execute task faulted.");
 
-            if (Exception != null)
-                throw Exception;
+                    throw Exception;
+                }
 
-            return _executTask;
+                if (_executeTask.IsCanceled)
+                {
+                    Exception = new TaskCanceledException(_executeTask);
+
+                    throw Exception;
+                }
+
+                return _executeTask;
+            }
+            catch (Exception ex)
+            {
+                Exception = Exception ?? ex;
+
+                throw;
+            }
         }
 
         public Task Rollback()
         {
-            _rollbackTask.RunSynchronously();
+            try
+            {
+                _rollbackTask.RunSynchronously();
 
-            if (_executTask.Status == TaskStatus.Faulted)
-                Exception = _executTask.Exception ?? new Exception("Rollback Faulted");
+                if (_rollbackTask.IsFaulted)
+                {
+                    var rollbackException =
+                        _rollbackTask.Exception?.InnerException
+                        ?? new Exception("Rollback task faulted.");
 
-            return _rollbackTask;
+                    Exception = Exception ?? rollbackException;
+
+                    throw rollbackException;
+                }
+
+                if (_rollbackTask.IsCanceled)
+                {
+                    var rollbackException =
+                        new TaskCanceledException(_rollbackTask);
+
+                    Exception = Exception ?? rollbackException;
+
+                    throw rollbackException;
+                }
+
+                return _rollbackTask;
+            }
+            catch (Exception ex)
+            {
+                Exception = Exception ?? ex;
+                throw;
+            }
         }
 
-        public void Commit(Enlistment enlistment)
-        {
-            enlistment.Done();
-        }
-
-        public void InDoubt(Enlistment enlistment)
-        {
-            enlistment.Done();
-        }
-
-        public void Prepare(PreparingEnlistment preparingEnlistment)
+        public void Prepare(
+            PreparingEnlistment preparingEnlistment)
         {
             try
             {
                 Execute();
+
                 preparingEnlistment.Prepared();
             }
             catch (Exception ex)
             {
-                Exception = ex;
-                Rollback();
-                preparingEnlistment.ForceRollback(ex);
+                Exception = Exception ?? ex;
+
+                try
+                {
+                    Rollback();
+                }
+                catch
+                {
+                    // The original transaction failure must remain
+                    // the failure reported to System.Transactions.
+                }
+
+                preparingEnlistment.ForceRollback(Exception);
             }
         }
 
-        public void Rollback(Enlistment enlistment)
+        public void Commit(
+            Enlistment enlistment)
         {
-            Rollback();
+            enlistment.Done();
+        }
+
+        public void Rollback(
+            Enlistment enlistment)
+        {
+            try
+            {
+                Rollback();
+            }
+            finally
+            {
+                enlistment.Done();
+            }
+        }
+
+        public void InDoubt(
+            Enlistment enlistment)
+        {
+            enlistment.Done();
         }
     }
 }

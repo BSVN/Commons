@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BSN.Commons.Responses;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace BSN.Commons.AutoMapper.Tests
 {
@@ -11,7 +12,7 @@ namespace BSN.Commons.AutoMapper.Tests
         {
             // Arrange
             var profile = new CommonMapperProfile();
-            var configuration = new MapperConfiguration(cfg => cfg.AddProfile(profile));
+            var configuration = new MapperConfiguration(cfg => cfg.AddProfile(profile), NullLoggerFactory.Instance);
             var mapper = new Mapper(configuration);
             var pagedEntityCollection = new PagedEntityCollection<int>
             {
@@ -35,7 +36,7 @@ namespace BSN.Commons.AutoMapper.Tests
         {
             // Arrange
             var profile = new CommonMapperProfile();
-            var configuration = new MapperConfiguration(cfg => cfg.AddProfile(profile));
+            var configuration = new MapperConfiguration(cfg => cfg.AddProfile(profile), NullLoggerFactory.Instance);
             var mapper = new Mapper(configuration);
             var items = new List<int> { 1, 2, 3 };
 
@@ -57,7 +58,7 @@ namespace BSN.Commons.AutoMapper.Tests
             {
                 cfg.AddProfile(profile);
                 cfg.AddProfile(customProfile);
-            });
+            }, NullLoggerFactory.Instance);
 
             var mapper = new Mapper(configuration);
             var customEntity = new CustomEntity { Id = 1, Name = "Custom Entity" };

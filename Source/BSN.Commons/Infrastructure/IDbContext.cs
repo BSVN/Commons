@@ -8,9 +8,8 @@ namespace BSN.Commons.Infrastructure
     public interface IDbContext : IDisposable
     {
         /// <summary>
-        /// Save changes to the database
+        /// Save changes to the database.
         /// </summary>
-        /// <returns></returns>
-        int SaveChanges();
+        int SaveChanges();        
     }
 }

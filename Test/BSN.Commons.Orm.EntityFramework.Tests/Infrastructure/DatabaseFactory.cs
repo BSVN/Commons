@@ -46,5 +46,17 @@ namespace BSN.Commons.Test.Infrastructure
             else
                 return (IDbContext)_dataContext;
         }
+        IAsyncDbContext IDatabaseFactory.GetAsyncContext()
+        {
+            if (_dataContext == null)
+            {
+                EffortConnection InMemoryconnection = DbConnectionFactory.CreateTransient();
+                _dataContext = UnitTestContext.Create(InMemoryconnection);
+                _dataContext.Database.Initialize(false);
+                return (IAsyncDbContext)_dataContext;
+            }
+            else
+                return (IAsyncDbContext)_dataContext;
+        }
     }
 }

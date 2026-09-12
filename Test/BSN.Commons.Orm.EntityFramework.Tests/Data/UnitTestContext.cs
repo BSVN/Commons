@@ -1,14 +1,15 @@
 ﻿using BSN.Commons.Infrastructure;
 using BSN.Commons.Tests;
 using System.Data.Entity;
+using System.Threading.Tasks;
 
 namespace BSN.Commons.Test.Data
 {
-    public class UnitTestContext : DbContext, IDbContext
+    public class UnitTestContext : DbContext, IDbContext, IAsyncDbContext
     {
-        public UnitTestContext(System.Data.Common.DbConnection dbConnection) : base(dbConnection, false) 
+        public UnitTestContext(System.Data.Common.DbConnection dbConnection) : base(dbConnection, false)
         {
-            
+
         }
 
         public UnitTestContext()
@@ -32,9 +33,10 @@ namespace BSN.Commons.Test.Data
             base.OnModelCreating(modelBuilder);
         }
 
-		public override int SaveChanges()
-		{
-            return base.SaveChanges();
-		}
-	}
+        public ValueTask DisposeAsync()
+        {
+            base.Dispose();
+            return new ValueTask();
+        }
+    }
 }

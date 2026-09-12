@@ -1,22 +1,29 @@
-﻿using System;
+﻿using BSN.Commons.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace BSN.Commons.Orm.EntityFramework
 {
-    using BSN.Commons.Infrastructure;
 
     /// <inheritdoc />
-    public abstract partial class RepositoryBase<T> : IRepository<T> where T : class
+    public abstract partial class RepositoryBase<T> : IRepository<T>, IAsyncRepository<T>
+        where T : class
     {
         /// <inheritdoc />
         protected RepositoryBase(IDatabaseFactory databaseFactory)
         {
+            if (databaseFactory == null)
+                throw new ArgumentNullException(nameof(databaseFactory));
+
             DatabaseFactory = databaseFactory;
             dbSet = DataContext.Set<T>();
         }
+
 
         /// <inheritdoc />
         public virtual void Add(T entity)
@@ -24,11 +31,39 @@ namespace BSN.Commons.Orm.EntityFramework
             dbSet.Add(entity);
         }
 
+
+        /// <inheritdoc />
+        public virtual Task AddAsync(
+            T entity,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            dbSet.Add(entity);
+
+            return Task.CompletedTask;
+        }
+
+
         /// <inheritdoc />
         public virtual void AddRange(IEnumerable<T> entities)
         {
             dbSet.AddRange(entities);
         }
+
+
+        /// <inheritdoc />
+        public virtual Task AddRangeAsync(
+            IEnumerable<T> entities,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            dbSet.AddRange(entities);
+
+            return Task.CompletedTask;
+        }
+
 
         /// <inheritdoc />
         public virtual void Update(T entity)
@@ -36,11 +71,15 @@ namespace BSN.Commons.Orm.EntityFramework
             Update(entity, cfg => cfg.IncludeAllProperties());
         }
 
+
         /// <inheritdoc />
-        public virtual void Update(T entity, Action<IUpdateConfig<T>> configurer)
+        public virtual void Update(
+            T entity,
+            Action<IUpdateConfig<T>> configurer)
         {
             var updateConfig = new UpdateConfig<T>();
-            configurer.Invoke(updateConfig);
+
+            configurer(updateConfig);
 
             if (updateConfig.AutoDetectChangedPropertiesEnabled)
             {
@@ -48,7 +87,8 @@ namespace BSN.Commons.Orm.EntityFramework
                 return;
             }
 
-            bool autoDetectChangesPreviousValue = _dataContext.Configuration.AutoDetectChangesEnabled;
+            bool previousValue =
+                _dataContext.Configuration.AutoDetectChangesEnabled;
 
             try
             {
@@ -58,31 +98,45 @@ namespace BSN.Commons.Orm.EntityFramework
 
                 if (updateConfig.IncludeAllPropertiesEnabled)
                 {
-                    _dataContext.Entry(entity).State = EntityState.Modified;
+                    _dataContext.Entry(entity).State =
+                        EntityState.Modified;
                 }
                 else
                 {
                     foreach (string propertyName in updateConfig.PropertyNames)
-                        _dataContext.Entry(entity).Property(propertyName).IsModified = true;
+                    {
+                        _dataContext
+                            .Entry(entity)
+                            .Property(propertyName)
+                            .IsModified = true;
+                    }
                 }
             }
             finally
             {
-                _dataContext.Configuration.AutoDetectChangesEnabled = autoDetectChangesPreviousValue;
+                _dataContext.Configuration.AutoDetectChangesEnabled =
+                    previousValue;
             }
         }
+
 
         /// <inheritdoc />
         public virtual void UpdateRange(IEnumerable<T> entities)
         {
-            UpdateRange(entities, cfg => cfg.IncludeAllProperties());
+            UpdateRange(
+                entities,
+                cfg => cfg.IncludeAllProperties());
         }
 
+
         /// <inheritdoc />
-        public virtual void UpdateRange(IEnumerable<T> entities, Action<IUpdateConfig<T>> configurer)
+        public virtual void UpdateRange(
+            IEnumerable<T> entities,
+            Action<IUpdateConfig<T>> configurer)
         {
             var updateConfig = new UpdateConfig<T>();
-            configurer.Invoke(updateConfig);
+
+            configurer(updateConfig);
 
             if (updateConfig.AutoDetectChangedPropertiesEnabled)
             {
@@ -90,35 +144,41 @@ namespace BSN.Commons.Orm.EntityFramework
                 return;
             }
 
-            bool autoDetectChangesPreviousValue = _dataContext.Configuration.AutoDetectChangesEnabled;
+            bool previousValue =
+                _dataContext.Configuration.AutoDetectChangesEnabled;
 
             try
             {
                 _dataContext.Configuration.AutoDetectChangesEnabled = false;
 
-                if (updateConfig.IncludeAllPropertiesEnabled)
+                foreach (T entity in entities)
                 {
-                    foreach (T entity in entities)
+                    dbSet.Attach(entity);
+
+                    if (updateConfig.IncludeAllPropertiesEnabled)
                     {
-                        dbSet.Attach(entity);
-                        _dataContext.Entry(entity).State = EntityState.Modified;
+                        _dataContext.Entry(entity).State =
+                            EntityState.Modified;
                     }
-                }
-                else
-                {
-                    foreach (T entity in entities)
+                    else
                     {
-                        dbSet.Attach(entity);
                         foreach (string propertyName in updateConfig.PropertyNames)
-                            _dataContext.Entry(entity).Property(propertyName).IsModified = true;
+                        {
+                            _dataContext
+                                .Entry(entity)
+                                .Property(propertyName)
+                                .IsModified = true;
+                        }
                     }
                 }
             }
             finally
             {
-                _dataContext.Configuration.AutoDetectChangesEnabled = autoDetectChangesPreviousValue;
+                _dataContext.Configuration.AutoDetectChangesEnabled =
+                    previousValue;
             }
         }
+
 
         /// <inheritdoc />
         public virtual void Delete(T entity)
@@ -126,56 +186,145 @@ namespace BSN.Commons.Orm.EntityFramework
             dbSet.Remove(entity);
         }
 
-        /// <inheritdoc />
-        public virtual void Delete(Expression<Func<T, bool>> where)
-        {
-            var objects = dbSet.Where(where).AsEnumerable();
-            foreach (var obj in objects)
-                dbSet.Remove(obj);
-        }
 
         /// <inheritdoc />
-        public virtual void DeleteRange(IEnumerable<T> entities)
+        public virtual void Delete(
+            Expression<Func<T, bool>> where)
+        {
+            var objects = dbSet.Where(where);
+
+            DeleteRange(objects);
+        }
+
+
+        /// <inheritdoc />
+        public virtual void DeleteRange(
+            IEnumerable<T> entities)
         {
             dbSet.RemoveRange(entities);
         }
 
+
         /// <inheritdoc />
-        public virtual T GetById<KeyType>(KeyType id)
+        public virtual T GetById<KeyType>(
+            KeyType id)
         {
             return dbSet.Find(id);
         }
 
-        /// <inheritdoc />
-        public virtual IEnumerable<T> GetAll()
-        {
-            return dbSet.ToList();
-        }
 
         /// <inheritdoc />
-        public virtual IEnumerable<T> GetMany(Expression<Func<T, bool>> where)
+        public virtual Task<T> GetByIdAsync<KeyType>(
+            KeyType id,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return dbSet.Where(where);
+            cancellationToken.ThrowIfCancellationRequested();
+
+            return dbSet.FindAsync(
+                cancellationToken,
+                id);
         }
 
+
         /// <inheritdoc />
-        public T Get(Expression<Func<T, bool>> where)
+        public virtual IEnumerable<T> GetAll(
+            bool asNoTracking = false)
         {
-            return dbSet.Where(where).FirstOrDefault();
+            IQueryable<T> query = dbSet;
+
+            if (asNoTracking)
+                query = query.AsNoTracking();
+
+            return query.ToList();
+        }
+
+
+        /// <inheritdoc />
+        public virtual async Task<IEnumerable<T>> GetAllAsync(
+            bool asNoTracking = false,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            IQueryable<T> query = dbSet;
+
+            if (asNoTracking)
+                query = query.AsNoTracking();
+
+            return await query
+                .ToListAsync(cancellationToken);
+        }
+
+
+        /// <inheritdoc />
+        public virtual IEnumerable<T> GetMany(
+            Expression<Func<T, bool>> where,
+            bool asNoTracking = false)
+        {
+            IQueryable<T> query = dbSet.Where(where);
+
+            if (asNoTracking)
+                query = query.AsNoTracking();
+
+            return query;
+        }
+
+
+        /// <inheritdoc />
+        public virtual async Task<IEnumerable<T>> GetManyAsync(
+            Expression<Func<T, bool>> where,
+            bool asNoTracking = false,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            IQueryable<T> query = dbSet.Where(where);
+
+            if (asNoTracking)
+                query = query.AsNoTracking();
+
+            return await query
+                .ToListAsync(cancellationToken);
+        }
+
+
+        /// <inheritdoc />
+        public virtual T Get(
+            Expression<Func<T, bool>> where,
+            bool asNoTracking = false)
+        {
+            IQueryable<T> query = dbSet.Where(where);
+
+            if (asNoTracking)
+                query = query.AsNoTracking();
+
+            return query.FirstOrDefault();
+        }
+
+
+        /// <inheritdoc />
+        public virtual async Task<T> GetAsync(
+            Expression<Func<T, bool>> where,
+            bool asNoTracking = false,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            IQueryable<T> query = dbSet.Where(where);
+
+            if (asNoTracking)
+                query = query.AsNoTracking();
+
+            return await query
+                .FirstOrDefaultAsync(cancellationToken);
         }
 
         /// <summary>
-        /// TODO: complete doc
+        /// Database Set
         /// </summary>
         protected readonly DbSet<T> dbSet;
 
         /// <summary>
-        /// TODO: complete doc
+        /// Database Context
         /// </summary>
         protected DbContext DataContext => _dataContext ?? (_dataContext = (DbContext)DatabaseFactory.Get());
 
         /// <summary>
-        /// TODO: complete doc
+        /// Database Factory
         /// </summary>
         protected IDatabaseFactory DatabaseFactory { get; private set; }
 

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace BSN.Commons.AutoMapper.Tests
 {
@@ -11,7 +13,7 @@ namespace BSN.Commons.AutoMapper.Tests
             // Arrange
             var services = new ServiceCollection();
             var configure = new Action<IMapperConfigurationExpression>(config => { });
-
+            services.AddSingleton<ILoggerFactory>(NullLoggerFactory.Instance);
             // Act
             services.AddAutoMapper(configure);
             var serviceProvider = services.BuildServiceProvider();

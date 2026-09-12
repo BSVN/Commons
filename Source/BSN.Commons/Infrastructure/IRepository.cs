@@ -8,8 +8,8 @@ namespace BSN.Commons.Infrastructure
     /// Repository Pattern Interface for abstract communicating with DataBase
     /// </summary>
     /// <typeparam name="T"></typeparam>
-	public interface IRepository<T> where T : class
-	{
+	public interface IRepository<T>  where T : class
+    {
         /// <summary>
         /// Add new object to repository.
         /// </summary>
@@ -76,20 +76,23 @@ namespace BSN.Commons.Infrastructure
         /// Get Object by Expression.
         /// </summary>
         /// <param name="where">Expression</param>
+        /// <param name="asNoTracking">No Tracking</param>
         /// <returns>Retrived Object or null</returns>
-        T Get(Expression<Func<T, bool>> where);
+        T Get(Expression<Func<T, bool>> where, bool asNoTracking = false);
 
         /// <summary>
         /// Get all Objects in the current repository.
         /// </summary>
+        /// <param name="asNoTracking">No Tracking</param>
         /// <returns>List of all Objects</returns>
-        IEnumerable<T> GetAll();
+        IEnumerable<T> GetAll(bool asNoTracking = false);
 
         /// <summary>
         /// Get List of existing objects using Expression.
         /// </summary>
         /// <param name="where">Expression</param>
+        /// <param name="asNoTracking">No Tracking</param>
         /// <returns>List of Objects</returns>
-		IEnumerable<T> GetMany(Expression<Func<T, bool>> where);
-	}
+		IEnumerable<T> GetMany(Expression<Func<T, bool>> where, bool asNoTracking = false);
+    }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BSN.Commons.Extensions
@@ -39,7 +40,7 @@ namespace BSN.Commons.Extensions
         /// Paginate IQueryable of <typeparamref name="T"/>
         /// with given pageNumber and pageSize
         /// </summary>
-        public static async Task<PagedEntityCollection<T>> PaginateAsync<T>(this IQueryable<T> query, uint pageNumber, uint pageSize)
+        public static async Task<PagedEntityCollection<T>> PaginateAsync<T>(this IQueryable<T> query, uint pageNumber, uint pageSize,CancellationToken cancellationToken = default)
         {
             if (pageNumber <= 0)
                 throw new ArgumentException("Must be greater than zero.", nameof(pageNumber));
@@ -52,7 +53,7 @@ namespace BSN.Commons.Extensions
                 CurrentPage = pageNumber,
                 PageSize = pageSize,
                 RecordCount = (uint) await query.CountAsync(),
-                Results = await query.Skip((int)((pageNumber - 1) * pageSize)).Take((int)pageSize).ToListAsync()
+                Results = await query.Skip((int)((pageNumber - 1) * pageSize)).Take((int)pageSize).ToListAsync(cancellationToken)
             };
 
             result.PageCount = (uint)Math.Ceiling((double)result.RecordCount / pageSize);

@@ -20,7 +20,7 @@ namespace BSN.Commons.AutoMapper.Extensions
             IMapper mapper = mappingConfig.CreateMapper();
 
             services.AddSingleton(mapper);
-            
+
             return services;
         }
     }

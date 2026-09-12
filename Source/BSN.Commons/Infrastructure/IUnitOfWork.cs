@@ -1,14 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
-using System.Transactions;
 
 namespace BSN.Commons.Infrastructure
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork : IDisposable
     {
         IDatabaseFactory DatabaseFactory { get; }
 
-        void Commit();
+        IReadOnlyCollection<Exception> Exceptions { get; }
+
         void AddToQueue(ITaskUnit task);
+
+        void Commit();
     }
 }
