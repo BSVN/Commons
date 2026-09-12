@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.18.1] - 2026-09-09
+### Fixed
+
+- Fix kafka factories concurrent requests
+- Update nuget packages to latest minor versions for security fixes
+
 ## [1.18.0] - 2025-05-31
 
 ### Added

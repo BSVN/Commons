@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.18.1] - 2026-09-09
+### Fixed
+
+- Update nuget packages to latest minor versions for security fixes
+
 ## [1.10.3] - 2023-06-09
 
 ### Added
